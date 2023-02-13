@@ -1,14 +1,19 @@
-from .base import Plugin, CmdMetric, Cmd
+from ixdiagnose.utils.command import Cmd
 
-
-class ArchMetric(CmdMetric):
-    cmds = [
-       Cmd(command=["uname", "-m"]),
-    ]
+from .base import CmdMetric, Plugin
 
 
 class Hardware(Plugin):
     name = 'hardware'
     metrics = [
-        ArchMetric()
+        CmdMetric(
+            'CPU Information', [
+                Cmd(['lscpu', '-J'], 'CPU Information'),
+            ]
+        ),
+        CmdMetric(
+            'Dmidecode', [
+                Cmd(['dmidecode'], 'Dmidecode'),
+            ],
+        ),
     ]

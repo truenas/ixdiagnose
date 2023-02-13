@@ -1,7 +1,7 @@
 import json
 import os
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from ixdiagnose.utils.command import Cmd
 
@@ -18,10 +18,12 @@ class Metric:
     def output_file_path(self, base_dir: str) -> str:
         return os.path.join(base_dir, f'{self.name}{self.output_file_extension}')
 
-    def format_data(self, context: Any) -> str:
-        return json.dumps(context, indent=4)
+    def execute(self) -> Tuple[Any, str]:
+        data = self.execute_impl()
+        assert isinstance(data, (list, tuple)) and len(data) == 2
+        return data
 
-    def execute(self) -> Dict:
+    def execute_impl(self) -> Tuple[Any, str]:
         raise NotImplementedError
 
 
@@ -41,7 +43,7 @@ class CmdMetric(Metric):
 
     def format_data(self, cmd_context: list) -> str:
         if self.serializable:
-            result = super().format_data(cmd_context)
+            result = json.dumps(cmd_context, indent=4)
         else:
             result = ''
             for index, entry in enumerate(cmd_context):
@@ -50,7 +52,7 @@ class CmdMetric(Metric):
 
         return result
 
-    def execute(self) -> Dict:
+    def execute_impl(self) -> Tuple[List, str]:
         cmd_context = []
         metric_report = []
         for cmd in self.cmds:
@@ -74,7 +76,27 @@ class CmdMetric(Metric):
 
             cmd_context.append({'description': cmd.description, 'result': output})
 
-        return {'stats': metric_report, 'output': self.format_data(cmd_context)}
+        return metric_report, self.format_data(cmd_context)
+
+
+class FileMetric(Metric):
+
+    def __init__(self, name: str, file_path: str):
+        super().__init__(name)
+        self.file_path: str = file_path
+
+    def execute_impl(self) -> Tuple[Dict, str]:
+        report = {
+            'error': None, 'description': f'Contents of {self.file_path!r}',
+        }
+        try:
+            with open(self.file_path, 'r') as f:
+                output = f.read()
+        except FileNotFoundError:
+            output = None
+            report['error'] = f'{self.file_path!r} file path does not exist'
+
+        return report, output
 
 
 class MiddlewareClientMetric(Metric):
@@ -84,6 +106,6 @@ class MiddlewareClientMetric(Metric):
     def format_output(self):
         pass
 
-    def execute(self):
+    def execute(self) -> Tuple[Any, str]:
         # {"api_endpoint": "", "api_payload": "", "result": None}
         pass

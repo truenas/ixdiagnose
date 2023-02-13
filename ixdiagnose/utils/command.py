@@ -11,13 +11,13 @@ class Cmd:
 
     def __init__(
         self, command: Union[str, list], description: str, shell: bool = False,
-        serializeable_output: bool = True, safe_returncodes: bool = None, env: Optional[dict] = None,
+        serializeable: bool = True, safe_returncodes: bool = None, env: Optional[dict] = None,
     ):
         self.command: Union[str, list] = command
         self.description: str = description
         self.env: Optional[dict] = env
         self.shell: bool = shell
-        self.serializeable: bool = serializeable_output
+        self.serializeable: bool = serializeable
         self.safe_returncodes: list = safe_returncodes or [0]
         if self.shell and not isinstance(self.command, str):
             raise CallError('Command must be a string as shell is specified')
