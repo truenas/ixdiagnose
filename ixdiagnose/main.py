@@ -1,15 +1,23 @@
 import click
 
-from .plugins.factory import PluginFactory
-
 
 @click.group()
-@click.option('--debug/--no-debug', default=False)
-def cli(debug):
-    click.echo(f"Debug mode is {'on' if debug else 'off'}")
+def cli():
+    pass
 
 
 @cli.command()
-def ixdiagnose():
+def run():
     # PluginFactory()
     click.echo('Syncing')
+
+
+@cli.command()
+@click.option('--debug/--no-debug', default=False)
+def debug(debug):
+    # PluginFactory()
+    click.echo('Debug')
+
+
+def main():
+    cli()

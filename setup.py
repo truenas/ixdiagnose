@@ -11,4 +11,9 @@ setup(
     packages=find_packages(),
     license='GNU3',
     platforms='any',
+    entry_points={
+        'console_scripts': [
+            'ixdiagnose = ixdiagnose.main:cli'
+        ]
+    }
 )
