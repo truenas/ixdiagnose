@@ -2,16 +2,16 @@ import json
 import os
 import time
 
-from typing import List, Union
+from typing import List
 
 from ixdiagnose.utils.paths import get_plugin_base_dir
 
-from .metrics_base import CmdMetric, MiddlewareClientMetric
+from .metrics_base import Metric
 
 
 class Plugin:
 
-    metrics: List[Union[CmdMetric, MiddlewareClientMetric]] = []
+    metrics: List[Metric] = []
     name: str = NotImplementedError
 
     def __init__(self):

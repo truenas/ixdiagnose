@@ -85,6 +85,10 @@ class FileMetric(Metric):
         super().__init__(name)
         self.file_path: str = file_path
 
+    @property
+    def output_file_extension(self) -> str:
+        return '.txt'
+
     def execute_impl(self) -> Tuple[Dict, str]:
         report = {
             'error': None, 'description': f'Contents of {self.file_path!r}',
