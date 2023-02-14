@@ -1,15 +1,23 @@
 import click
 
+from .config import conf
+from .plugin import generate_plugins_debug
+
 
 @click.group()
-def cli():
-    pass
+@click.option('--debug-path')
+@click.pass_context
+def cli(ctx, debug_path):
+    ctx.ensure_object(dict)
+    ctx.obj['debug_path'] = debug_path
+    conf.debug_path = debug_path
 
 
 @cli.command()
-def run():
-    # PluginFactory()
-    click.echo('Syncing')
+@click.pass_context
+def run(ctx):
+    click.echo('Generating debug of plugins')
+    generate_plugins_debug()
 
 
 @cli.command()
@@ -20,4 +28,4 @@ def debug(debug):
 
 
 def main():
-    cli()
+    cli(obj={})

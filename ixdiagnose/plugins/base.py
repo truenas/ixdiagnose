@@ -37,12 +37,12 @@ class Plugin:
                 with open(metric.output_file_path(self.output_dir), 'w') as f:
                     f.write(metric_output)
 
-            self.debug_report[metric.name] += {
+            self.debug_report[metric.name] = {
                 'execution_time': execution_time,
                 'metric_report': metric_report,
                 'metric_execution_error': metric_error,
             }
 
     def write_debug_report(self):
-        with open(self.output_dir, 'report.json') as f:
+        with open(os.path.join(self.output_dir, 'report.json'), 'w') as f:
             f.write(json.dumps(self.debug_report, indent=4))

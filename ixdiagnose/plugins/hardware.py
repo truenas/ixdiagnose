@@ -7,13 +7,13 @@ class Hardware(Plugin):
     name = 'hardware'
     metrics = [
         CmdMetric(
-            'CPU Information', [
+            'cpu', [
                 Cmd(['lscpu', '-J'], 'CPU Information'),
             ]
         ),
         CmdMetric(
-            'Dmidecode', [
-                Cmd(['dmidecode'], 'Dmidecode'),
+            'dmidecode', [
+                Cmd(['dmidecode'], 'Dmidecode', serializeable=False),
             ],
         ),
     ]

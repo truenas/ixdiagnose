@@ -1,6 +1,7 @@
 import errno
 
 from ixdiagnose.exceptions import CallError
+from typing import Dict
 
 from .base import Plugin
 from .hardware import Hardware
@@ -19,7 +20,7 @@ class PluginFactory:
             raise CallError(f'Unable to locate {name!r} plugin.', errno=errno.ENOENT)
         return self._creators[name]
 
-    def get_plugins(self) -> dict:
+    def get_plugins(self) -> Dict[str, Plugin]:
         return self._creators
 
 

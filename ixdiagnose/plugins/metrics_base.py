@@ -48,7 +48,7 @@ class CmdMetric(Metric):
             result = ''
             for index, entry in enumerate(cmd_context):
                 padding = f'\n{"-" * (len(entry["description"]) + 5)}\n'
-                result += f'{padding}{index + 1}) {entry["description"]}{padding}{entry["result"]}'
+                result += f'{padding}{index + 1}) {entry["description"]}{padding}\n{entry["result"]}'
 
         return result
 
@@ -76,7 +76,7 @@ class CmdMetric(Metric):
 
             cmd_context.append({'description': cmd.description, 'result': output})
 
-        return metric_report, self.format_data(cmd_context)
+        return metric_report, self.format_data(cmd_context) if cmd_context else ''
 
 
 class FileMetric(Metric):
