@@ -1,7 +1,7 @@
 from ixdiagnose.utils.command import Cmd
 
 from .base import Plugin
-from .metrics_base import CmdMetric, FileMetric
+from .metrics_base import CmdMetric, FileMetric, MiddlewareClientMetric
 
 
 class Hardware(Plugin):
@@ -30,5 +30,12 @@ class Hardware(Plugin):
                 Cmd(['lspci', '-vvvD'], 'List of PCI Devices', serializeable=False),
             ],
         ),
+        CmdMetric(
+            'sensors', [
+                Cmd(['sensors', '-j'], 'List of available sensors'),
+            ],
+        ),
         FileMetric('usb_devices', '/sys/kernel/debug/usb/devices'),
+        MiddlewareClientMetric('disks', 'device.get_disks'),
+        MiddlewareClientMetric('enclosures', 'enclosure.query'),
     ]
