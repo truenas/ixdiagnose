@@ -1,38 +1,38 @@
-from ixdiagnose.utils.command import Cmd
+from ixdiagnose.utils.command import Command
 
 from .base import Plugin
-from .metrics_base import CmdMetric, FileMetric, MiddlewareClientMetric
+from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric
 
 
 class Hardware(Plugin):
     name = 'hardware'
     metrics = [
-        CmdMetric(
+        CommandMetric(
             'block_devices', [
-                Cmd([
+                Command([
                     'lsblk', '-J', '-o',
                     'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,PATH',
                 ], 'List of PCI Devices'),
             ],
         ),
-        CmdMetric(
+        CommandMetric(
             'cpu', [
-                Cmd(['lscpu', '-J'], 'CPU Information'),
+                Command(['lscpu', '-J'], 'CPU Information'),
             ]
         ),
-        CmdMetric(
+        CommandMetric(
             'dmidecode', [
-                Cmd(['dmidecode'], 'Dmidecode', serializeable=False),
+                Command(['dmidecode'], 'Dmidecode', serializeable=False),
             ],
         ),
-        CmdMetric(
+        CommandMetric(
             'pci', [
-                Cmd(['lspci', '-vvvD'], 'List of PCI Devices', serializeable=False),
+                Command(['lspci', '-vvvD'], 'List of PCI Devices', serializeable=False),
             ],
         ),
-        CmdMetric(
+        CommandMetric(
             'sensors', [
-                Cmd(['sensors', '-j'], 'List of available sensors'),
+                Command(['sensors', '-j'], 'List of available sensors'),
             ],
         ),
         FileMetric('usb_devices', '/sys/kernel/debug/usb/devices'),

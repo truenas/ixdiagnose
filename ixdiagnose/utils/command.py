@@ -7,7 +7,7 @@ from ixdiagnose.exceptions import CallError
 from .run import run
 
 
-class Cmd:
+class Command:
 
     def __init__(
         self, command: Union[str, list], description: str, shell: bool = False,

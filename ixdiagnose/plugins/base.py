@@ -6,7 +6,7 @@ from typing import List
 
 from ixdiagnose.utils.paths import get_plugin_base_dir
 
-from .metrics_base import Metric
+from .metrics import Metric
 
 
 class Plugin:
