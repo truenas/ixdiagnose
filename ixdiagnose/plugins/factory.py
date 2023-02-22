@@ -6,6 +6,7 @@ from typing import Dict
 from .base import Plugin
 from .hardware import Hardware
 from .iscsi import ISCSI
+from .kubernetes import Kubernetes
 
 
 class PluginFactory:
@@ -29,5 +30,6 @@ plugin_factory = PluginFactory()
 for plugin in [
     Hardware,
     ISCSI,
+    Kubernetes,
 ]:
     plugin_factory.register(plugin())
