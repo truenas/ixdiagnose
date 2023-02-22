@@ -34,7 +34,7 @@ class MiddlewareClientMetric(Metric):
             response = middleware_command.execute()
             metric_report.append({
                 'error': response.error,
-                'description': self.get_methods_metadata().get(middleware_command.endpoint),
+                'description': self.get_methods_metadata().get(middleware_command.endpoint, {}).get('description'),
             })
             if response.error:
                 continue

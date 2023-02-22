@@ -11,7 +11,7 @@ class Command:
 
     def __init__(
         self, command: Union[str, list], description: str, shell: bool = False,
-        serializeable: bool = True, safe_returncodes: bool = None, env: Optional[dict] = None,
+        serializeable: bool = True, safe_returncodes: list = None, env: Optional[dict] = None,
     ):
         self.command: Union[str, list] = command
         self.description: str = description

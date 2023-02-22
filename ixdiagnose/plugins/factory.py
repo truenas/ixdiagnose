@@ -5,6 +5,7 @@ from typing import Dict
 
 from .base import Plugin
 from .hardware import Hardware
+from .iscsi import ISCSI
 
 
 class PluginFactory:
@@ -27,5 +28,6 @@ class PluginFactory:
 plugin_factory = PluginFactory()
 for plugin in [
     Hardware,
+    ISCSI,
 ]:
     plugin_factory.register(plugin())
