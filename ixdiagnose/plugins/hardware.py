@@ -1,4 +1,5 @@
 from ixdiagnose.utils.command import Command
+from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
 from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric
@@ -36,6 +37,6 @@ class Hardware(Plugin):
             ],
         ),
         FileMetric('usb_devices', '/sys/kernel/debug/usb/devices'),
-        MiddlewareClientMetric('disks', 'device.get_disks'),
-        MiddlewareClientMetric('enclosures', 'enclosure.query'),
+        MiddlewareClientMetric('disks', [MiddlewareCommand('device.get_disks')]),
+        MiddlewareClientMetric('enclosures', [MiddlewareCommand('enclosure.query')]),
     ]
