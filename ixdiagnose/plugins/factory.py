@@ -10,6 +10,7 @@ from .kubernetes import Kubernetes
 from .nfs import NFS
 from .ssl import SSL
 from .sysctl import Sysctl
+from .system import System
 
 
 class PluginFactory:
@@ -37,5 +38,6 @@ for plugin in [
     NFS,
     SSL,
     Sysctl,
+    System,
 ]:
     plugin_factory.register(plugin())

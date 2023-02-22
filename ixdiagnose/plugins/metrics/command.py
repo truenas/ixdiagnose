@@ -3,6 +3,7 @@ import json
 from typing import List, Tuple
 
 from ixdiagnose.plugins.prerequisites.base import Prerequisite
+from ixdiagnose.utils.formatter import dumps, loads
 from ixdiagnose.utils.command import Command
 
 from .base import Metric
@@ -24,7 +25,7 @@ class CommandMetric(Metric):
 
     def format_data(self, cmd_context: list) -> str:
         if self.serializable:
-            result = json.dumps(cmd_context, indent=4)
+            result = dumps(cmd_context, indent=4)
         else:
             result = ''
             for index, entry in enumerate(cmd_context):
@@ -50,7 +51,7 @@ class CommandMetric(Metric):
             output = cp.stdout
             if self.serializable:
                 try:
-                    output = json.loads(output)
+                    output = loads(output)
                 except json.JSONDecodeError:
                     report['error'] = f'Failed to serialize command output: {output!r}'
                     continue

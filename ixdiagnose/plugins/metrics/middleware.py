@@ -1,6 +1,7 @@
 import json
 
 from ixdiagnose.plugins.prerequisites.base import Prerequisite
+from ixdiagnose.utils.formatter import dumps
 from ixdiagnose.utils.middleware import get_middleware_client, MiddlewareCommand
 from typing import Any, List, Tuple
 
@@ -26,9 +27,9 @@ class MiddlewareClientMetric(Metric):
 
     def format_output(self, context: list) -> str:
         if len(context) == 1:
-            return json.dumps(context[0])
+            return dumps(context[0])
         else:
-            return json.dumps({entry['key']: entry['output'] for entry in context})
+            return dumps({entry['key']: entry['output'] for entry in context})
 
     def execute_impl(self) -> Tuple[Any, str]:
         context = []

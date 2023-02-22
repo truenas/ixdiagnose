@@ -1,6 +1,7 @@
 import json
 import os
 
+from ixdiagnose.utils.formatter import dumps
 from ixdiagnose.utils.middleware import MiddlewareCommand
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -39,4 +40,4 @@ class DirectoryTreeMetric(Metric):
             return report, ''
 
         results, report = get_results(self.path)
-        return report, json.dumps(results, indent=4)
+        return report, dumps(results, indent=4)

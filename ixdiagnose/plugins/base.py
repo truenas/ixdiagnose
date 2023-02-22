@@ -1,9 +1,9 @@
-import json
 import os
 import time
 
 from typing import List
 
+from ixdiagnose.utils.formatter import dumps
 from ixdiagnose.utils.paths import get_plugin_base_dir
 
 from .metrics import Metric
@@ -45,4 +45,4 @@ class Plugin:
 
     def write_debug_report(self):
         with open(os.path.join(self.output_dir, 'report.json'), 'w') as f:
-            f.write(json.dumps(self.debug_report, indent=4))
+            f.write(dumps(self.debug_report, indent=4))
