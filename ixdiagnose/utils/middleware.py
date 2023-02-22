@@ -27,13 +27,13 @@ class MiddlewareCommand:
         self.endpoint: str = endpoint
         self.overridden_format_output: Optional[Callable] = format_output
         self.payload: List = api_payload or []
-        self.result_key: str = result_key
+        self.result_key: str = result_key or self.endpoint.replace('.', '_')
 
     def format_output(self, output: Any) -> Any:
         return self.overridden_format_output(output) if self.overridden_format_output else output
 
     def execute(self) -> MiddlewareResponse:
-        response = MiddlewareResponse(result_key=self.result_key or self.endpoint)
+        response = MiddlewareResponse(result_key=self.result_key)
         try:
             with get_middleware_client() as client:
                 response.output = client.call(self.endpoint, *self.payload)

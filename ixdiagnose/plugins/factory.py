@@ -7,6 +7,7 @@ from .base import Plugin
 from .hardware import Hardware
 from .iscsi import ISCSI
 from .kubernetes import Kubernetes
+from .nfs import NFS
 
 
 class PluginFactory:
@@ -31,5 +32,6 @@ for plugin in [
     Hardware,
     ISCSI,
     Kubernetes,
+    NFS,
 ]:
     plugin_factory.register(plugin())
