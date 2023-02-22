@@ -2,6 +2,7 @@ import json
 
 from typing import List, Tuple
 
+from ixdiagnose.plugins.prerequisites.base import Prerequisite
 from ixdiagnose.utils.command import Command
 
 from .base import Metric
@@ -9,8 +10,8 @@ from .base import Metric
 
 class CommandMetric(Metric):
 
-    def __init__(self, name: str, cmds: List[Command]):
-        super().__init__(name)
+    def __init__(self, name: str, cmds: List[Command], prerequisites: List[Prerequisite] = None):
+        super().__init__(name, prerequisites)
         self.cmds: List[Command] = cmds
 
     @property

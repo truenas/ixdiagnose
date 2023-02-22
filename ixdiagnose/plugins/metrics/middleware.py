@@ -1,5 +1,6 @@
 import json
 
+from ixdiagnose.plugins.prerequisites.base import Prerequisite
 from ixdiagnose.utils.middleware import get_middleware_client, MiddlewareCommand
 from typing import Any, List, Tuple
 
@@ -17,8 +18,10 @@ class MiddlewareClientMetric(Metric):
                 cls.methods_metadata = client.call('core.get_methods')
         return cls.methods_metadata
 
-    def __init__(self, name: str, middleware_commands: List[MiddlewareCommand]):
-        super().__init__(name)
+    def __init__(
+        self, name: str, middleware_commands: List[MiddlewareCommand], prerequisites: List[Prerequisite] = None
+    ):
+        super().__init__(name, prerequisites)
         self.middleware_commands = middleware_commands
 
     def format_output(self, context: list) -> str:

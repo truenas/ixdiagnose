@@ -3,6 +3,7 @@ from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
 from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric
+from .prerequisites import ServiceRunningPrerequisite
 
 
 class ISCSI(Plugin):
@@ -29,7 +30,7 @@ class ISCSI(Plugin):
                 Command(['scstadmin', '-list_target', '-driver', 'iscsi'], 'Lists SCST targets', serializeable=False),
                 Command(['scstadmin', '-list_sessions'], 'Lists SCST active sessions', serializeable=False),
                 Command(['scstadmin', '-list_scst_attr'], 'Lists SCST core attributes', serializeable=False),
-            ],
+            ], prerequisites=[ServiceRunningPrerequisite('scst')],
         ),
         FileMetric('shadow.conf', '/etc/ctl.conf.shadow'),
         FileMetric('scst_conf', '/etc/scst.conf'),
