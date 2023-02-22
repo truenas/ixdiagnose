@@ -9,6 +9,7 @@ from .iscsi import ISCSI
 from .kubernetes import Kubernetes
 from .nfs import NFS
 from .ssl import SSL
+from .sysctl import Sysctl
 
 
 class PluginFactory:
@@ -35,5 +36,6 @@ for plugin in [
     Kubernetes,
     NFS,
     SSL,
+    Sysctl,
 ]:
     plugin_factory.register(plugin())
