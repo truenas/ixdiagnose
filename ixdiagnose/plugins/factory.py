@@ -8,6 +8,7 @@ from .hardware import Hardware
 from .iscsi import ISCSI
 from .kubernetes import Kubernetes
 from .nfs import NFS
+from .ssl import SSL
 
 
 class PluginFactory:
@@ -33,5 +34,6 @@ for plugin in [
     ISCSI,
     Kubernetes,
     NFS,
+    SSL,
 ]:
     plugin_factory.register(plugin())
