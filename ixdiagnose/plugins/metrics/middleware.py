@@ -1,5 +1,3 @@
-import json
-
 from ixdiagnose.plugins.prerequisites.base import Prerequisite
 from ixdiagnose.utils.formatter import dumps
 from ixdiagnose.utils.middleware import get_middleware_client, MiddlewareCommand

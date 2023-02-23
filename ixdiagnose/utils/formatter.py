@@ -1,4 +1,4 @@
-from middlewared.client.ejson import dumps, loads
+from middlewared.client.ejson import dumps, loads # noqa
 from middlewared.utils import get
 from typing import Dict, List
 
