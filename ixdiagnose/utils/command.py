@@ -12,10 +12,12 @@ class Command:
     def __init__(
         self, command: Union[str, list], description: str, shell: bool = False,
         serializeable: bool = True, safe_returncodes: list = None, env: Optional[dict] = None,
+        max_lines: Optional[int] = None,
     ):
         self.command: Union[str, list] = command
         self.description: str = description
         self.env: Optional[dict] = env
+        self.max_length: Optional[int] = max_lines
         self.shell: bool = shell
         self.serializeable: bool = serializeable
         self.safe_returncodes: list = safe_returncodes or [0]
@@ -25,4 +27,7 @@ class Command:
             raise CallError('Command must be list/tuple as shell is unset')
 
     def execute(self) -> subprocess.CompletedProcess:
-        return run(self.command, shell=self.shell, check=False, env=self.env)
+        cp = run(self.command, shell=self.shell, check=False, env=self.env)
+        if self.max_length and cp.returncode in self.safe_returncodes:
+            cp.stdout = cp.stdout.splitlines()[:self.max_length]
+        return cp
