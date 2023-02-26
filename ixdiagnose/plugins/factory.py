@@ -37,6 +37,7 @@ for plugin in [
     ISCSI,
     Kubernetes,
     NFS,
+    SMB,
     SSL,
     Sysctl,
     System,
