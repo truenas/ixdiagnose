@@ -5,6 +5,9 @@ from middlewared.client import Client
 from typing import Any, Callable, List, Optional
 
 
+MiddlewareClient: Client = Client
+
+
 @contextlib.contextmanager
 def get_middleware_client() -> Client:
     with Client() as client:

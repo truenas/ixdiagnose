@@ -8,6 +8,7 @@ from .hardware import Hardware
 from .iscsi import ISCSI
 from .kubernetes import Kubernetes
 from .nfs import NFS
+from .smb import SMB
 from .ssl import SSL
 from .sysctl import Sysctl
 from .system import System
