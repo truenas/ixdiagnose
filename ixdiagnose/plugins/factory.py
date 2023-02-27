@@ -8,6 +8,7 @@ from .hardware import Hardware
 from .iscsi import ISCSI
 from .kubernetes import Kubernetes
 from .nfs import NFS
+from .smart import SMART
 from .smb import SMB
 from .ssl import SSL
 from .sysctl import Sysctl
@@ -37,6 +38,7 @@ for plugin in [
     ISCSI,
     Kubernetes,
     NFS,
+    SMART,
     SMB,
     SSL,
     Sysctl,
