@@ -7,6 +7,7 @@ from .base import Plugin
 from .hardware import Hardware
 from .iscsi import ISCSI
 from .kubernetes import Kubernetes
+from .network import Network
 from .nfs import NFS
 from .smart import SMART
 from .smb import SMB
@@ -37,6 +38,7 @@ for plugin in [
     Hardware,
     ISCSI,
     Kubernetes,
+    Network,
     NFS,
     SMART,
     SMB,
