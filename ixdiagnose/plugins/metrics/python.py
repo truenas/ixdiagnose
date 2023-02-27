@@ -23,7 +23,7 @@ class PythonMetric(Metric):
         if not callable(self.callback):
             raise CallError('Callback must be a callable')
         else:
-            if len(inspect.signature(self.callback).parameters) == 2:
+            if len(inspect.signature(self.callback).parameters) != 2:
                 raise CallError(
                     'Only 2 argument must be specified for callback with first being middleware client and '
                     'second being any context specified for the callback'
