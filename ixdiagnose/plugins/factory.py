@@ -14,6 +14,7 @@ from .smb import SMB
 from .ssl import SSL
 from .sysctl import Sysctl
 from .system import System
+from .zfs import ZFS
 
 
 class PluginFactory:
@@ -45,5 +46,6 @@ for plugin in [
     SSL,
     Sysctl,
     System,
+    ZFS,
 ]:
     plugin_factory.register(plugin())

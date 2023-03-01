@@ -12,6 +12,8 @@ from .metrics import Metric
 class Plugin:
 
     metrics: List[Metric] = []
+    raw_metrics: List[Metric] = []
+    serializable_metrics: List[Metric] = []
     name: str = NotImplementedError
 
     def __init__(self):
@@ -21,9 +23,12 @@ class Plugin:
     def output_dir(self) -> str:
         return os.path.join(get_plugin_base_dir(), self.name)
 
+    def metrics_to_execute(self):
+        return self.metrics + self.raw_metrics
+
     def execute_metrics(self) -> None:
         os.makedirs(self.output_dir, exist_ok=True)
-        for metric in self.metrics:
+        for metric in self.metrics_to_execute():
             metric_report = metric_output = metric_error = None
             start_time = time.time()
             try:

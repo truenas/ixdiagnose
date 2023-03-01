@@ -19,6 +19,7 @@ class FileMetric(Metric):
             'error': None, 'description': f'Contents of {self.file_path!r}',
         }
         try:
+            # TODO: Let's redo this with shutil.copy
             with open(self.file_path, 'r') as f:
                 output = f.read()
         except FileNotFoundError:
