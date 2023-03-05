@@ -29,7 +29,7 @@ class Metric:
         assert isinstance(data, (list, tuple)) and len(data) == 2
         return data
 
-    def initialize_context(self):
+    def initialize_context(self) -> None:
         pass
 
     def execute_impl(self) -> Tuple[Any, str]:

@@ -30,7 +30,7 @@ class MiddlewareClientMetric(Metric):
         else:
             return dumps({entry['key']: entry['output'] for entry in context})
 
-    def initialize_context(self):
+    def initialize_context(self) -> None:
         self.middleware_client = self.execution_context['middleware_client']
 
     def execute_impl(self) -> Tuple[Any, str]:

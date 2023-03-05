@@ -1,3 +1,5 @@
+import shutil
+
 from ixdiagnose.plugins.prerequisites.base import Prerequisite
 from typing import Dict, List, Tuple
 
@@ -18,12 +20,10 @@ class FileMetric(Metric):
         report = {
             'error': None, 'description': f'Contents of {self.file_path!r}',
         }
+        output = ''
         try:
-            # TODO: Let's redo this with shutil.copy
-            with open(self.file_path, 'r') as f:
-                output = f.read()
+            shutil.copy(self.file_path, self.output_file_path(self.execution_context['output_dir']))
         except FileNotFoundError:
-            output = None
             report['error'] = f'{self.file_path!r} file path does not exist'
 
         return report, output
