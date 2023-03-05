@@ -1,7 +1,7 @@
 from ixdiagnose.plugins.prerequisites.base import Prerequisite
 from ixdiagnose.utils.formatter import dumps
-from ixdiagnose.utils.middleware import get_middleware_client, MiddlewareCommand
-from typing import Any, List, Tuple
+from ixdiagnose.utils.middleware import get_middleware_client, MiddlewareClient, MiddlewareCommand
+from typing import Any, List, Optional, Tuple
 
 from .base import Metric
 
@@ -21,6 +21,7 @@ class MiddlewareClientMetric(Metric):
         self, name: str, middleware_commands: List[MiddlewareCommand], prerequisites: List[Prerequisite] = None
     ):
         super().__init__(name, prerequisites)
+        self.middleware_client: Optional[MiddlewareClient] = None
         self.middleware_commands = middleware_commands
 
     def format_output(self, context: list) -> str:
@@ -29,11 +30,14 @@ class MiddlewareClientMetric(Metric):
         else:
             return dumps({entry['key']: entry['output'] for entry in context})
 
+    def initialize_context(self):
+        self.middleware_client = self.execution_context['middleware_client']
+
     def execute_impl(self) -> Tuple[Any, str]:
         context = []
         metric_report = []
         for middleware_command in self.middleware_commands:
-            response = middleware_command.execute()
+            response = middleware_command.execute(self.middleware_client)
             metric_report.append({
                 'error': response.error,
                 'description': self.get_methods_metadata().get(middleware_command.endpoint, {}).get('description'),

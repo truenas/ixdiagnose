@@ -35,11 +35,14 @@ class MiddlewareCommand:
     def format_output(self, output: Any) -> Any:
         return self.overridden_format_output(output) if self.overridden_format_output else output
 
-    def execute(self) -> MiddlewareResponse:
+    def execute(self, middleware_client: Optional[MiddlewareClient] = None) -> MiddlewareResponse:
         response = MiddlewareResponse(result_key=self.result_key)
         try:
-            with get_middleware_client() as client:
-                response.output = client.call(self.endpoint, *self.payload)
+            if middleware_client:
+                response.output = middleware_client.call(self.endpoint, *self.payload)
+            else:
+                with get_middleware_client() as client:
+                    response.output = client.call(self.endpoint, *self.payload)
         except Exception as e:
             response.error = str(e)
         else:
