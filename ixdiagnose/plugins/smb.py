@@ -55,11 +55,6 @@ class SMB(Plugin):
                 Command(['testparm', '-s'], 'SMB Global Configuration', serializeable=False),
             ]
         ),
-        CommandMetric(
-            'smb_lock_info', [
-                Command(['smbstatus', '-j', '-L'], 'SMB Lock Information', max_lines=50),
-            ]
-        ),
         FileMetric('smb_config_file', '/etc/smb4.conf'),
         MiddlewareClientMetric(
             'smb_info', [
@@ -72,4 +67,18 @@ class SMB(Plugin):
             ]
         ),
         PythonMetric('smb_shares', callback=get_smb_shares, description='SMB Shares and Permissions'),
+    ]
+    raw_metrics = [
+        CommandMetric(
+            'smb_lock_info', [
+                Command(['smbstatus', '-L'], 'SMB Lock Information', max_lines=50, serializeable=False),
+            ]
+        ),
+    ]
+    serializable_metrics = [
+        CommandMetric(
+            'smb_lock_info', [
+                Command(['smbstatus', '-j', '-L'], 'SMB Lock Information', max_lines=50),
+            ]
+        ),
     ]

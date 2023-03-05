@@ -9,19 +9,6 @@ class Hardware(Plugin):
     name = 'hardware'
     metrics = [
         CommandMetric(
-            'block_devices', [
-                Command([
-                    'lsblk', '-J', '-o',
-                    'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,PATH',
-                ], 'List of PCI Devices'),
-            ],
-        ),
-        CommandMetric(
-            'cpu', [
-                Command(['lscpu', '-J'], 'CPU Information'),
-            ]
-        ),
-        CommandMetric(
             'dmidecode', [
                 Command(['dmidecode'], 'Dmidecode', serializeable=False),
             ],
@@ -39,4 +26,26 @@ class Hardware(Plugin):
         FileMetric('usb_devices', '/sys/kernel/debug/usb/devices'),
         MiddlewareClientMetric('disks', [MiddlewareCommand('device.get_disks')]),
         MiddlewareClientMetric('enclosures', [MiddlewareCommand('enclosure.query')]),
+    ]
+    raw_metrics = [
+        CommandMetric(
+            'block_devices', [
+                Command([
+                    'lsblk', '-o',
+                    'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,PATH',
+                ], 'List of PCI Devices', serializeable=False),
+            ],
+        ),
+        CommandMetric('cpu', [Command(['lscpu'], 'CPU Information', serializeable=False)]),
+    ]
+    serializable_metrics = [
+        CommandMetric(
+            'block_devices', [
+                Command([
+                    'lsblk', '-J', '-o',
+                    'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,PATH',
+                ], 'List of PCI Devices'),
+            ],
+        ),
+        CommandMetric('cpu', [Command(['lscpu', '-J'], 'CPU Information')]),
     ]
