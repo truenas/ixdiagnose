@@ -48,6 +48,10 @@ class Plugin:
                 'metric_execution_error': metric_error,
             }
 
-    def write_debug_report(self):
+    def write_debug_report(self) -> None:
         with open(os.path.join(self.output_dir, 'report.json'), 'w') as f:
             f.write(dumps(self.debug_report, indent=4))
+
+    def execute(self) -> None:
+        self.execute_metrics()
+        self.write_debug_report()
