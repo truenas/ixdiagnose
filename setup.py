@@ -13,7 +13,7 @@ setup(
     platforms='any',
     entry_points={
         'console_scripts': [
-            'ixdiagnose = ixdiagnose.main:cli'
+            'ixdiagnose2 = ixdiagnose.main:cli'
         ]
     }
 )
