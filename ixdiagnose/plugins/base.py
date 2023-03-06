@@ -61,7 +61,7 @@ class Plugin:
 
     def write_debug_report(self) -> None:
         with open(os.path.join(self.output_dir, 'report.json'), 'w') as f:
-            f.write(dumps(self.debug_report, indent=4))
+            f.write(dumps(self.debug_report))
 
     def execute(self) -> dict:
         start_time = time.time()

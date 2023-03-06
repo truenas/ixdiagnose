@@ -1,6 +1,11 @@
-from middlewared.client.ejson import dumps, loads # noqa
+from middlewared.client.ejson import dumps as middleware_dumps, loads # noqa
 from middlewared.utils import get
 from typing import Dict, List
+
+
+def dumps(*args, **kwargs):
+    kwargs.setdefault('indent', 4)
+    return middleware_dumps(*args, **kwargs)
 
 
 class Json:

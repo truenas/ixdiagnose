@@ -25,7 +25,7 @@ class CommandMetric(Metric):
 
     def format_data(self, cmd_context: list) -> str:
         if self.serializable:
-            result = dumps(cmd_context, indent=4)
+            result = dumps(cmd_context)
         else:
             result = ''
             for index, entry in enumerate(cmd_context):

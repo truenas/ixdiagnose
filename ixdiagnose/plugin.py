@@ -29,4 +29,4 @@ def generate_plugins_debug() -> None:
             plugins_report[plugin_name] = report
 
     with open(os.path.join(get_plugin_base_dir(), 'report.json'), 'w') as f:
-        f.write(dumps(plugins_report, indent=4))
+        f.write(dumps(plugins_report))
