@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+from ixdiagnose.config import conf
+
 
 def run(*args, **kwargs) -> subprocess.CompletedProcess:
     if isinstance(args[0], list):
@@ -15,7 +17,13 @@ def run(*args, **kwargs) -> subprocess.CompletedProcess:
         args, stdout=kwargs['stdout'], stderr=kwargs['stderr'], shell=shell,
         encoding='utf8', errors='ignore', env=env,
     )
-    stdout, stderr = proc.communicate()
+    stdout = ''
+    try:
+        stdout, stderr = proc.communicate(timeout=conf.timeout)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+        stderr = 'Timed out waiting for response'
+        proc.returncode = -1
 
     cp = subprocess.CompletedProcess(args, proc.returncode, stdout=stdout, stderr=stderr)
     if check and cp.returncode:

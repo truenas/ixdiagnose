@@ -1,6 +1,7 @@
 import contextlib
 
 from dataclasses import dataclass
+from ixdiagnose.config import conf
 from middlewared.client import Client
 from typing import Any, Callable, List, Optional
 
@@ -10,7 +11,7 @@ MiddlewareClient: Client = Client
 
 @contextlib.contextmanager
 def get_middleware_client() -> Client:
-    with Client() as client:
+    with Client(call_timeout=conf.timeout) as client:
         yield client
 
 
