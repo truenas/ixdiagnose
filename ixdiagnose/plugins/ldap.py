@@ -1,5 +1,5 @@
 from ixdiagnose.utils.command import Command
-from ixdiagnose.utils.formatter import Json
+from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
@@ -21,7 +21,7 @@ class LDAP(Plugin):
         FileMetric('nslcd.conf', '/etc/nslcd.conf'),
         MiddlewareClientMetric(
             'ldap_config', [
-                MiddlewareCommand('ldap.config', format_output=Json(['bindpw']).remove),
+                MiddlewareCommand('ldap.config', format_output=remove_keys(['bindpw'])),
                 MiddlewareCommand('ldap.get_samba_domains', result_key='samba_domains'),
                 MiddlewareCommand('ldap.get_root_DSE', result_key='root_dse'),
             ]

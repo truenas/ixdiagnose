@@ -1,5 +1,5 @@
 from ixdiagnose.utils.command import Command
-from ixdiagnose.utils.formatter import Json
+from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
@@ -30,14 +30,14 @@ class System(Plugin):
         MiddlewareClientMetric('coredump', [MiddlewareCommand('system.coredumps')]),
         MiddlewareClientMetric('general_settings', [
             MiddlewareCommand(
-                'system.general.config', format_output=Json([
+                'system.general.config', format_output=remove_keys([
                     'birthday', 'ui_certificate.privatekey', 'ui_certificate.issuer.privatekey',
                     'ui_certificate.signedby.privatekey',
-                ]).remove
+                ])
             )
         ]),
         MiddlewareClientMetric('advanced_settings', [
-            MiddlewareCommand('system.advanced.config', format_output=Json(['sed_user', 'sed_passwd']).remove),
+            MiddlewareCommand('system.advanced.config', format_output=remove_keys(['sed_user', 'sed_passwd'])),
         ]),
         MiddlewareClientMetric('alerts', [MiddlewareCommand('alert.list')]),
         MiddlewareClientMetric('middleware_tasks', [MiddlewareCommand('core.get_tasks')]),
@@ -47,7 +47,7 @@ class System(Plugin):
             MiddlewareCommand('system.is_enterprise', result_key='Enterprise System'),
             MiddlewareCommand(
                 'truecommand.connected', result_key='Truecommand Status',
-                format_output=Json(['truecommand_ip', 'truecommand_url']).remove
+                format_output=remove_keys(['truecommand_ip', 'truecommand_url'])
             ),
             MiddlewareCommand('system.license', result_key='System License'),
             MiddlewareCommand('system.gather_update_failed', result_key='Failed Updates'),
