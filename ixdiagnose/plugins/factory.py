@@ -7,6 +7,7 @@ from .base import Plugin
 from .hardware import Hardware
 from .iscsi import ISCSI
 from .kubernetes import Kubernetes
+from .ldap import LDAP
 from .network import Network
 from .nfs import NFS
 from .smart import SMART
@@ -39,6 +40,7 @@ for plugin in [
     Hardware,
     ISCSI,
     Kubernetes,
+    LDAP,
     Network,
     NFS,
     SMART,
