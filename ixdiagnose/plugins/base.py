@@ -63,6 +63,18 @@ class Plugin:
         with open(os.path.join(self.output_dir, 'report.json'), 'w') as f:
             f.write(dumps(self.debug_report, indent=4))
 
-    def execute(self) -> None:
-        self.execute_metrics()
-        self.write_debug_report()
+    def execute(self) -> dict:
+        start_time = time.time()
+        plugin_error = plugin_traceback = None
+        try:
+            self.execute_metrics()
+            self.write_debug_report()
+        except Exception as exception:
+            plugin_error = str(exception)
+            plugin_traceback = traceback.format_exc()
+
+        return {
+            'execution_time': time.time() - start_time,
+            'execution_error': plugin_error,
+            'execution_traceback': plugin_traceback,
+        }
