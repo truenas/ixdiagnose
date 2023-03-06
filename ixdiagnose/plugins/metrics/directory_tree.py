@@ -33,7 +33,7 @@ class DirectoryTreeMetric(Metric):
         self.path: str = path
 
     def execute_impl(self) -> Tuple[Any, str]:
-        report = {'error': None}
+        report = {'error': None, 'path': self.path}
         if not os.path.isdir(self.path):
             report['error'] = f'{self.path!r} either does not exist or is not a directory'
             return report, ''

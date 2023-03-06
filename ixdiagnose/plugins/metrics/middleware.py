@@ -1,3 +1,5 @@
+import time
+
 from ixdiagnose.plugins.prerequisites.base import Prerequisite
 from ixdiagnose.utils.formatter import dumps
 from ixdiagnose.utils.middleware import get_middleware_client, MiddlewareClient, MiddlewareCommand
@@ -37,9 +39,12 @@ class MiddlewareClientMetric(Metric):
         context = []
         metric_report = []
         for middleware_command in self.middleware_commands:
+            start_time = time.time()
             response = middleware_command.execute(self.middleware_client)
             metric_report.append({
+                'endpoint': middleware_command.endpoint,
                 'error': response.error,
+                'execution_time': time.time() - start_time,
                 'description': self.get_methods_metadata().get(middleware_command.endpoint, {}).get('description'),
             })
             if response.error:

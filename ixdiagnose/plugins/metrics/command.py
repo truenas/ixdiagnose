@@ -1,4 +1,5 @@
 import json
+import time
 
 from typing import List, Tuple
 
@@ -38,9 +39,14 @@ class CommandMetric(Metric):
         cmd_context = []
         metric_report = []
         for cmd in self.cmds:
+            start_time = time.time()
             cp = cmd.execute()
             report = {
-                'error': None, 'description': cmd.description, 'returncode': cp.returncode,
+                'command': cmd.command,
+                'error': None,
+                'execution_time': time.time() - start_time,
+                'description': cmd.description,
+                'returncode': cp.returncode,
             }
             metric_report.append(report)
 
