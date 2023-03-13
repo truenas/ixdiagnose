@@ -30,11 +30,16 @@ class Plugin:
 
     def execute_metrics(self) -> None:
         os.makedirs(self.output_dir, exist_ok=True)
-        with get_middleware_client() as client:
-            return self.execute_impl({
-                'middleware_client': client,
-                'output_dir': self.output_dir,
-            })
+        context = {
+            'middleware_client': None,
+            'output_dir': self.output_dir,
+        }
+        try:
+            with get_middleware_client() as client:
+                context['middleware_client'] = client
+                return self.execute_impl(context)
+        except ConnectionError:
+            return self.execute_impl(context)
 
     def execute_impl(self, context: dict) -> None:
         for metric in self.metrics_to_execute():
