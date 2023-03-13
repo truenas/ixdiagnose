@@ -8,13 +8,14 @@ from .base import Metric
 
 class FileMetric(Metric):
 
-    def __init__(self, name: str, file_path: str, prerequisites: List[Prerequisite] = None):
+    def __init__(self, name: str, file_path: str, prerequisites: List[Prerequisite] = None, extension: str = '.txt'):
         super().__init__(name, prerequisites)
+        self.extension: str = extension
         self.file_path: str = file_path
 
     @property
     def output_file_extension(self) -> str:
-        return '.txt'
+        return self.extension
 
     def execute_impl(self) -> Tuple[Dict, str]:
         report = {
