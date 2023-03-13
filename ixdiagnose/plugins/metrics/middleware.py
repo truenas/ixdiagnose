@@ -2,7 +2,7 @@ import time
 
 from ixdiagnose.plugins.prerequisites.base import Prerequisite
 from ixdiagnose.utils.formatter import dumps
-from ixdiagnose.utils.middleware import get_middleware_client, MiddlewareClient, MiddlewareCommand
+from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
 from typing import Any, List, Optional, Tuple
 
 from .base import Metric
@@ -10,13 +10,12 @@ from .base import Metric
 
 class MiddlewareClientMetric(Metric):
 
-    methods_metadata = {}
+    methods_metadata: Optional[dict] = None
 
     @classmethod
     def get_methods_metadata(cls):
-        if not cls.methods_metadata:
-            with get_middleware_client() as client:
-                cls.methods_metadata = client.call('core.get_methods')
+        if cls.methods_metadata is None:
+            cls.methods_metadata = MiddlewareCommand('core.get_methods').execute().output or {}
         return cls.methods_metadata
 
     def __init__(

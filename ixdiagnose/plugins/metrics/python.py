@@ -3,8 +3,8 @@ import inspect
 from ixdiagnose.exceptions import CallError
 from ixdiagnose.plugins.prerequisites import Prerequisite
 from ixdiagnose.utils.formatter import dumps
-from ixdiagnose.utils.middleware import get_middleware_client
-from typing import Any, Callable, List, Tuple
+from ixdiagnose.utils.middleware import MiddlewareClient
+from typing import Any, Callable, List, Optional, Tuple
 
 from .base import Metric
 
@@ -19,6 +19,7 @@ class PythonMetric(Metric):
         self.callback: Callable = callback
         self.context: Any = context
         self.description: str = description
+        self.middleware_client: Optional[MiddlewareClient] = None
         self.serializable: bool = serializable
         if not callable(self.callback):
             raise CallError('Callback must be a callable')
@@ -33,12 +34,14 @@ class PythonMetric(Metric):
     def output_file_extension(self) -> str:
         return '.json' if self.serializable else '.txt'
 
+    def initialize_context(self) -> None:
+        self.middleware_client = self.execution_context['middleware_client']
+
     def execute_impl(self) -> Tuple[Any, str]:
         report = {'error': None}
         output = None
         try:
-            with get_middleware_client() as client:
-                output = self.callback(client, self.context)
+            output = self.callback(self.middleware_client, self.context)
         except Exception as e:
             report['error'] = f'Failed to execute defined callback: {e!r}'
 
