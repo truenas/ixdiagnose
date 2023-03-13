@@ -3,6 +3,7 @@ import errno
 from ixdiagnose.exceptions import CallError
 from typing import Dict
 
+from .active_directory import ActiveDirectory
 from .base import Plugin
 from .hardware import Hardware
 from .iscsi import ISCSI
@@ -37,6 +38,7 @@ class PluginFactory:
 
 plugin_factory = PluginFactory()
 for plugin in [
+    ActiveDirectory,
     Hardware,
     ISCSI,
     Kubernetes,
