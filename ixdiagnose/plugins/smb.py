@@ -55,7 +55,7 @@ class SMB(Plugin):
                 Command(['testparm', '-s'], 'SMB Global Configuration', serializeable=False),
             ]
         ),
-        FileMetric('smb_config_file', '/etc/smb4.conf'),
+        FileMetric('smb4', '/etc/smb4.conf', extension='.conf'),
         MiddlewareClientMetric(
             'smb_info', [
                 MiddlewareCommand('smb.config'),

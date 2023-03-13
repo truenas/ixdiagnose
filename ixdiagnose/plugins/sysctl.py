@@ -8,5 +8,5 @@ class Sysctl(Plugin):
     name = 'sysctl'
     metrics = [
         CommandMetric('kernel_params', [Command(['sysctl', '-a'], 'All kernel parameters', serializeable=False)]),
-        FileMetric('sysctl_config', '/etc/sysctl.conf'),
+        FileMetric('sysctl', '/etc/sysctl.conf', extension='.conf'),
     ]

@@ -7,5 +7,5 @@ class SSL(Plugin):
     metrics = [
         DirectoryTreeMetric('certs', '/etc/certificates'),
         DirectoryTreeMetric('ssl_directory', '/etc/ssl'),
-        FileMetric('openssl_config', '/etc/ssl/openssl.cnf'),
+        FileMetric('openssl', '/etc/ssl/openssl.cnf', extension='.cnf'),
     ]

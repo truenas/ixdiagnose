@@ -21,7 +21,7 @@ class Network(Plugin):
         CommandMetric('arp', [Command(['arp', '-an'], 'ARP Entries', serializeable=False)]),
         CommandMetric('socket_stats', [Command(['ss', '-nipea'], 'Socket Statistics', serializeable=False)]),
         FileMetric('hosts', '/etc/hosts'),
-        FileMetric('resolvers', '/etc/resolv.conf'),
+        FileMetric('resolv', '/etc/resolv.conf', extension='.conf'),
         MiddlewareClientMetric(
             'middleware_config', [
                 MiddlewareCommand('network.configuration.config'),

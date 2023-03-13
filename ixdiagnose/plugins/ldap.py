@@ -15,10 +15,10 @@ class LDAP(Plugin):
                 Command(['klist', '-ket'], 'Kerberos keytab system', serializeable=False),
             ]
         ),
-        FileMetric('nsswitch_conf', '/etc/nsswitch.conf'),
-        FileMetric('krb5_conf', '/etc/krb5.conf'),
-        FileMetric('openldap_ldap_conf', '/etc/openldap/ldap.conf'),
-        FileMetric('nslcd.conf', '/etc/nslcd.conf'),
+        FileMetric('nsswitch', '/etc/nsswitch.conf', extension='.conf'),
+        FileMetric('krb5', '/etc/krb5.conf', extension='.conf'),
+        FileMetric('ldap', '/etc/openldap/ldap.conf', extension='.conf'),
+        FileMetric('nslcd', '/etc/nslcd.conf', extension='.conf'),
         MiddlewareClientMetric(
             'ldap_config', [
                 MiddlewareCommand('ldap.config', format_output=remove_keys(['bindpw'])),

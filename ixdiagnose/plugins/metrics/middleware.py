@@ -39,14 +39,19 @@ class MiddlewareClientMetric(Metric):
         metric_report = []
         for middleware_command in self.middleware_commands:
             start_time = time.time()
-            response = middleware_command.execute(self.middleware_client)
+            if self.middleware_client is None:
+                execution_error = 'Failed to initialize middleware client'
+            else:
+                response = middleware_command.execute(self.middleware_client)
+                execution_error = response.error
+
             metric_report.append({
                 'endpoint': middleware_command.endpoint,
-                'error': response.error,
+                'error': execution_error,
                 'execution_time': time.time() - start_time,
                 'description': self.get_methods_metadata().get(middleware_command.endpoint, {}).get('description'),
             })
-            if response.error:
+            if execution_error:
                 continue
 
             context.append({

@@ -38,11 +38,12 @@ class PythonMetric(Metric):
         self.middleware_client = self.execution_context['middleware_client']
 
     def execute_impl(self) -> Tuple[Any, str]:
-        report = {'error': None}
+        report = {'error': None if self.middleware_client else 'Failed to initialize middleware client'}
         output = None
-        try:
-            output = self.callback(self.middleware_client, self.context)
-        except Exception as e:
-            report['error'] = f'Failed to execute defined callback: {e!r}'
+        if report['error'] is None:
+            try:
+                output = self.callback(self.middleware_client, self.context)
+            except Exception as e:
+                report['error'] = f'Failed to execute defined callback: {e!r}'
 
         return report, output or '' if isinstance(output, str) or output is None else dumps(output)

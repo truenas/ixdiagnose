@@ -32,6 +32,5 @@ class ISCSI(Plugin):
                 Command(['scstadmin', '-list_scst_attr'], 'Lists SCST core attributes', serializeable=False),
             ], prerequisites=[ServiceRunningPrerequisite('scst')],
         ),
-        FileMetric('shadow.conf', '/etc/ctl.conf.shadow'),
-        FileMetric('scst_conf', '/etc/scst.conf'),
+        FileMetric('scst', '/etc/scst.conf', extension='.conf'),
     ]
