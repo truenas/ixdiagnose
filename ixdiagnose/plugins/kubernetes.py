@@ -27,6 +27,12 @@ class Kubernetes(Plugin):
             ], prerequisites=[ServiceRunningPrerequisite('k3s')],
         ),
         MiddlewareClientMetric('config', [MiddlewareCommand('kubernetes.config')]),
+        MiddlewareClientMetric('catalogs', [MiddlewareCommand('catalog.query')]),
+        MiddlewareClientMetric(
+            'chart_releases', [
+                MiddlewareCommand('chart.release.query', [[], {'extra': {'history': True}}]),
+            ], prerequisites=[ServiceRunningPrerequisite('k3s')],
+        ),
     ]
     raw_metrics = [
         CommandMetric(resource, [

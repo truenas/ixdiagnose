@@ -9,18 +9,10 @@ from .prerequisites import ServiceRunningPrerequisite
 class ISCSI(Plugin):
     name = 'iscsi'
     metrics = [
-        CommandMetric(
-            'service_status', [
-                Command(
-                    ['systemctl', 'status', 'scst'], 'SCST Service Status', serializeable=False, safe_returncodes=[0, 3]
-                ),
-            ],
-        ),
         MiddlewareClientMetric('iscsi_config', [
-            MiddlewareCommand(
-                'service.query', [[['service', '=', 'iscsitarget']], {'get': True}], result_key='service_config',
-            ),
-            MiddlewareCommand('iscsi.global.config', result_key='ISCSI global configuration'),
+            MiddlewareCommand('iscsi.global.config', result_key='global_config'),
+            MiddlewareCommand('iscsi.target.query', result_key='targets'),
+            MiddlewareCommand('iscsi.extent.query', result_key='extents'),
         ]),
         CommandMetric(
             'iscsi_state', [
@@ -33,4 +25,22 @@ class ISCSI(Plugin):
             ], prerequisites=[ServiceRunningPrerequisite('scst')],
         ),
         FileMetric('scst', '/etc/scst.conf', extension='.conf'),
+    ]
+    raw_metrics = [
+        CommandMetric(
+            'service_status', [
+                Command(
+                    ['systemctl', 'status', 'scst'], 'SCST Service Status', serializeable=False, safe_returncodes=[0, 3]
+                ),
+            ],
+        ),
+    ]
+    serializable_metrics = [
+        MiddlewareClientMetric(
+            'service_status', [
+                MiddlewareCommand(
+                    'service.query', [[['service', '=', 'iscsitarget']], {'get': True}], result_key='service'
+                ),
+            ]
+        )
     ]

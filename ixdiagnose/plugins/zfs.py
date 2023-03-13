@@ -39,7 +39,9 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
     resource_context = resource_name = None
     output = ''
     prop_dict = {}
-    for index, resource_line in enumerate(filter(bool, map(str.strip, cp.stdout.splitlines()[1:]))):
+    output_lines = cp.stdout.splitlines()
+    props_header = output_lines[0]
+    for index, resource_line in enumerate(filter(bool, map(str.strip, output_lines[1:]))):
         resource_name = resource_line.split()[0].strip()
         if resource_context != resource_name:
             if resource_context is not None and resource_type == 'zfs':
@@ -49,6 +51,7 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
             header_str = f'{resource_type} get all {resource_name}'
             next_line = '\n\n' if index != 0 else ''
             output += f'{next_line}{"=" * (len(header_str) + 5)}\n  {header_str}  \n{"=" * (len(header_str) + 5)}\n\n'
+            output += f'{props_header}\n'
             resource_context = resource_name
 
         if resource_type == 'zfs':
@@ -67,7 +70,7 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
 def encryption_summary(client: MiddlewareClient, context: Any) -> str:
     summary = {}
     for pool in client.call('pool.query'):
-        summary[pool['name']] = client.call('pool.dataset.encryption_summary', pool['name'])
+        summary[pool['name']] = client.call('pool.dataset.encryption_summary', pool['name'], job=True)
 
     return dumps(summary)
 

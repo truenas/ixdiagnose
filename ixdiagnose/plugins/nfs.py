@@ -33,7 +33,6 @@ class NFS(Plugin):
         FileMetric('nfs-exports', '/etc/exports'),
         MiddlewareClientMetric('nfs_config', [
             MiddlewareCommand('nfs.config'),
-            MiddlewareCommand('service.query', [[['service', '=', 'nfs']], {'get': True}], result_key='nfs_service'),
             MiddlewareCommand('sharing.nfs.query'),
         ]),
     ]
