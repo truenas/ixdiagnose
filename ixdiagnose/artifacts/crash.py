@@ -1,10 +1,10 @@
 from .base import Artifact
-from .items import Directory
+from .items import Pattern
 
 
 class Crash(Artifact):
-    base_dir = '/data'
+    base_dir = '/data/crash'
     name = 'crash'
     items = [
-        Directory('crash'),
+        Pattern(r'.*'),
     ]
