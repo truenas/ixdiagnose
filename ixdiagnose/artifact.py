@@ -9,7 +9,7 @@ from .utils.paths import get_artifacts_base_dir
 def gather_artifacts() -> None:
     os.makedirs(get_artifacts_base_dir(), exist_ok=True)
     artifacts_report = {}
-    for artifact_name, artifact in artifact_factory.get_artifacts().items():
+    for artifact_name, artifact in artifact_factory.get_items().items():
         try:
             report = artifact.gather()
         except Exception as exc:

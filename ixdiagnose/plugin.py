@@ -11,7 +11,7 @@ def generate_plugins_debug() -> None:
     os.makedirs(get_plugin_base_dir(), exist_ok=True)
     with concurrent.futures.ProcessPoolExecutor(max_workers=3) as exc:
         futures = {
-            exc.submit(plugin.execute): plugin_name for plugin_name, plugin in plugin_factory.get_plugins().items()
+            exc.submit(plugin.execute): plugin_name for plugin_name, plugin in plugin_factory.get_items().items()
         }
         plugins_report = {}
         for future in concurrent.futures.as_completed(futures):

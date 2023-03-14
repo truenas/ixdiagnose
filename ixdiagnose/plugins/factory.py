@@ -1,10 +1,6 @@
-import errno
-
-from ixdiagnose.exceptions import CallError
-from typing import Dict
+from ixdiagnose.utils.factory import Factory
 
 from .active_directory import ActiveDirectory
-from .base import Plugin
 from .dbdump import DatabaseDump
 from .hardware import Hardware
 from .iscsi import ISCSI
@@ -22,24 +18,7 @@ from .vm import VM
 from .zfs import ZFS
 
 
-class PluginFactory:
-
-    def __init__(self):
-        self._creators: dict = {}
-
-    def register(self, plugin: Plugin) -> None:
-        self._creators[plugin.name] = plugin
-
-    def plugin(self, name: str) -> Plugin:
-        if name not in self._creators:
-            raise CallError(f'Unable to locate {name!r} plugin.', errno=errno.ENOENT)
-        return self._creators[name]
-
-    def get_plugins(self) -> Dict[str, Plugin]:
-        return self._creators
-
-
-plugin_factory = PluginFactory()
+plugin_factory = Factory()
 for plugin in [
     ActiveDirectory,
     DatabaseDump,
