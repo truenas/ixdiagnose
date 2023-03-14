@@ -4,11 +4,16 @@ import traceback
 
 from ixdiagnose.utils.formatter import dumps
 from ixdiagnose.utils.paths import get_artifacts_base_dir
+from typing import List
+
+from .items import Item
 
 
 class Artifact:
 
+    base_dir: str = NotImplementedError
     name: str = NotImplementedError
+    items: List[Item] = []
 
     def __init__(self):
         self.debug_report: dict = {}
@@ -39,4 +44,18 @@ class Artifact:
         }
 
     def gather_impl(self) -> None:
-        raise NotImplementedError()
+        for item in self.items:
+            item_report = item_execution_error = item_execution_traceback = None
+            start_time = time.time()
+            try:
+                item_report = item.copy(self.base_dir, self.output_dir)
+            except Exception as exc:
+                item_execution_error = str(exc)
+                item_execution_traceback = traceback.format_exc()
+
+            self.debug_report[item.name] = {
+                'execution_time': time.time() - start_time,
+                'item_execution_error': item_execution_error,
+                'item_execution_traceback': item_execution_traceback,
+                'item_report': item_report,
+            }

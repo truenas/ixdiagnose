@@ -1,5 +1,6 @@
 import click
 
+from .artifact import gather_artifacts
 from .config import conf
 from .plugin import generate_plugins_debug
 
@@ -18,6 +19,8 @@ def cli(ctx, debug_path):
 def run(ctx):
     click.echo('Generating debug of plugins')
     generate_plugins_debug()
+    click.echo('Grabbing artifacts')
+    gather_artifacts()
 
 
 @cli.command()

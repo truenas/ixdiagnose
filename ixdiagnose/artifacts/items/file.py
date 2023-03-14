@@ -5,6 +5,7 @@ from .base import Item
 
 
 class File(Item):
+    # TODO: Allow regex matching
 
     def size(self, item_path: str) -> int:
         return pathlib.Path(item_path).stat().st_size
