@@ -4,6 +4,7 @@ from ixdiagnose.exceptions import CallError
 from typing import Dict
 
 from .base import Artifact
+from .coredumps import CoreDumps
 from .logs import Logs
 
 
@@ -27,6 +28,7 @@ class ArtifactFactory:
 
 artifact_factory = ArtifactFactory()
 for artifact in [
+    CoreDumps,
     Logs,
 ]:
     artifact_factory.register(artifact())
