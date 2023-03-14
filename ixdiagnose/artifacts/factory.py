@@ -5,7 +5,9 @@ from typing import Dict
 
 from .base import Artifact
 from .coredumps import CoreDumps
+from .crash import Crash
 from .logs import Logs
+from .sys_info import SystemInfo
 
 
 # TODO: Lets have a common class for factory
@@ -29,6 +31,8 @@ class ArtifactFactory:
 artifact_factory = ArtifactFactory()
 for artifact in [
     CoreDumps,
+    Crash,
     Logs,
+    SystemInfo,
 ]:
     artifact_factory.register(artifact())
