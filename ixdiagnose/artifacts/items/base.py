@@ -16,6 +16,9 @@ class Item:
     def size(self, item_path: str) -> int:
         raise NotImplementedError()
 
+    def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]:
+        return True, None
+
     def is_to_be_copied(self, item_path) -> Tuple[bool, Optional[str]]:
         if not self.exists(item_path):
             return False, f'{item_path!r} does not exist'
@@ -25,7 +28,13 @@ class Item:
             if size > self.max_size:
                 return False, f'{item_path!r} exceeds specified {self.max_size!r} size with size being {size!r}'
 
-        return True, None
+        return self.is_to_be_copied(item_path)
+
+    def source_item_path(self, item_dir: str) -> str:
+        return os.path.join(item_dir, self.name)
+
+    def destination_item_path(self, destination_dir: str) -> str:
+        return os.path.join(destination_dir, self.name)
 
     def copy(self, item_dir: str, destination_dir: str) -> dict:
         report = {
@@ -33,11 +42,11 @@ class Item:
             'traceback': None,
             'copied_items': [],
         }
-        item_path = os.path.join(item_dir, self.name)
+        item_path = self.source_item_path(item_dir)
         to_be_copied, report['error'] = self.is_to_be_copied(item_path)
         if to_be_copied:
             try:
-                report['copied_items'] = self.copy_impl(item_path, os.path.join(destination_dir, self.name))
+                report['copied_items'] = self.copy_impl(item_path, self.destination_item_path(destination_dir))
             except Exception as e:
                 report.update({
                     'error': str(e),
