@@ -1,13 +1,19 @@
 from .base import Artifact
-from .items import Directory, File, Pattern
+from .items import Directory, File
 
 
 class Logs(Artifact):
     base_dir = '/var/log'
     name = 'logs'
     items = [
+        Directory('openvpn'),
         Directory('pods'),
-        File('middlewared.log'),
+        Directory('samba4'),
+        File('daemon.log'),
+        File('failover.log'),
         File('kern.log'),
-        Pattern(r'sys*'),
+        File('messages'),
+        File('middlewared.log'),
+        File('syslog'),
+        File('zettarepl.log'),
     ]
