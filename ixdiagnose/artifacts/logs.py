@@ -1,5 +1,5 @@
 from .base import Artifact
-from .items import Directory, File
+from .items import Directory, File, Pattern
 
 
 class Logs(Artifact):
@@ -9,4 +9,5 @@ class Logs(Artifact):
         Directory('pods'),
         File('middlewared.log'),
         File('kern.log'),
+        Pattern(r'sys*'),
     ]

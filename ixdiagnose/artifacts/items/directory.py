@@ -44,7 +44,7 @@ def copy_tree(src: str, dst: str, regex_pattern: Optional[str] = None) -> list:
             outputs.extend(copy_tree(src_name, dst_name, regex_pattern))
         else:
             copy_file(src_name, dst_name)
-            outputs.append(dst_name)
+            outputs.append(src_name)
 
     return outputs
 
