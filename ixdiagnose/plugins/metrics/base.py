@@ -11,6 +11,10 @@ class Metric:
         self.name: str = name
         self.prerequisites: List[Prerequisite] = prerequisites or []
 
+        assert type(name) is str and bool(name) is True
+        assert type(prerequisites) is list
+        assert all(isinstance(prerequisite, Prerequisite) for prerequisite in self.prerequisites) is True
+
     @property
     def output_file_extension(self) -> str:
         return '.json'
@@ -27,6 +31,7 @@ class Metric:
         self.initialize_context()
         data = self.execute_impl()
         assert isinstance(data, (list, tuple)) and len(data) == 2
+        assert type(data[1]) is str
         return data
 
     def initialize_context(self) -> None:

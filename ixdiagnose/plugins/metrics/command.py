@@ -16,6 +16,9 @@ class CommandMetric(Metric):
         super().__init__(name, prerequisites)
         self.cmds: List[Command] = cmds
 
+        assert type(self.cmds) is list
+        assert all(isinstance(cmd, Command) for cmd in self.cmds) is True
+
     @property
     def serializable(self) -> bool:
         return all(cmd.serializeable for cmd in self.cmds)

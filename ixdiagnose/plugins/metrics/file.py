@@ -13,6 +13,8 @@ class FileMetric(Metric):
         self.extension: str = extension
         self.file_path: str = file_path
 
+        assert type(self.file_path) is str and bool(self.file_path) is True
+
     @property
     def output_file_extension(self) -> str:
         return self.extension

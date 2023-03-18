@@ -21,6 +21,12 @@ class Plugin:
     def __init__(self):
         self.debug_report: dict = {}
 
+        assert type(self.name) is str and bool(self.name) is True
+        for name in ('metrics', 'raw_metrics', 'serializable_metrics'):
+            metric_val = getattr(self, name)
+            assert type(metric_val) is list
+            assert all(isinstance(metric, Metric) for metric in metric_val)
+
     @property
     def output_dir(self) -> str:
         return os.path.join(get_plugin_base_dir(), self.name)
