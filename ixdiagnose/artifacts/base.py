@@ -18,6 +18,10 @@ class Artifact:
     def __init__(self):
         self.debug_report: dict = {}
 
+        assert type(self.base_dir) is str and bool(self.base_dir) is True
+        assert type(self.name) is str and bool(self.name) is True
+        assert all(isinstance(item, Item) for item in self.items) is True
+
     @property
     def output_dir(self) -> str:
         return os.path.join(get_artifacts_base_dir(), self.name)

@@ -10,6 +10,8 @@ class Item:
         self.name: str = name
         self.max_size: Optional[int] = max_size
 
+        assert type(self.name) is str and bool(self.name) is True
+
     def exists(self, item_path: str) -> Tuple[bool, str]:
         exists = os.path.exists(item_path)
         return exists, '' if exists else f'{item_path!r} does not exist'
