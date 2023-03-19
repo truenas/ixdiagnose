@@ -19,6 +19,14 @@ class Item:
     def size(self, item_path: str) -> int:
         raise NotImplementedError()
 
+    def size_check(self, item_path) -> Tuple[bool, Optional[str]]:
+        if self.max_size is not None:
+            size = self.size(item_path)
+            if size > self.max_size:
+                return False, f'{item_path!r} exceeds specified {self.max_size!r} size with size being {size!r}'
+
+        return True, None
+
     def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[Union[str, Dict[str, str]]]]:
         return True, None
 

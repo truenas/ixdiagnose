@@ -4,7 +4,7 @@ import traceback
 
 from ixdiagnose.utils.formatter import dumps
 from ixdiagnose.utils.paths import get_artifacts_base_dir
-from typing import List
+from typing import List, Optional
 
 from .items import Item
 
@@ -13,6 +13,7 @@ class Artifact:
 
     base_dir: str = NotImplementedError
     name: str = NotImplementedError
+    individual_item_max_size_limit: Optional[int] = None
     items: List[Item] = []
 
     def __init__(self):
@@ -21,6 +22,10 @@ class Artifact:
         assert type(self.base_dir) is str and bool(self.base_dir) is True
         assert type(self.name) is str and bool(self.name) is True
         assert all(isinstance(item, Item) for item in self.items) is True
+
+        if self.individual_item_max_size_limit is not None:
+            for item in self.items:
+                item.max_size = self.individual_item_max_size_limit
 
     @property
     def output_dir(self) -> str:

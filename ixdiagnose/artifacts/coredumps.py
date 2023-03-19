@@ -13,7 +13,7 @@ RE_CORE_NAME = re.compile(r'^core\.(.+?)\..+')
 class CorePattern(Pattern):
 
     def __init__(self, max_size: Optional[int] = None):
-        super().__init__(r'^core\..+', max_size)
+        super().__init__(r'^core\..+', max_size, truncate_files=False)
 
     def to_copy_items(self, items_path: str) -> list:
         items = {}
@@ -31,5 +31,5 @@ class CoreDumps(Artifact):
     base_dir = '/var/db/system/cores'
     name = 'cores'
     items = [
-        CorePattern(max_size=52428800),  # limiting it to 50 mb for now
+        CorePattern(max_size=10 * 1024 * 1024),  # limiting it to 10 mb per core for now
     ]

@@ -10,16 +10,21 @@ from .file import File
 
 class Pattern(Item):
 
-    def __init__(self, name: str, max_size: Optional[int] = None):
+    def __init__(self, name: str, max_size: Optional[int] = None, truncate_files: Optional[bool] = True):
         super().__init__(name, max_size)
         self.pattern: str = self.name
         self.items: List[Item] = []
         self.to_skip_items: List[Item] = []
+        self.truncate_files: bool = truncate_files
 
     def initialize_context(self, item_path: str) -> None:
         for entry in self.to_copy_items(item_path):
-            item_type = Directory if os.path.isdir(os.path.join(item_path, entry)) else File
-            self.items.append(item_type(entry, max_size=self.max_size))
+            if os.path.isdir(os.path.join(item_path, entry)):
+                item = Directory(entry, max_size=self.max_size)
+            else:
+                item = File(entry, max_size=self.max_size, truncate=self.truncate_files)
+
+            self.items.append(item)
 
     def exists(self, item_path: str) -> Tuple[bool, str]:
         exists = bool(self.items)
