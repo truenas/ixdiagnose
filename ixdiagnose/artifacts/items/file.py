@@ -2,6 +2,7 @@ import os
 import pathlib
 import shutil
 
+from ixdiagnose.utils.io import truncate_file
 from typing import Optional, Tuple
 
 from .base import Item
@@ -23,3 +24,9 @@ class File(Item):
 
     def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]:
         return (True, None) if os.path.isfile(item_path) else (False, f'{item_path!r} is not a file')
+
+    def post_copy_hook(self, destination_path: str):
+        if self.max_size is None:
+            return
+
+        truncate_file(destination_path, self.max_size)

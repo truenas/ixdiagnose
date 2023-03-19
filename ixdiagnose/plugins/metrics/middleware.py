@@ -25,7 +25,6 @@ class MiddlewareClientMetric(Metric):
         self.middleware_client: Optional[MiddlewareClient] = None
         self.middleware_commands: List[MiddlewareCommand] = middleware_commands
 
-        assert type(self.middleware_client) is list
         assert all(
             isinstance(middleware_command, MiddlewareCommand) for middleware_command in self.middleware_commands
         ) is True

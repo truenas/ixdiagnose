@@ -14,12 +14,12 @@ class Pattern(Item):
         super().__init__(name, max_size)
         self.pattern: str = self.name
         self.items: List[Item] = []
+        self.to_skip_items: List[Item] = []
 
     def initialize_context(self, item_path: str) -> None:
         for entry in self.to_copy_items(item_path):
-            self.items.append(
-                Directory(entry) if os.path.isdir(os.path.join(item_path, entry)) else File(entry)
-            )
+            item_type = Directory if os.path.isdir(os.path.join(item_path, entry)) else File
+            self.items.append(item_type(entry, max_size=self.max_size))
 
     def exists(self, item_path: str) -> Tuple[bool, str]:
         exists = bool(self.items)
@@ -37,13 +37,19 @@ class Pattern(Item):
     def size(self, item_path: str) -> int:
         return sum(item.size(item_path) for item in self.items)
 
-    def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]:
-        items_checks = list(zip(*[i.to_be_copied_checks(os.path.join(item_path, i.name)) for i in self.items]))
-        return all(items_checks[0] or [False]), '\n'.join(filter(bool, items_checks[1])) or None
+    def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[dict]]:
+        item_check_report = {}
+        for item in self.items:
+            to_copy, error = item.to_be_copied_checks(os.path.join(item_path, item.name))
+            if not to_copy:
+                item_check_report[item.name] = error
+                self.to_skip_items.append(item)
+
+        return len(self.items) != len(self.to_skip_items), item_check_report
 
     def copy_impl(self, item_path: str, destination_path: str) -> list:
         copied_items = []
-        for item in self.items:
+        for item in filter(lambda i: i not in self.to_skip_items, self.items):
             copied_items.extend(item.copy_impl(
                 item.source_item_path(item_path), item.destination_item_path(destination_path)
             ))

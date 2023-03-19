@@ -56,6 +56,11 @@ class Directory(Item):
         self.regex: Optional[str] = regex
 
     def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]:
+        if self.max_size is not None:
+            size = self.size(item_path)
+            if size > self.max_size:
+                return False, f'{item_path!r} exceeds specified {self.max_size!r} size with size being {size!r}'
+
         return (True, None) if os.path.isdir(item_path) else (False, f'{item_path!r} is not a directory')
 
     def size(self, item_path: str) -> int:

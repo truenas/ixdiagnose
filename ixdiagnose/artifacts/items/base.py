@@ -1,7 +1,7 @@
 import os
 import traceback
 
-from typing import Optional, Tuple
+from typing import Dict, Optional, Tuple, Union
 
 
 class Item:
@@ -19,18 +19,13 @@ class Item:
     def size(self, item_path: str) -> int:
         raise NotImplementedError()
 
-    def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]:
+    def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[Union[str, Dict[str, str]]]]:
         return True, None
 
-    def is_to_be_copied(self, item_path) -> Tuple[bool, Optional[str]]:
+    def is_to_be_copied(self, item_path) -> Tuple[bool, Optional[Union[str, Dict[str, str]]]]:
         exists, exists_error = self.exists(item_path)
         if not exists:
             return False, exists_error
-
-        if self.max_size is not None:
-            size = self.size(item_path)
-            if size > self.max_size:
-                return False, f'{item_path!r} exceeds specified {self.max_size!r} size with size being {size!r}'
 
         return self.to_be_copied_checks(item_path)
 
@@ -41,6 +36,9 @@ class Item:
         return os.path.join(destination_dir, self.name)
 
     def initialize_context(self, item_path: str) -> None:
+        pass
+
+    def post_copy_hook(self, destination_path: str):
         pass
 
     def copy(self, item_dir: str, destination_dir: str) -> dict:
@@ -54,7 +52,9 @@ class Item:
         to_be_copied, report['error'] = self.is_to_be_copied(item_path)
         if to_be_copied:
             try:
-                report['copied_items'] = self.copy_impl(item_path, self.destination_item_path(destination_dir))
+                destination_path = self.destination_item_path(destination_dir)
+                report['copied_items'] = self.copy_impl(item_path, destination_path)
+                self.post_copy_hook(destination_path)
             except Exception as e:
                 report.update({
                     'error': str(e),

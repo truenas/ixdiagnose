@@ -12,7 +12,7 @@ class Metric:
         self.prerequisites: List[Prerequisite] = prerequisites or []
 
         assert type(name) is str and bool(name) is True
-        assert type(prerequisites) is list
+        assert type(self.prerequisites) is list
         assert all(isinstance(prerequisite, Prerequisite) for prerequisite in self.prerequisites) is True
 
     @property
