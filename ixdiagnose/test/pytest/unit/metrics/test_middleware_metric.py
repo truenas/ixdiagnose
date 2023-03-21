@@ -100,9 +100,11 @@ from ixdiagnose.plugins.metrics.middleware import MiddlewareClientMetric
     ),
 ])
 def test_middleware_metric(mocker, name, cmds, responses, context, should_work):
+    mock_client = mocker.Mock()
     mocker.patch('ixdiagnose.utils.middleware.MiddlewareCommand.execute', side_effect=responses)
     mocker.patch('ixdiagnose.plugins.metrics.middleware.MiddlewareClientMetric.get_methods_metadata', return_value={})
     metric = MiddlewareClientMetric(name, cmds)
+    metric.middleware_client = mock_client
     if should_work:
         report, output = metric.execute_impl()
         assert output == metric.format_output(context=context)

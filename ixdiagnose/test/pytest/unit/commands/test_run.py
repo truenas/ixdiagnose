@@ -13,28 +13,23 @@ Filename				Type		Size	Used	Priority
 '''
 
 
-@pytest.mark.parametrize('command,stdout,stderr,expected_output,should_work', [
+@pytest.mark.parametrize('command,stdout,stderr,expected_output,', [
     (
         ['swapon', '-s'],
         swapon_output,
         '',
         CompletedProcess(args=('swapon', '-s'), returncode=0, stdout=swapon_output, stderr=''),
-        True,
     ),
     (
         ['swapon', '-s'],
         swapon_output,
         '',
         CompletedProcess(args=('swapon', '-s'), returncode=0, stdout=swapon_output, stderr=''),
-        False,
     )
 ])
-def test_run(mocker, command, stdout, stderr, expected_output, should_work):
+def test_run(mocker, command, stdout, stderr, expected_output):
     mock_popen = mocker.patch('subprocess.Popen')
     mock_popen.return_value.communicate.return_value = (stdout, stderr)
     mock_popen.return_value.returncode = 0
     result = run(command, shell=False, check=False, env=None)
-    if not should_work:
-        assert result.stdout != expected_output.stdout
-    else:
-        assert result.stdout == expected_output.stdout
+    assert result.stdout == expected_output.stdout
