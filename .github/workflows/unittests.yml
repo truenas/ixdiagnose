@@ -9,16 +9,16 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/truenas/middleware:master
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.9
-    - name: Install dependencies
+    - name: Deps
       run: |
-        python -m pip install --upgrade pip
+        chmod +x /usr/bin/apt*
+        apt update
+        apt install -y python3-pip
         pip install -r ixdiagnose/test/requirements.txt
     - name: Running test
-      run: pytest ixdiagnose/test/pytest/unit/
+      run: pytest -v ixdiagnose/test/pytest/unit/
