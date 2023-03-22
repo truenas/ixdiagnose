@@ -47,33 +47,39 @@ directory_tree_output = [
 ]
 
 
-@pytest.mark.parametrize('name,path,result,report,should_work', [
+@pytest.mark.parametrize('name,isdir,path,result,report,should_work', [
     (
         'certs', '/etc/certificates',
+        True,
         (directory_tree_output, []),
         [],
         True,
     ),
     (
         'certs', '/etc/certificates',
+        False,
         (directory_tree_output, []),
         [{'error': None, 'path': '/etc/certificates'}],
         False,
     ),
     (
         'certs', '/etc/certificates',
-        (directory_tree_output, [{'error': None, 'path': '/etc/certificates'}]),
-        [{'error': None, 'path': '/etc/certificates'}],
+        False,
+        (directory_tree_output, [{'error': '/etc/certificates either does not exist or is not a directory',
+                                  'path': '/etc/certificates'}]),
+        [{'error': '/etc/certificates either does not exist or is not a directory', 'path': '/etc/certificates'}],
         True,
     ),
     (
         'certs', '/etc/certificates',
+        True,
         (directory_tree_output, [{'error': None, 'path': '/etc/certificates'}]),
         [],
         False,
     ),
 ])
-def test_directory_tree_metric(mocker, name, path, result, report, should_work):
+def test_directory_tree_metric(mocker, name, isdir, path, result, report, should_work):
+    mocker.patch('os.path.isdir', return_value=isdir)
     mocker.patch('ixdiagnose.plugins.metrics.directory_tree.get_results', return_value=result)
     directory_tree = DirectoryTreeMetric(name, path)
     if not should_work:
