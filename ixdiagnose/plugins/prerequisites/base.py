@@ -5,7 +5,7 @@ class CacheMeta(type):
 
     def __new__(cls, *args, **kwargs):
         klass = super().__new__(cls, *args, **kwargs)
-        klass.cache = {}
+        klass.CACHE_RESULTS = {}
         return klass
 
 
