@@ -58,4 +58,5 @@ class Pattern(Item):
             copied_items.extend(item.copy_impl(
                 item.source_item_path(item_path), item.destination_item_path(destination_path)
             ))
+            item.post_copy_hook(item.destination_item_path(destination_path))
         return copied_items
