@@ -1,24 +1,22 @@
-name: ixdiagnose_test
+name: unit_tests
 
 on:
-  push:
-    branches:
-      - '*'
+  pull_request:
+    types:
+      - 'synchronize'
+      - 'opened'
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/truenas/middleware:master
+      image: ghcr.io/truenas/ixdiagnose:master
 
     steps:
     - uses: actions/checkout@v2
     - name: Deps
       run: |
-        chmod +x /usr/bin/apt*
-        apt update
-        apt install -y python3-pip
-        pip install -r ixdiagnose/test/requirements.txt
+        pip install -r requirements.txt
     - name: Running test
       run: pytest -v ixdiagnose/test/pytest/unit/
