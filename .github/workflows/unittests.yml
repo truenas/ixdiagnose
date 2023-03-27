@@ -18,5 +18,6 @@ jobs:
     - name: Deps
       run: |
         pip install -r requirements.txt
+        pip install -U .
     - name: Running test
       run: pytest -v ixdiagnose/test/pytest/unit/
