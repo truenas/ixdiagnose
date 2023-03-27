@@ -50,7 +50,7 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
             prop_dict = {}
             header_str = f'{resource_type} get all {resource_name}'
             next_line = '\n\n' if index != 0 else ''
-            output += f'{next_line}{"=" * (len(header_str) + 5)}\n  {header_str}  \n{"=" * (len(header_str) + 5)}\n\n'
+            output += f'{next_line}{"=" * (len(header_str) + 5)}\n  {header_str}\n{"=" * (len(header_str) + 5)}\n\n'
             output += f'{props_header}\n'
             resource_context = resource_name
 
@@ -88,7 +88,7 @@ def kstat_output(client: MiddlewareClient, context: Any) -> str:
     for index, kstat in enumerate(kstats):
         kstat_header = f'kstat {kstat!r}'
         newline = '\n\n' if index != 0 else ''
-        header = f'{newline}{"=" * (len(kstat_header) + 5)}\n  {kstat_header}  \n{"=" * (len(kstat_header) + 5)}\n'
+        header = f'{newline}{"=" * (len(kstat_header) + 5)}\n  {kstat_header}\n{"=" * (len(kstat_header) + 5)}\n'
         output += header
         kstat_path = os.path.join('/proc/spl/kstat/zfs', kstat)
         if os.path.exists(kstat_path):

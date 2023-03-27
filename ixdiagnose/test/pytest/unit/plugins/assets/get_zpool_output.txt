@@ -1,0 +1,42 @@
+======================
+  zfs get all crave
+======================
+
+NAME   PROPERTY                       VALUE                          SOURCE
+crave  type                           filesystem                     -
+crave  creation                       Mon Feb  6  6:05 2023          -
+crave  used                           13.4G                          -
+crave  available                      3.54G                          -
+crave  referenced                     96K                            -
+crave  compressratio                  1.54x                          -
+
+Mountpoint ACL: crave
+# file: mnt/crave
+# owner: root
+# group: root
+user::rwx
+group::r-x
+other::r-x
+
+
+
+======================
+  zfs get all rootd
+======================
+
+NAME   PROPERTY                       VALUE                          SOURCE
+rootd  type                           filesystem                     -
+rootd  creation                       Sun Feb 19  8:59 2023          -
+rootd  used                           2.03G                          -
+rootd  available                      14.9G                          -
+rootd  referenced                     192K                           -
+rootd  compressratio                  1.00x                          -
+
+Mountpoint ACL: rootd
+# file: mnt/rootd
+# owner: root
+# group: root
+user::rwx
+group::r-x
+other::r-x
+

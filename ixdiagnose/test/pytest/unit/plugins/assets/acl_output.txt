@@ -1,0 +1,7 @@
+Mountpoint ACL: crave/ix-applications
+# file: mnt/crave/ix-applications
+# owner: root
+# group: root
+user::rwx
+group::r-x
+other::r-x
