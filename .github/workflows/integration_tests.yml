@@ -1,9 +1,10 @@
-name: ixdiagnose_test
+name: integration_tests
 
 on:
-  push:
-    branches:
-      - '*'
+  pull_request:
+    types:
+      - 'synchronize'
+      - 'opened'
 
 jobs:
   build:
