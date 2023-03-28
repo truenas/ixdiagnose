@@ -1,6 +1,7 @@
 import contextlib
 import json
 import os
+import pytest
 import shutil
 
 from ixdiagnose.artifact import artifact_factory, gather_artifacts as gather_artifacts_impl
@@ -31,6 +32,17 @@ ARTIFACT_REPORT_SCHEMA = {
         'item_execution_traceback': {'type': ['string', 'null']},
     },
 }
+
+
+@contextlib.contextmanager
+def create_test_file_having_size(file_path: str, file_size: int):
+    try:
+        with open(file_path, 'wb') as f:
+            f.write(os.urandom(file_size))
+
+        yield os.path.basename(file_path)
+    finally:
+        os.remove(file_path)
 
 
 @contextlib.contextmanager
@@ -91,3 +103,18 @@ def test_report_schema():
 
             for item_report in artifact_report.values():
                 validate(item_report, ARTIFACT_REPORT_SCHEMA)
+
+
+@pytest.mark.parametrize('file_size,file_truncated', [
+    (5 * 1024 * 1024, False),
+    (2 * 1024 * 1024, False),
+    (12 * 1024 * 1024, True),
+    (15 * 1024 * 1024, True),
+])
+def test_truncation_of_file(file_size, file_truncated):
+    with create_test_file_having_size('/var/log/failover.log', file_size) as file_name:
+        with gather_artifacts() as artifacts_dir:
+            if file_truncated:
+                assert os.path.getsize(os.path.join(artifacts_dir, 'logs', file_name)) < file_size
+            else:
+                assert os.path.getsize(os.path.join(artifacts_dir, 'logs', file_name)) == file_size
