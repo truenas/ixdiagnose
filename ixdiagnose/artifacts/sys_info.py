@@ -6,6 +6,5 @@ class SystemInfo(Artifact):
     base_dir = '/etc'
     name = 'sys_info'
     items = [
-        File('hostid'),
         File('version'),
     ]
