@@ -4,6 +4,7 @@ from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
 from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric
+from .prerequisites import LDAPStatePrerequisite
 
 
 class LDAP(Plugin):
@@ -24,6 +25,6 @@ class LDAP(Plugin):
                 MiddlewareCommand('ldap.config', format_output=remove_keys(['bindpw'])),
                 MiddlewareCommand('ldap.get_samba_domains', result_key='samba_domains'),
                 MiddlewareCommand('ldap.get_root_DSE', result_key='root_dse'),
-            ]
+            ], prerequisites=[LDAPStatePrerequisite()]
         ),
     ]

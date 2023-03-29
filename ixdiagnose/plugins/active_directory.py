@@ -36,21 +36,21 @@ class ActiveDirectory(Plugin):
                 Command(
                     ['wbinfo', f'--dsgetdcname={ad_domain_name()}'], 'Active Directory DC name.', serializeable=False
                 ),
-            ], prerequisites=[ActiveDirectoryStatePrerequisite('HEALTHY')],
+            ], prerequisites=[ActiveDirectoryStatePrerequisite()],
         ),
         CommandMetric(
             'ad_join_status', [
                 Command(
                     ['net', '-d', 5, '-k', 'ads', 'testjoin'], 'Active Directory Join Status.', serializeable=False
                 ),
-            ], prerequisites=[ActiveDirectoryStatePrerequisite('HEALTHY')],
+            ], prerequisites=[ActiveDirectoryStatePrerequisite()],
         ),
         MiddlewareClientMetric(
             'ad_config', [MiddlewareCommand('activedirectory.config', format_output=remove_keys(['bindpw']))],
         ),
         MiddlewareClientMetric(
             'domain_info', [MiddlewareCommand('activedirectory.domain_info')],
-            prerequisites=[ActiveDirectoryStatePrerequisite('HEALTHY')],
+            prerequisites=[ActiveDirectoryStatePrerequisite()],
         ),
         MiddlewareClientMetric(
             'kerberos_principal_choices', [MiddlewareCommand('kerberos.keytab.kerberos_principal_choices')],
@@ -58,17 +58,17 @@ class ActiveDirectory(Plugin):
         MiddlewareClientMetric(
             'machine_account_status', [
                 MiddlewareCommand('activedirectory.machine_account_status'),
-            ], prerequisites=[ActiveDirectoryStatePrerequisite('HEALTHY')]
+            ], prerequisites=[ActiveDirectoryStatePrerequisite()]
         ),
         MiddlewareClientMetric(
             'lookup_dc', [
                 MiddlewareCommand('activedirectory.lookup_dc'),
-            ], prerequisites=[ActiveDirectoryStatePrerequisite('HEALTHY')]
+            ], prerequisites=[ActiveDirectoryStatePrerequisite()]
         ),
         MiddlewareClientMetric(
             'spn_list', [
                 MiddlewareCommand('activedirectory.lookup_dc'),
-            ], prerequisites=[ActiveDirectoryStatePrerequisite('HEALTHY')]
+            ], prerequisites=[ActiveDirectoryStatePrerequisite()]
         ),
         MiddlewareClientMetric('idmap', [MiddlewareCommand('idmap.query')]),
     ]
