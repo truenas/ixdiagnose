@@ -56,7 +56,15 @@ class Item:
             'copied_items': [],
         }
         item_path = self.source_item_path(item_dir)
-        self.initialize_context(item_path)
+        try:
+            self.initialize_context(item_path)
+        except Exception as e:
+            report.update({
+                'error': f'Failed to initialize context for {self.name!r}: {str(e)}',
+                'traceback': traceback.format_exc(),
+            })
+            return report
+
         to_be_copied, report['error'] = self.is_to_be_copied(item_path)
         if to_be_copied:
             try:
