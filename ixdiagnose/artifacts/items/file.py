@@ -23,7 +23,7 @@ class File(Item):
         return get_file_size(item_path)
 
     def copy_impl(self, item_path: str, destination_path: str) -> list:
-        shutil.copy(item_path, destination_path)
+        shutil.copy2(item_path, destination_path)
         return [item_path]
 
     def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]:

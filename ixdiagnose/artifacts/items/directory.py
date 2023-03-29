@@ -13,8 +13,8 @@ def get_directory_size(directory: str) -> int:
 
 
 def copy2(copied_files: list, src: str, dst: str) -> str:
-    copied_files.append(shutil.copy2(src, dst))
-    return copied_files[-1]
+    copied_files.append(src)
+    return shutil.copy2(src, dst)
 
 
 class Directory(Item):
