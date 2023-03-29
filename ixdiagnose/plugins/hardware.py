@@ -33,7 +33,7 @@ class Hardware(Plugin):
                 Command([
                     'lsblk', '-o',
                     'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,PATH',
-                ], 'List of PCI Devices', serializeable=False),
+                ], 'List of Block Devices', serializeable=False),
             ],
         ),
         CommandMetric('cpu', [Command(['lscpu'], 'CPU Information', serializeable=False)]),
@@ -44,7 +44,7 @@ class Hardware(Plugin):
                 Command([
                     'lsblk', '-J', '-o',
                     'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,PATH',
-                ], 'List of PCI Devices'),
+                ], 'List of Block Devices'),
             ],
         ),
         CommandMetric('cpu', [Command(['lscpu', '-J'], 'CPU Information')]),
