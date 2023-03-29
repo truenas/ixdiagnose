@@ -1,10 +1,7 @@
-import errno
 import os
-import re
 
 from distutils.dir_util import copy_tree
-from distutils.file_util import copy_file
-from ixdiagnose.exceptions import CallError
+from pathlib import Path
 from typing import Optional, Tuple
 
 from .base import Item
@@ -13,14 +10,17 @@ from .base import Item
 def get_directory_size(directory: str) -> int:
     total = 0
     try:
-        for entry in os.scandir(directory):
-            if entry.is_file():
-                total += entry.stat().st_size
-            elif entry.is_dir():
-                try:
-                    total += get_directory_size(entry.path)
-                except FileNotFoundError:
-                    pass
+        with os.scandir(directory) as it:
+            for entry in it:
+                if entry.is_symlink():
+                    continue
+                if entry.is_file():
+                    total += entry.stat().st_size
+                elif entry.is_dir():
+                    try:
+                        total += get_directory_size(entry.path)
+                    except FileNotFoundError:
+                        pass
     except NotADirectoryError:
         return os.path.getsize(directory)
     except PermissionError:
