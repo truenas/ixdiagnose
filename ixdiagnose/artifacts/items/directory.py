@@ -2,7 +2,7 @@ import errno
 import os
 import re
 
-from distutils.dir_util import mkpath
+from distutils.dir_util import copy_tree
 from distutils.file_util import copy_file
 from ixdiagnose.exceptions import CallError
 from typing import Optional, Tuple
@@ -29,31 +29,7 @@ def get_directory_size(directory: str) -> int:
     return total
 
 
-def copy_tree(src: str, dst: str, regex_pattern: Optional[str] = None) -> list:
-    if not os.path.isdir(src):
-        raise CallError(f'{src!r} is not a directory', errno=errno.EINVAL)
-
-    mkpath(dst)
-
-    outputs = []
-    for n in filter(lambda name: not regex_pattern or re.findall(regex_pattern, name), os.listdir(src)):
-        src_name = os.path.join(src, n)
-        dst_name = os.path.join(dst, n)
-
-        if os.path.isdir(src_name):
-            outputs.extend(copy_tree(src_name, dst_name, regex_pattern))
-        else:
-            copy_file(src_name, dst_name)
-            outputs.append(src_name)
-
-    return outputs
-
-
 class Directory(Item):
-
-    def __init__(self, name: str, max_size: Optional[int] = None, regex: Optional[str] = None):
-        super().__init__(name, max_size)
-        self.regex: Optional[str] = regex
 
     def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]:
         to_copy, error = (True, None) if os.path.isdir(item_path) else (False, f'{item_path!r} is not a directory')
@@ -65,4 +41,4 @@ class Directory(Item):
         return get_directory_size(item_path)
 
     def copy_impl(self, item_path: str, destination_path: str) -> list:
-        return copy_tree(item_path, destination_path, self.regex)
+        return copy_tree(item_path, destination_path)

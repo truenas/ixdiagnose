@@ -2,7 +2,7 @@ import errno
 
 
 def get_errname(code):
-    return errno.errorcode.get(code) or 'EUNKNOWN'
+    return errno.errorcode.get(code, 'EUNKNOWN')
 
 
 class CallError(Exception):
