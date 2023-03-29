@@ -9,7 +9,7 @@ from .base import Item
 
 
 def get_file_size(file_path: str) -> int:
-    return pathlib.Path(file_path).stat().st_size
+    return pathlib.Path(file_path).lstat().st_size
 
 
 class File(Item):

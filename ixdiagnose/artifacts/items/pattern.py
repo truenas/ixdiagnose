@@ -19,10 +19,10 @@ class Pattern(Item):
 
     def initialize_context(self, item_path: str) -> None:
         for entry in self.to_copy_items(item_path):
-            if os.path.isdir(os.path.join(item_path, entry)):
-                item = Directory(entry, max_size=self.max_size)
+            if entry.is_dir():
+                item = Directory(entry.name, max_size=self.max_size)
             else:
-                item = File(entry, max_size=self.max_size, truncate=self.truncate_files)
+                item = File(entry.name, max_size=self.max_size, truncate=self.truncate_files)
 
             self.items.append(item)
 
@@ -37,7 +37,11 @@ class Pattern(Item):
         return destination_dir
 
     def to_copy_items(self, items_path: str) -> list:
-        return [entry for entry in filter(lambda e: re.findall(self.pattern, e), os.listdir(items_path))]
+        return [
+            entry for entry in filter(
+                lambda e: re.findall(self.pattern, e.name), os.scandir(items_path)
+            )
+        ]
 
     def size(self, item_path: str) -> int:
         return sum(item.size(item_path) for item in self.items)

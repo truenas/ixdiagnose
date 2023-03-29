@@ -1,5 +1,5 @@
 from .base import Artifact
-from .items import Directory, File
+from .items import Directory, File, Pattern
 
 
 class Logs(Artifact):
@@ -10,11 +10,11 @@ class Logs(Artifact):
         Directory('openvpn'),
         Directory('pods'),
         Directory('samba4'),
-        File('daemon.log'),
-        File('failover.log'),
+        Pattern('daemon.+'),
+        File('failover.+'),
         File('kern.log'),
         File('messages'),
-        File('middlewared.log'),
+        Pattern('middlewared.+'),
         File('syslog'),
-        File('zettarepl.log'),
+        Pattern('zettarepl.+'),
     ]
