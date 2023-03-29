@@ -1,6 +1,7 @@
+import functools
 import os
+import shutil
 
-from distutils.dir_util import copy_tree
 from pathlib import Path
 from typing import Optional, Tuple
 
@@ -9,6 +10,11 @@ from .base import Item
 
 def get_directory_size(directory: str) -> int:
     return sum(i.lstat().st_size for i in Path(directory).rglob('*')) + Path(directory).stat().st_size
+
+
+def copy2(copied_files: list, src: str, dst: str) -> str:
+    copied_files.append(shutil.copy2(src, dst))
+    return copied_files[-1]
 
 
 class Directory(Item):
@@ -23,4 +29,6 @@ class Directory(Item):
         return get_directory_size(item_path)
 
     def copy_impl(self, item_path: str, destination_path: str) -> list:
-        return copy_tree(item_path, destination_path)
+        copied_items = []
+        shutil.copytree(item_path, destination_path, copy_function=functools.partial(copy2, copied_items))
+        return copied_items
