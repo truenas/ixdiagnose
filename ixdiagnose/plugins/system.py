@@ -10,23 +10,23 @@ class System(Plugin):
     name = 'system'
     metrics = [
         CommandMetric('time_info', [
-            Command(['date'], 'System Date', serializeable=False),
-            Command(['uptime'], 'System Uptime', serializeable=False),
-            Command(['ntpq', '-c', 'rv'], 'NTP System Variables', serializeable=False),
-            Command(['ntpq', '-pwn'], 'List of NTP peers known to the system', serializeable=False),
+            Command(['date'], 'System Date', serializable=False),
+            Command(['uptime'], 'System Uptime', serializable=False),
+            Command(['ntpq', '-c', 'rv'], 'NTP System Variables', serializable=False),
+            Command(['ntpq', '-pwn'], 'List of NTP peers known to the system', serializable=False),
         ]),
-        CommandMetric('dmesg', [Command(['dmesg'], 'Dmesg', serializeable=False)]),
-        CommandMetric('processes', [Command(['ps', '-auxwwf'], 'All running processes', serializeable=False)]),
+        CommandMetric('dmesg', [Command(['dmesg'], 'Dmesg', serializable=False)]),
+        CommandMetric('processes', [Command(['ps', '-auxwwf'], 'All running processes', serializable=False)]),
         CommandMetric('mount_info', [
-            Command(['swapon', '-s'], 'Swap Usage Summary', serializeable=False),
-            Command(['mount'], 'System Mount Paths', serializeable=False),
-            Command(['df', '-T', '-h'], 'Filesystem Resource Usage', serializeable=False),
+            Command(['swapon', '-s'], 'Swap Usage Summary', serializable=False),
+            Command(['mount'], 'System Mount Paths', serializable=False),
+            Command(['df', '-T', '-h'], 'Filesystem Resource Usage', serializable=False),
         ]),
         CommandMetric('memory', [
-            Command(['top', '-SHbi', '-d1', '-n2'], 'System Processes/Threads Top', serializeable=False),
-            Command(['vmstat'], 'Virtual Memory Statistics', serializeable=False),
+            Command(['top', '-SHbi', '-d1', '-n2'], 'System Processes/Threads Top', serializable=False),
+            Command(['vmstat'], 'Virtual Memory Statistics', serializable=False),
         ]),
-        CommandMetric('kernel_modules', [Command(['lsmod'], 'List of Kernel Modules', serializeable=False)]),
+        CommandMetric('kernel_modules', [Command(['lsmod'], 'List of Kernel Modules', serializable=False)]),
         MiddlewareClientMetric('coredump', [MiddlewareCommand('system.coredumps')]),
         MiddlewareClientMetric('general_settings', [
             MiddlewareCommand(

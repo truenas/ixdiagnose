@@ -7,6 +7,7 @@ from .kubernetes import Kubernetes
 from .ldap import LDAP
 from .network import Network
 from .nfs import NFS
+from .replication import Replication
 from .services import Services
 from .smart import SMART
 from .smb import SMB
@@ -26,6 +27,7 @@ for plugin in [
     LDAP,
     Network,
     NFS,
+    Replication,
     Services,
     SMART,
     SMB,

@@ -7,7 +7,7 @@ from subprocess import CompletedProcess
 
 @pytest.mark.parametrize('name,cmds,return_values,cmd_context,context,should_work', [(
         'cmd',
-        [Command(['lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'], 'lsblk', serializeable=False)],
+        [Command(['lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'], 'lsblk', serializable=False)],
         [
             CompletedProcess(
                 args=('lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'),
@@ -84,7 +84,7 @@ from subprocess import CompletedProcess
     (
         'cmd',
         [Command(['lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'], 'lsblk',
-                 serializeable=False)],
+                 serializable=False)],
         [
             CompletedProcess(
                 args=('lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'),

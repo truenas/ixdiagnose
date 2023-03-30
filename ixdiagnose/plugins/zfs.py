@@ -106,29 +106,19 @@ class ZFS(Plugin):
     metrics = [
         CommandMetric(
             'dataset_list', [
-                Command(['zfs', 'list', '-ro', 'space,refer,mountpoint'], 'ZFS Pool(s)', serializeable=False),
+                Command(['zfs', 'list', '-ro', 'space,refer,mountpoint'], 'ZFS Pool(s)', serializable=False),
             ]
         ),
         CommandMetric(
-            'pool_list', [Command(['zpool', 'list', '-v'], 'ZFS Pool(s)', serializeable=False)]
+            'pool_list', [Command(['zpool', 'list', '-v'], 'ZFS Pool(s)', serializable=False)]
         ),
         CommandMetric(
-            'pool_status', [Command(['zpool', 'status', '-v'], 'ZFS Pool(s) Status', serializeable=False)]
+            'pool_status', [Command(['zpool', 'status', '-v'], 'ZFS Pool(s) Status', serializable=False)]
         ),
-        CommandMetric('pool_history', [Command(['zpool', 'history'], 'ZFS Pool(s) History', serializeable=False)]),
+        CommandMetric('pool_history', [Command(['zpool', 'history'], 'ZFS Pool(s) History', serializable=False)]),
         MiddlewareClientMetric(
             'pool_scrub_tasks', [
                 MiddlewareCommand('pool.scrub.query', result_key='scrub_tasks'),
-            ]
-        ),
-        MiddlewareClientMetric(
-            'replication', [
-                MiddlewareCommand('replication.query'),
-            ]
-        ),
-        MiddlewareClientMetric(
-            'snapshot_tasks', [
-                MiddlewareCommand('pool.snapshottask.query', result_key='snapshot_tasks'),
             ]
         ),
         PythonMetric('encryption_summary', encryption_summary),
@@ -138,14 +128,14 @@ class ZFS(Plugin):
         CommandMetric('snapshot_config', [
             Command(
                 ['zfs', 'list', '-t', 'snapshot', '-o', 'name,used,available,referenced,mountpoint,freenas:state'],
-                'ZFS Snapshots', serializeable=False,
+                'ZFS Snapshots', serializable=False,
             )
         ]),
         CommandMetric(
             'lsblk', [
                 Command(
                     ['lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'],
-                    'lsblk -o NAME,FSTYPE,LABEL,UUID,PARTUUID -l -e 230', serializeable=False
+                    'lsblk -o NAME,FSTYPE,LABEL,UUID,PARTUUID -l -e 230', serializable=False
                 ),
             ]
         ),

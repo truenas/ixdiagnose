@@ -11,21 +11,21 @@ class NFS(Plugin):
     metrics = [
         CommandMetric('services_status', [
             Command(
-                ['systemctl', 'status', 'nfs-server'], 'NFS Service Status', serializeable=False,
+                ['systemctl', 'status', 'nfs-server'], 'NFS Service Status', serializable=False,
                 safe_returncodes=[0, 3],
             ),
             Command(
-                ['systemctl', 'status', 'rpc-statd'], 'RPC Statd Service Status', serializeable=False,
+                ['systemctl', 'status', 'rpc-statd'], 'RPC Statd Service Status', serializable=False,
                 safe_returncodes=[0, 3],
             ),
             Command(
-                ['systemctl', 'status', 'rpc-gssd'], 'RPC Gssd Service Status', serializeable=False,
+                ['systemctl', 'status', 'rpc-gssd'], 'RPC Gssd Service Status', serializable=False,
                 safe_returncodes=[0, 3],
             ),
         ]),
         CommandMetric(
             'rpcinfo', [
-                Command(['rpcinfo', '-p'], 'Status of the RPC Server', serializeable=False),
+                Command(['rpcinfo', '-p'], 'Status of the RPC Server', serializable=False),
             ], prerequisites=[ServiceRunningPrerequisite('rpc-statd')],
         ),
         FileMetric('nfs-common', '/etc/default/nfs-common'),

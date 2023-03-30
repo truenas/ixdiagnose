@@ -19,7 +19,7 @@ sdc2  zfs_member        tank          16172535520268519460                 c71e6
 '''
 
 
-@pytest.mark.parametrize('args,returncode,stdout,stderr,cmd,description,shell,should_work', [
+@pytest.mark.parametrize('args,returncode,stdout,stderr,cmd,description', [
     (
         ('lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'),
         0,
@@ -27,8 +27,6 @@ sdc2  zfs_member        tank          16172535520268519460                 c71e6
         '',
         ['lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'],
         'lsblk',
-        False,
-        True,
     ),
     (
         ('lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'),
@@ -37,8 +35,6 @@ sdc2  zfs_member        tank          16172535520268519460                 c71e6
         '',
         ['lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'],
         'lsblk',
-        True,
-        False,
     ),
     (
         'lsblk -o NAME,FSTYPE,LABEL,UUID,PARTUUID -l -e 230',
@@ -47,18 +43,12 @@ sdc2  zfs_member        tank          16172535520268519460                 c71e6
         '',
         'lsblk -o NAME,FSTYPE,LABEL,UUID,PARTUUID -l -e 230',
         'lsblk',
-        False,
-        False,
     ),
 ])
-def test_command(mocker, args, returncode, stdout, stderr, cmd, description, shell, should_work):
+def test_command_shell(mocker, args, returncode, stdout, stderr, cmd, description):
     mocker.patch(
         'ixdiagnose.utils.command.run', return_value=CompletedProcess(
             args=args, returncode=returncode, stdout=stdout, stderr=stderr
         )
     )
-    if not should_work:
-        with pytest.raises(Exception):
-            Command(cmd, description, shell).execute()
-    else:
-        assert Command(cmd, description, shell).execute() is not None
+    assert Command(cmd, description).execute() is not None

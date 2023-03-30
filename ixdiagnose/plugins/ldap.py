@@ -12,8 +12,8 @@ class LDAP(Plugin):
     metrics = [
         CommandMetric(
             'kerberos', [
-                Command(['klist'], 'Kerberos Tickets', serializeable=False),
-                Command(['klist', '-ket'], 'Kerberos keytab system', serializeable=False),
+                Command(['klist'], 'Kerberos Tickets', serializable=False),
+                Command(['klist', '-ket'], 'Kerberos keytab system', serializable=False),
             ]
         ),
         FileMetric('nsswitch', '/etc/nsswitch.conf', extension='.conf'),

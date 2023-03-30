@@ -21,7 +21,7 @@ class CommandMetric(Metric):
 
     @property
     def serializable(self) -> bool:
-        return all(cmd.serializeable for cmd in self.cmds)
+        return all(cmd.serializable for cmd in self.cmds)
 
     @property
     def output_file_extension(self) -> str:

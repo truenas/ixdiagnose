@@ -9,17 +9,17 @@ class Network(Plugin):
     name = 'network'
     metrics = [
         CommandMetric(
-            'protocol_stats', [Command(['netstat', '-p', '-s'], 'Statistics of All protocols', serializeable=False)],
+            'protocol_stats', [Command(['netstat', '-p', '-s'], 'Statistics of All protocols', serializable=False)],
         ),
         CommandMetric(
             'ipset_ipvs_rules', [
-                Command(['ipvsadm', '-L'], 'IPVS Rules', serializeable=False),
-                Command(['ipset', '--list'], 'IPSET Rules', serializeable=False),
-                Command(['netstat', '-nrW'], 'Routing table (netstat)', serializeable=False),
+                Command(['ipvsadm', '-L'], 'IPVS Rules', serializable=False),
+                Command(['ipset', '--list'], 'IPSET Rules', serializable=False),
+                Command(['netstat', '-nrW'], 'Routing table (netstat)', serializable=False),
             ]
         ),
-        CommandMetric('arp', [Command(['arp', '-an'], 'ARP Entries', serializeable=False)]),
-        CommandMetric('socket_stats', [Command(['ss', '-nipea'], 'Socket Statistics', serializeable=False)]),
+        CommandMetric('arp', [Command(['arp', '-an'], 'ARP Entries', serializable=False)]),
+        CommandMetric('socket_stats', [Command(['ss', '-nipea'], 'Socket Statistics', serializable=False)]),
         FileMetric('hosts', '/etc/hosts'),
         FileMetric('resolv', '/etc/resolv.conf', extension='.conf'),
         MiddlewareClientMetric(
@@ -33,16 +33,16 @@ class Network(Plugin):
     raw_metrics = [
         CommandMetric(
             'routing', [
-                Command(['ip', 'route', 'show', 'default'], 'default_route', serializeable=False),
-                Command(['ip', 'route', 'show', 'table', 'all'], 'routing_tables', serializeable=False),
-                Command(['ip', 'rule', 'list'], 'ip_rules', serializeable=False),
+                Command(['ip', 'route', 'show', 'default'], 'default_route', serializable=False),
+                Command(['ip', 'route', 'show', 'table', 'all'], 'routing_tables', serializable=False),
+                Command(['ip', 'rule', 'list'], 'ip_rules', serializable=False),
             ]
         ),
         CommandMetric('interface_statistics', [
-            Command(['ip', '-s', 'addr'], 'Interface Statistics', serializeable=False)
+            Command(['ip', '-s', 'addr'], 'Interface Statistics', serializable=False)
         ]),
         CommandMetric('nft_rules', [
-            Command(['nft', '-a', 'list', 'ruleset'], 'NFTables rulesets', serializeable=False)
+            Command(['nft', '-a', 'list', 'ruleset'], 'NFTables rulesets', serializable=False)
         ]),
     ]
     serializable_metrics = [

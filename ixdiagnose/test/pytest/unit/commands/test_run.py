@@ -31,5 +31,5 @@ def test_run(mocker, command, stdout, stderr, expected_output):
     mock_popen = mocker.patch('subprocess.Popen')
     mock_popen.return_value.communicate.return_value = (stdout, stderr)
     mock_popen.return_value.returncode = 0
-    result = run(command, shell=False, check=False, env=None)
+    result = run(command, check=False, env=None)
     assert result.stdout == expected_output.stdout

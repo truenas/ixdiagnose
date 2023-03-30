@@ -16,12 +16,12 @@ class ISCSI(Plugin):
         ]),
         CommandMetric(
             'iscsi_state', [
-                Command(['scstadmin', '--list_device'], 'Lists SCST devices', serializeable=False),
-                Command(['scstadmin', '-list_handler'], 'Lists SCST device handlers', serializeable=False),
-                Command(['scstadmin', '-list_driver'], 'Lists SCST drivers', serializeable=False),
-                Command(['scstadmin', '-list_target', '-driver', 'iscsi'], 'Lists SCST targets', serializeable=False),
-                Command(['scstadmin', '-list_sessions'], 'Lists SCST active sessions', serializeable=False),
-                Command(['scstadmin', '-list_scst_attr'], 'Lists SCST core attributes', serializeable=False),
+                Command(['scstadmin', '--list_device'], 'Lists SCST devices', serializable=False),
+                Command(['scstadmin', '-list_handler'], 'Lists SCST device handlers', serializable=False),
+                Command(['scstadmin', '-list_driver'], 'Lists SCST drivers', serializable=False),
+                Command(['scstadmin', '-list_target', '-driver', 'iscsi'], 'Lists SCST targets', serializable=False),
+                Command(['scstadmin', '-list_sessions'], 'Lists SCST active sessions', serializable=False),
+                Command(['scstadmin', '-list_scst_attr'], 'Lists SCST core attributes', serializable=False),
             ], prerequisites=[ServiceRunningPrerequisite('scst')],
         ),
         FileMetric('scst', '/etc/scst.conf', extension='.conf'),
@@ -30,7 +30,7 @@ class ISCSI(Plugin):
         CommandMetric(
             'service_status', [
                 Command(
-                    ['systemctl', 'status', 'scst'], 'SCST Service Status', serializeable=False, safe_returncodes=[0, 3]
+                    ['systemctl', 'status', 'scst'], 'SCST Service Status', serializable=False, safe_returncodes=[0, 3]
                 ),
             ],
         ),

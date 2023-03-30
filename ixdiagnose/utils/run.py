@@ -5,12 +5,13 @@ from ixdiagnose.config import conf
 
 
 def run(*args, **kwargs) -> subprocess.CompletedProcess:
+    shell = isinstance(args[0], str)
     if isinstance(args[0], list):
         args = tuple(args[0])
     kwargs.setdefault('stdout', subprocess.PIPE)
     kwargs.setdefault('stderr', subprocess.PIPE)
+    kwargs.setdefault('timeout', conf.timeout)
     check = kwargs.pop('check', True)
-    shell = kwargs.pop('shell', False)
     env = kwargs.pop('env', None) or os.environ
 
     proc = subprocess.Popen(
@@ -19,7 +20,7 @@ def run(*args, **kwargs) -> subprocess.CompletedProcess:
     )
     stdout = ''
     try:
-        stdout, stderr = proc.communicate(timeout=conf.timeout)
+        stdout, stderr = proc.communicate(timeout=kwargs['timeout'])
     except subprocess.TimeoutExpired:
         proc.kill()
         stderr = 'Timed out waiting for response'

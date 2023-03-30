@@ -29,7 +29,7 @@ def get_smb_shares(client: MiddlewareClient, context: Any) -> str:
             else:
                 f'getfacl {smb_share["path"]};\n'
 
-    cp = run(command, shell=True, check=False)
+    cp = run(command, check=False)
     if cp.returncode:
         return f'Failed to retrieve SMB Share(s) configuration: {cp.stderr}'
     else:
@@ -41,18 +41,18 @@ class SMB(Plugin):
     metrics = [
         CommandMetric(
             'net_config', [
-                Command(['net', 'conf', 'showshare', 'global'], 'SMB Global Configuration', serializeable=False),
-                Command(['net', 'getlocalsid'], 'SID of the Local Server', serializeable=False),
-                Command(['net', 'getdomainsid'], 'SID of Domain', serializeable=False),
-                Command(['net', 'status', 'sessions'], 'Net Status Sessions', serializeable=False, max_lines=50),
-                Command(['net', 'status', 'shares'], 'Net Shares Status', serializeable=False),
+                Command(['net', 'conf', 'showshare', 'global'], 'SMB Global Configuration', serializable=False),
+                Command(['net', 'getlocalsid'], 'SID of the Local Server', serializable=False),
+                Command(['net', 'getdomainsid'], 'SID of Domain', serializable=False),
+                Command(['net', 'status', 'sessions'], 'Net Status Sessions', serializable=False, max_lines=50),
+                Command(['net', 'status', 'shares'], 'Net Shares Status', serializable=False),
             ]
         ),
         CommandMetric(
             'smb_general', [
-                Command(['smbd', '-V'], 'Samba Version', serializeable=False),
-                Command(['smbd', '-b'], 'Samba Build Information', serializeable=False),
-                Command(['testparm', '-s'], 'SMB Global Configuration', serializeable=False),
+                Command(['smbd', '-V'], 'Samba Version', serializable=False),
+                Command(['smbd', '-b'], 'Samba Build Information', serializable=False),
+                Command(['testparm', '-s'], 'SMB Global Configuration', serializable=False),
             ]
         ),
         FileMetric('smb4', '/etc/smb4.conf', extension='.conf'),
@@ -71,7 +71,7 @@ class SMB(Plugin):
     raw_metrics = [
         CommandMetric(
             'smb_lock_info', [
-                Command(['smbstatus', '-L'], 'SMB Lock Information', max_lines=50, serializeable=False),
+                Command(['smbstatus', '-L'], 'SMB Lock Information', max_lines=50, serializable=False),
             ]
         ),
     ]

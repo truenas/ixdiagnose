@@ -10,12 +10,12 @@ class Hardware(Plugin):
     metrics = [
         CommandMetric(
             'dmidecode', [
-                Command(['dmidecode'], 'Dmidecode', serializeable=False),
+                Command(['dmidecode'], 'Dmidecode', serializable=False),
             ],
         ),
         CommandMetric(
             'pci', [
-                Command(['lspci', '-vvvD'], 'List of PCI Devices', serializeable=False),
+                Command(['lspci', '-vvvD'], 'List of PCI Devices', serializable=False),
             ],
         ),
         CommandMetric(
@@ -33,10 +33,10 @@ class Hardware(Plugin):
                 Command([
                     'lsblk', '-o',
                     'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,PATH',
-                ], 'List of Block Devices', serializeable=False),
+                ], 'List of Block Devices', serializable=False),
             ],
         ),
-        CommandMetric('cpu', [Command(['lscpu'], 'CPU Information', serializeable=False)]),
+        CommandMetric('cpu', [Command(['lscpu'], 'CPU Information', serializable=False)]),
     ]
     serializable_metrics = [
         CommandMetric(

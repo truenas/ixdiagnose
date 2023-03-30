@@ -17,31 +17,31 @@ class ActiveDirectory(Plugin):
     metrics = [
         CommandMetric(
             'ad_info', [
-                Command(['wbinfo', '-t'], 'Active directory trust secret', serializeable=False),
-                Command(['wbinfo', '-P'], 'Active directory NETLOGON connection.', serializeable=False),
-                Command(['wbinfo', '-m ', '--verbose'], 'Active directory trusted domains.', serializeable=False),
-                Command(['wbinfo', '--all-domains'], 'Active directory of all domains.', serializeable=False),
-                Command(['wbinfo', '--own-domain'], 'Active directory own domains', serializeable=False),
-                Command(['wbinfo', '--online-status'], 'Active directory online status.', serializeable=False),
-                Command(['wbinfo -u'], 'Active directory Users', serializeable=False, max_lines=50),
-                Command(['wbinfo -g'], 'Active directory Groups.', serializeable=False, max_lines=50),
+                Command(['wbinfo', '-t'], 'Active directory trust secret', serializable=False),
+                Command(['wbinfo', '-P'], 'Active directory NETLOGON connection.', serializable=False),
+                Command(['wbinfo', '-m ', '--verbose'], 'Active directory trusted domains.', serializable=False),
+                Command(['wbinfo', '--all-domains'], 'Active directory of all domains.', serializable=False),
+                Command(['wbinfo', '--own-domain'], 'Active directory own domains', serializable=False),
+                Command(['wbinfo', '--online-status'], 'Active directory online status.', serializable=False),
+                Command(['wbinfo -u'], 'Active directory Users', serializable=False, max_lines=50),
+                Command(['wbinfo -g'], 'Active directory Groups.', serializable=False, max_lines=50),
                 Command(
                     'wbinfo --domain-info="$(wbinfo --own-domain)"', 'Active directory domain information.',
-                    shell=True, serializeable=False,
+                    serializable=False,
                 ),
                 Command(
                     'wbinfo --dc-info="$(wbinfo --own-domain)"', 'Active Directory DC info.',
-                    shell=True, serializeable=False,
+                    serializable=False,
                 ),
                 Command(
-                    ['wbinfo', f'--dsgetdcname={ad_domain_name()}'], 'Active Directory DC name.', serializeable=False
+                    ['wbinfo', f'--dsgetdcname={ad_domain_name()}'], 'Active Directory DC name.', serializable=False
                 ),
             ], prerequisites=[ActiveDirectoryStatePrerequisite()],
         ),
         CommandMetric(
             'ad_join_status', [
                 Command(
-                    ['net', '-d', 5, '-k', 'ads', 'testjoin'], 'Active Directory Join Status.', serializeable=False
+                    ['net', '-d', 5, '-k', 'ads', 'testjoin'], 'Active Directory Join Status.', serializable=False
                 ),
             ], prerequisites=[ActiveDirectoryStatePrerequisite()],
         ),
