@@ -1,0 +1,12 @@
+NAME   PROPERTY                       VALUE                          SOURCE
+crave  type                           filesystem                     -
+crave  creation                       Mon Feb  6  6:05 2023          -
+crave  used                           13.4G                          -
+crave  available                      3.54G                          -
+crave  referenced                     96K                            -
+rootd  type                           filesystem                     -
+rootd  creation                       Sun Feb 19  8:59 2023          -
+rootd  used                           2.03G                          -
+rootd  available                      14.9G                          -
+rootd  referenced                     192K                           -
+rootd  compressratio                  1.00x                          -
