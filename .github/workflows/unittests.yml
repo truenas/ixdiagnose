@@ -1,0 +1,23 @@
+name: unit_tests
+
+on:
+  pull_request:
+    types:
+      - 'synchronize'
+      - 'opened'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/truenas/ixdiagnose:master
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Deps
+      run: |
+        pip install -r requirements.txt
+        pip install -U .
+    - name: Running test
+      run: pytest -v ixdiagnose/test/pytest/unit/
