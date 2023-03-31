@@ -1,3 +1,5 @@
+import json
+
 from typing import Any
 
 from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
@@ -13,18 +15,24 @@ def smart_output(client: MiddlewareClient, context: Any) -> str:
     if cp.returncode:
         return cp.stderr
 
-    output = ''
+    serializable = context['serializable']
+    output = {} if serializable else ''
     for disk in filter(bool, cp.stdout.splitlines()):
-        command = ''
-        msg = '(NVME device detected)' if 'nvme' in disk else ''
-        msg = f'Block Device: /dev/{disk} {msg}'
-        command += f'echo "{"=" * (len(msg) + 5)}"\n'
-        command += f'echo "  {msg}"\n'
-        command += f'echo "{"=" * (len(msg) + 5)}"\n'
-        next_line = '\n' * 5
-        command += f'smartctl -a /dev/{disk}{next_line}'
-        cp = run(command, check=False, timeout=3)
-        output += cp.stderr if cp.returncode else cp.stdout
+        cp = run(['smartctl', '-a', f'/dev/{disk}'] + (['-j'] if serializable else []), check=False, timeout=3)
+
+        if serializable:
+            try:
+                disk_output = cp.stderr if cp.returncode else json.loads(cp.stdout)
+            except json.JSONDecodeError as e:
+                disk_output = str(e)
+
+            output[disk] = disk_output
+        else:
+            msg = '(NVME device detected)' if 'nvme' in disk else ''
+            msg = f'Block Device: /dev/{disk} {msg}'
+            output += f'{"=" * (len(msg) + 5)}\n'
+            output += f'  {msg}\n'
+            output += f'{"=" * (len(msg) + 5)}\n\n{cp.stderr if cp.returncode else cp.stdout}\n\n'
 
     # TODO: Check the awk script and see what it normalizes
     return output
@@ -41,7 +49,14 @@ class SMART(Plugin):
                 MiddlewareCommand('smart.test.query', result_key='SMART Tests'),
             ]
         ),
+    ]
+    raw_metrics = [
         PythonMetric(
-            'smart_out', smart_output, description='SMART output', serializable=False,
+            'smart_out', smart_output, description='SMART output', serializable=False, context={'serializable': False},
+        ),
+    ]
+    serializable_metrics = [
+        PythonMetric(
+            'smart_out', smart_output, description='SMART output', context={'serializable': True},
         ),
     ]
