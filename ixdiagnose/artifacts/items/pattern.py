@@ -24,6 +24,7 @@ class Pattern(Item):
             else:
                 item = File(entry.name, max_size=self.max_size, truncate=self.truncate_files)
 
+            item.initialize_context(entry.path)
             self.items.append(item)
 
     def exists(self, item_path: str) -> Tuple[bool, str]:
