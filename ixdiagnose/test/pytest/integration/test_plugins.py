@@ -59,8 +59,7 @@ def generate_plugins():
 
 def get_plugins_dirs(base_plugins_dir) -> list:
     return [
-        os.path.join(base_plugins_dir, i) for i in os.listdir(base_plugins_dir)
-        if os.path.isdir(os.path.join(base_plugins_dir, i))
+        i.path for i in os.scandir(base_plugins_dir) if i.is_dir()
     ]
 
 

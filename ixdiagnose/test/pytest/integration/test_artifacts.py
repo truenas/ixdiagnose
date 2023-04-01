@@ -59,8 +59,7 @@ def gather_artifacts():
 
 def get_artifacts_dirs(base_artifact_dir) -> list:
     return [
-        os.path.join(base_artifact_dir, i) for i in os.listdir(base_artifact_dir)
-        if os.path.isdir(os.path.join(base_artifact_dir, i))
+        i.path for i in os.scandir(base_artifact_dir) if i.is_dir()
     ]
 
 
