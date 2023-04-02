@@ -5,11 +5,14 @@ import pytest
 import shutil
 
 from ixdiagnose.artifact import artifact_factory, gather_artifacts as gather_artifacts_impl
+from ixdiagnose.event import event_callbacks
 from ixdiagnose.config import conf
 from jsonschema import validate
 
 from .utils import BASE_REPORT_SCHEMA
 
+PROGRESS_DESCRIPTIONS = []
+PROGRESS_TRACK = []
 
 ARTIFACT_REPORT_SCHEMA = {
     'type': 'object',
@@ -46,14 +49,15 @@ def create_test_file_having_size(file_path: str, file_size: int):
 
 
 @contextlib.contextmanager
-def gather_artifacts():
+def gather_artifacts(base_percentage=0, total_percentage=100):
     conf.debug_path = '/tmp/ixdiagnose'
     os.makedirs(conf.debug_path, exist_ok=True)
 
     try:
-        gather_artifacts_impl()
+        gather_artifacts_impl(percentage=base_percentage, total_percentage=total_percentage)
         yield os.path.join(conf.debug_path, 'debug/artifacts')
     finally:
+        event_callbacks.clear()
         shutil.rmtree(conf.debug_path, ignore_errors=True)
 
 
@@ -61,6 +65,11 @@ def get_artifacts_dirs(base_artifact_dir) -> list:
     return [
         i.path for i in os.scandir(base_artifact_dir) if i.is_dir()
     ]
+
+
+def event_callback(progresss, text):
+    PROGRESS_TRACK.append(progresss)
+    PROGRESS_DESCRIPTIONS.append(text)
 
 
 def test_base_report_generation():
@@ -117,3 +126,17 @@ def test_truncation_of_file(file_size, file_truncated):
                 assert os.path.getsize(os.path.join(artifacts_dir, 'logs', file_name)) < file_size
             else:
                 assert os.path.getsize(os.path.join(artifacts_dir, 'logs', file_name)) == file_size
+
+
+def test_artifact_event_progress_count():
+    event_callbacks.register(callback=event_callback)
+    with gather_artifacts():
+        assert (len(artifact_factory.get_items()) + 1) == len(PROGRESS_DESCRIPTIONS) == len(PROGRESS_TRACK)
+
+
+def test_artifact_event_progress_percentage():
+    event_callbacks.register(callback=event_callback)
+    base_percentage = 90
+    total_percentage = 10
+    with gather_artifacts(base_percentage, total_percentage):
+        assert (base_percentage + total_percentage) == PROGRESS_TRACK[-1]
