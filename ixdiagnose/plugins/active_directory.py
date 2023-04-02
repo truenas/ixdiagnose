@@ -23,8 +23,8 @@ class ActiveDirectory(Plugin):
                 Command(['wbinfo', '--all-domains'], 'Active directory of all domains.', serializable=False),
                 Command(['wbinfo', '--own-domain'], 'Active directory own domains', serializable=False),
                 Command(['wbinfo', '--online-status'], 'Active directory online status.', serializable=False),
-                Command(['wbinfo -u'], 'Active directory Users', serializable=False, max_lines=50),
-                Command(['wbinfo -g'], 'Active directory Groups.', serializable=False, max_lines=50),
+                Command(['wbinfo', '-u'], 'Active directory Users', serializable=False, max_lines=50),
+                Command(['wbinfo', '-g'], 'Active directory Groups.', serializable=False, max_lines=50),
                 Command(
                     'wbinfo --domain-info="$(wbinfo --own-domain)"', 'Active directory domain information.',
                     serializable=False,
@@ -41,7 +41,7 @@ class ActiveDirectory(Plugin):
         CommandMetric(
             'ad_join_status', [
                 Command(
-                    ['net', '-d', 5, '-k', 'ads', 'testjoin'], 'Active Directory Join Status.', serializable=False
+                    ['net', '-d', '5', '-k', 'ads', 'testjoin'], 'Active Directory Join Status.', serializable=False
                 ),
             ], prerequisites=[ActiveDirectoryStatePrerequisite()],
         ),

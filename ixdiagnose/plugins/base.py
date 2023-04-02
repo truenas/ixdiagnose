@@ -44,7 +44,8 @@ class Plugin:
             with get_middleware_client() as client:
                 context['middleware_client'] = client
                 return self.execute_impl(context)
-        except ConnectionError:
+        except (ConnectionError, FileNotFoundError):
+            # ConnectionError/FileNotFoundError is raised when middleware is not running
             return self.execute_impl(context)
 
     def execute_impl(self, context: dict) -> None:
