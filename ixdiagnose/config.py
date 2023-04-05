@@ -11,6 +11,7 @@ class Configuration:
             'compressed_path': {'type': ['string', 'null']},
             'clean_debug_path': {'type': 'boolean'},
             'debug_path': {'type': ['string', 'null']},
+            'structured_data': {'type': 'boolean'},
             'timeout': {'type': 'integer'},
         },
     }
@@ -20,6 +21,7 @@ class Configuration:
         self.compressed_path: Optional[str] = None
         self.clean_debug_path: bool = False
         self.debug_path: Optional[str] = None
+        self.structured_data: bool = False
         self.timeout: int = 20
 
     def apply(self, new_config: dict) -> None:
