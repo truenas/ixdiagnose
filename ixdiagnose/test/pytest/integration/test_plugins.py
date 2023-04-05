@@ -6,6 +6,7 @@ import shutil
 from ixdiagnose.config import conf
 from ixdiagnose.event import event_callbacks
 from ixdiagnose.plugin import generate_plugins_debug, plugin_factory
+from ixdiagnose.utils.paths import get_plugin_base_dir
 from jsonschema import validate
 
 from .utils import BASE_REPORT_SCHEMA
@@ -56,7 +57,7 @@ def generate_plugins(base_percentage=0, total_percentage=100):
 
     try:
         generate_plugins_debug(percentage=base_percentage, total_percentage=total_percentage)
-        yield os.path.join(conf.debug_path, 'debug/plugins')
+        yield get_plugin_base_dir()
     finally:
         event_callbacks.clear()
         shutil.rmtree(conf.debug_path, ignore_errors=True)

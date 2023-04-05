@@ -7,6 +7,7 @@ import shutil
 from ixdiagnose.artifact import artifact_factory, gather_artifacts as gather_artifacts_impl
 from ixdiagnose.event import event_callbacks
 from ixdiagnose.config import conf
+from ixdiagnose.utils.paths import get_artifacts_base_dir
 from jsonschema import validate
 
 from .utils import BASE_REPORT_SCHEMA
@@ -55,7 +56,7 @@ def gather_artifacts(base_percentage=0, total_percentage=100):
 
     try:
         gather_artifacts_impl(percentage=base_percentage, total_percentage=total_percentage)
-        yield os.path.join(conf.debug_path, 'debug/artifacts')
+        yield get_artifacts_base_dir()
     finally:
         event_callbacks.clear()
         shutil.rmtree(conf.debug_path, ignore_errors=True)
