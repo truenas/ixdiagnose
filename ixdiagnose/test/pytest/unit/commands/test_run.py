@@ -1,35 +1,20 @@
-import pytest
-
-from subprocess import CompletedProcess
+from ixdiagnose.test.pytest.unit.utils import get_asset
 from ixdiagnose.utils.run import run
+from subprocess import CompletedProcess
 
 
-swapon_output = '''
-Filename				Type		Size	Used	Priority
-/dev/dm-0                              	partition	2095036	0	-2
-/dev/dm-1                              	partition	2095036	0	-3
-/dev/dm-2                              	partition	2095036	0	-4
-/dev/dm-3                              	partition	2095036	0	-5
-'''
+ASSETS_FILENAME = 'swapon_output.txt'
 
 
-@pytest.mark.parametrize('command,stdout,stderr,expected_output,', [
-    (
-        ['swapon', '-s'],
-        swapon_output,
-        '',
-        CompletedProcess(args=('swapon', '-s'), returncode=0, stdout=swapon_output, stderr=''),
-    ),
-    (
-        ['swapon', '-s'],
-        swapon_output,
-        '',
-        CompletedProcess(args=('swapon', '-s'), returncode=0, stdout=swapon_output, stderr=''),
-    )
-])
-def test_run(mocker, command, stdout, stderr, expected_output):
+def test_run(mocker):
     mock_popen = mocker.patch('subprocess.Popen')
-    mock_popen.return_value.communicate.return_value = (stdout, stderr)
+    stdout = get_asset(ASSETS_FILENAME)
+    mock_popen.return_value.communicate.return_value = (stdout, '')
     mock_popen.return_value.returncode = 0
-    result = run(command, check=False, env=None)
-    assert result.stdout == expected_output.stdout
+    result = run(['swapon', '-s'], check=False, env=None)
+    assert result.__dict__ == CompletedProcess(['swapon', '-s'], 0, stdout=stdout, stderr='').__dict__
+
+
+def test_run_timeout():
+    result = run(['tail', '-f', '/dev/null'], check=False, timeout=2)
+    assert result.stderr is not None

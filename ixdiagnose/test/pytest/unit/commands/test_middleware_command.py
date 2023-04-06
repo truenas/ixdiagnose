@@ -78,9 +78,9 @@ def test_middleware_command(mocker, endpoint, api_payload, output, response, sho
     mock_client.return_value = mock_call
     mocker.patch('ixdiagnose.utils.middleware.get_middleware_client', return_value=mock_client)
     cmd_response = MiddlewareCommand(endpoint).execute(middleware_client=mock_response)
-    if not should_work:
-        assert cmd_response.output != response.output
-        assert cmd_response.error != response.error
-    else:
+    if should_work:
         assert cmd_response.output == response.output
         assert cmd_response.error == response.error
+    else:
+        assert cmd_response.output != response.output
+        assert cmd_response.error != response.error

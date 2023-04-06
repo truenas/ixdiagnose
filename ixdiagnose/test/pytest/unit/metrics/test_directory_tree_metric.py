@@ -82,9 +82,9 @@ def test_directory_tree_metric(mocker, name, isdir, path, result, report, should
     mocker.patch('os.path.isdir', return_value=isdir)
     mocker.patch('ixdiagnose.plugins.metrics.directory_tree.get_results', return_value=result)
     directory_tree = DirectoryTreeMetric(name, path)
-    if not should_work:
-        reports, results = directory_tree.execute_impl()
-        assert reports != report
-    else:
+    if should_work:
         reports, results = directory_tree.execute_impl()
         assert reports == report
+    else:
+        reports, results = directory_tree.execute_impl()
+        assert reports != report
