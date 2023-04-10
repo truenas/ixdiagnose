@@ -1,6 +1,7 @@
 import json
 import pytest
 
+from ixdiagnose.exceptions import CallError
 from ixdiagnose.plugins.metrics.python import PythonMetric
 
 
@@ -55,3 +56,28 @@ def test_python_metric(mocker, monkeypatch, name, output, report, should_work):
         assert error_report == report
     else:
         assert error_report != report
+
+
+@pytest.mark.parametrize('name,callback,should_work', [
+    (
+        'smb_shares',
+        lambda client, context: None,
+        True,
+    ),
+    (
+        'smb_shares',
+        lambda client: None,
+        False,
+    ),
+    (
+        'smb_shares',
+        'not a callable',
+        False,
+    )
+])
+def test_python_metric_callback(name, callback, should_work):
+    if should_work:
+        assert isinstance(PythonMetric(name, callback), PythonMetric) is True
+    else:
+        with pytest.raises(CallError):
+            PythonMetric(name, callback)

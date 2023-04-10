@@ -34,8 +34,8 @@ def test_clear_callbacks():
     )
 ])
 def test_event_callbacks(callback, should_work):
-    if not should_work:
+    if should_work:
+        assert event_callbacks.register(callback) is None
+    else:
         with pytest.raises(CallError):
             event_callbacks.register(callback)
-    else:
-        assert event_callbacks.register(callback) is None
