@@ -45,7 +45,8 @@ def generate_debug() -> str:
 
 def compress_debug() -> None:
     if conf.compress and not conf.compressed_path:
-        conf.compressed_path = tempfile.NamedTemporaryFile(suffix='.tgz').name
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            conf.compressed_path = temp_file.name
 
     with tarfile.open(conf.compressed_path, 'w:gz') as tar:
         for entry in os.listdir(conf.debug_path):
