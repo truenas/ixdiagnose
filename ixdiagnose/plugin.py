@@ -10,7 +10,7 @@ from .utils.paths import get_plugin_base_dir
 
 def generate_plugins_debug(percentage: int = 0, total_percentage: int = 100) -> None:
     os.makedirs(get_plugin_base_dir(), exist_ok=True)
-    send_event(percentage, 'Gathering plugins debug information')
+    send_event(percentage + 1, 'Gathering plugins debug information')
 
     plugin_percentage = total_percentage / len(plugin_factory.get_items())
     with concurrent.futures.ProcessPoolExecutor(max_workers=3) as exc:

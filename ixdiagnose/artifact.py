@@ -9,7 +9,7 @@ from .utils.paths import get_artifacts_base_dir
 
 def gather_artifacts(percentage: int = 0, total_percentage: int = 100) -> None:
     os.makedirs(get_artifacts_base_dir(), exist_ok=True)
-    send_event(percentage, 'Gathering artifacts')
+    send_event(percentage + 1, 'Gathering artifacts')
     artifacts_report = {}
     artifact_percentage = total_percentage / len(artifact_factory.get_items())
     for artifact_name, artifact in artifact_factory.get_items().items():

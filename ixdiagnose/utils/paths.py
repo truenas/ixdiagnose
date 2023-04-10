@@ -4,7 +4,7 @@ from ixdiagnose.config import conf
 
 
 def get_debug_dir() -> str:
-    return os.path.join(conf.debug_path, 'debug')
+    return os.path.join(conf.debug_path, 'ixdiagnose')
 
 
 def get_artifacts_base_dir() -> str:
