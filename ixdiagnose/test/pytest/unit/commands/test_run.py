@@ -12,7 +12,7 @@ def test_run(mocker):
     mock_popen.return_value.communicate.return_value = (stdout, '')
     mock_popen.return_value.returncode = 0
     result = run(['swapon', '-s'], check=False, env=None)
-    assert result.__dict__ == CompletedProcess(['swapon', '-s'], 0, stdout=stdout, stderr='').__dict__
+    assert result.__dict__ == CompletedProcess(('swapon', '-s'), 0, stdout=stdout, stderr='').__dict__
 
 
 def test_run_timeout():
