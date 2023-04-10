@@ -4,6 +4,7 @@ import traceback
 
 from typing import List
 
+from ixdiagnose.config import conf
 from ixdiagnose.utils.formatter import dumps
 from ixdiagnose.utils.middleware import get_middleware_client
 from ixdiagnose.utils.paths import get_plugin_base_dir
@@ -32,7 +33,7 @@ class Plugin:
         return os.path.join(get_plugin_base_dir(), self.name)
 
     def metrics_to_execute(self):
-        return self.metrics + self.raw_metrics
+        return self.metrics + (self.serializable_metrics if conf.structured_data else self.raw_metrics)
 
     def execute_metrics(self) -> None:
         os.makedirs(self.output_dir, exist_ok=True)
