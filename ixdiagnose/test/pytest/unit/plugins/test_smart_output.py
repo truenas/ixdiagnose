@@ -1,7 +1,7 @@
 import pytest
-from subprocess import CompletedProcess
 
 from ixdiagnose.plugins.smart import smart_output
+from subprocess import CompletedProcess
 
 
 @pytest.mark.parametrize('run_output', [

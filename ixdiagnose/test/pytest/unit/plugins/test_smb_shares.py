@@ -1,8 +1,8 @@
 import pytest
-from subprocess import CompletedProcess
 
 from ixdiagnose.plugins.smb import get_smb_shares
 from ixdiagnose.test.pytest.unit.utils import get_asset
+from subprocess import CompletedProcess
 
 
 @pytest.mark.parametrize('middleware_return_values', [

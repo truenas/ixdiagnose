@@ -1,7 +1,7 @@
 import pytest
 
-from ixdiagnose.plugins.metrics.middleware import MiddlewareClientMetric
 from ixdiagnose.plugins.base import Plugin
+from ixdiagnose.plugins.metrics.middleware import MiddlewareClientMetric
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 
