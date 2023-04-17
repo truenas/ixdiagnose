@@ -1,6 +1,7 @@
 import pytest
 
-from ixdiagnose.plugins.metrics.directory_tree import DirectoryTreeMetric
+from ixdiagnose.plugins.metrics.directory_tree import DirectoryTreeMetric, get_results
+from ixdiagnose.utils.middleware import MiddlewareCommand, MiddlewareResponse
 
 
 directory_tree_output = [
@@ -88,3 +89,86 @@ def test_directory_tree_metric(mocker, name, isdir, path, result, report, should
     else:
         reports, results = directory_tree.execute_impl()
         assert reports != report
+
+
+@pytest.mark.parametrize('middlleware_response,results,reports', [
+    (
+        MiddlewareResponse(
+            result_key='filesystem_listdir',
+            error=None,
+            output=[
+                {
+                    'name': 'truenas_default.key',
+                    'path': '/etc/certificates/truenas_default.key',
+                    'realpath': '/etc/certificates/truenas_default.key',
+                    'type': 'FILE',
+                    'size': 1704,
+                    'mode': 33024,
+                    'acl': False,
+                    'uid': 0,
+                    'gid': 0,
+                    'is_mountpoint': False,
+                    'is_ctldir': False
+                },
+                {
+                    'name': 'truenas_default.crt',
+                    'path': '/etc/certificates/truenas_default.crt',
+                    'realpath': '/etc/certificates/truenas_default.crt',
+                    'type': 'FILE',
+                    'size': 1334,
+                    'mode': 33188,
+                    'acl': False,
+                    'uid': 0,
+                    'gid': 0,
+                    'is_mountpoint': False,
+                    'is_ctldir': False
+                }
+            ]
+        ),
+        [
+           {
+              'name': 'truenas_default.key',
+              'path': '/etc/certificates/truenas_default.key',
+              'realpath': '/etc/certificates/truenas_default.key',
+              'type': 'FILE',
+              'size': 1704,
+              'mode': 33024,
+              'acl': False,
+              'uid': 0,
+              'gid': 0,
+              'is_mountpoint': False,
+              'is_ctldir': False
+           },
+           {
+              'name': 'truenas_default.crt',
+              'path': '/etc/certificates/truenas_default.crt',
+              'realpath': '/etc/certificates/truenas_default.crt',
+              'type': 'FILE',
+              'size': 1334,
+              'mode': 33188,
+              'acl': False,
+              'uid': 0,
+              'gid': 0,
+              'is_mountpoint': False,
+              'is_ctldir': False
+           }
+        ],
+        [],
+    ),
+    (
+        MiddlewareResponse(
+            result_key='filesystem_listdir',
+            error='File does not exists',
+            output=[]
+        ),
+        [],
+        [
+            {'error': "Failed to list contents of '/etc/certificates': File does not exists"}
+        ],
+    ),
+])
+def test_get_results(mocker, middlleware_response, results, reports):
+    mocker.patch.object(MiddlewareCommand, 'execute', return_value=middlleware_response)
+    output, report = get_results('/etc/certificates')
+    assert output == results
+    assert report == reports

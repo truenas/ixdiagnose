@@ -36,8 +36,7 @@ from subprocess import CompletedProcess
         'command_metric_output2.txt',
         False
     )
-]
-                         )
+])
 def test_command_metric(mocker, name, cmds, return_values, input_file, output_file, should_work):
     input_params = get_asset(input_file)
     output = get_asset(output_file)
