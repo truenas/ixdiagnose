@@ -8,7 +8,7 @@ from ixdiagnose.plugins.smart import smart_output
     [
         CompletedProcess(
             args=(
-                    'lsblk', '-ndo', 'name', '-I', '8,65,66,67,68,69,70,71,128,129,130,131,132,133,134,135,254,259'
+                'lsblk', '-ndo', 'name', '-I', '8,65,66,67,68,69,70,71,128,129,130,131,132,133,134,135,254,259'
             ),
             returncode=0,
             stdout='vda\nvdb\nvdc\n',
@@ -16,7 +16,7 @@ from ixdiagnose.plugins.smart import smart_output
         ),
         CompletedProcess(
             args=(
-                    'smartctl', '-a', '/dev/vda'
+                'smartctl', '-a', '/dev/vda'
             ),
             returncode=1,
             stdout='smartctl 7.2 2020-12-30 r5155 [x86_64-linux-5.15.79+truenas] (local build)\n'
@@ -27,7 +27,7 @@ from ixdiagnose.plugins.smart import smart_output
         ),
         CompletedProcess(
             args=(
-                    'smartctl', '-a', '/dev/vdb'
+                'smartctl', '-a', '/dev/vdb'
             ),
             returncode=1,
             stdout='smartctl 7.2 2020-12-30 r5155 [x86_64-linux-5.15.79+truenas] (local build)\n'
@@ -38,7 +38,7 @@ from ixdiagnose.plugins.smart import smart_output
         ),
         CompletedProcess(
             args=(
-                    'smartctl', '-a', '/dev/vdc'
+                'smartctl', '-a', '/dev/vdc'
             ),
             returncode=1,
             stdout='smartctl 7.2 2020-12-30 r5155 [x86_64-linux-5.15.79+truenas] (local build)\n'
@@ -53,4 +53,4 @@ from ixdiagnose.plugins.smart import smart_output
 def test_smart_output(mocker, run_output):
     client = mocker.MagicMock()
     mocker.patch('ixdiagnose.plugins.smart.run', side_effect=run_output)
-    assert isinstance(smart_output(client, {'serializable': False}), str)
+    assert isinstance(smart_output(client, {'serializable': False}), str) is True

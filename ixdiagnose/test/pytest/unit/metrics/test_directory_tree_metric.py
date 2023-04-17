@@ -91,7 +91,7 @@ def test_directory_tree_metric(mocker, name, isdir, path, result, report, should
         assert reports != report
 
 
-@pytest.mark.parametrize('middlleware_response,results,reports', [
+@pytest.mark.parametrize('middleware_response,results,reports', [
     (
         MiddlewareResponse(
             result_key='filesystem_listdir',
@@ -167,8 +167,8 @@ def test_directory_tree_metric(mocker, name, isdir, path, result, report, should
         ],
     ),
 ])
-def test_get_results(mocker, middlleware_response, results, reports):
-    mocker.patch.object(MiddlewareCommand, 'execute', return_value=middlleware_response)
+def test_get_results(mocker, middleware_response, results, reports):
+    mocker.patch.object(MiddlewareCommand, 'execute', return_value=middleware_response)
     output, report = get_results('/etc/certificates')
     assert output == results
     assert report == reports

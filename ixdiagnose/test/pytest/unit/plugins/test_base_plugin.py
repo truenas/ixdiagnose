@@ -51,7 +51,7 @@ from ixdiagnose.utils.middleware import MiddlewareCommand
         ]
     )
 ])
-def test_ecexute_impl(mocker, metrics_to_execute, metric_output, metric_report):
+def test_execute_impl(mocker, metrics_to_execute, metric_output, metric_report):
     mock_client = mocker.MagicMock()
     context = {'middleware_client': mock_client, 'output_dir': '/root/debug_reports/ixdiagnose/plugins/services'}
     mocker.patch('ixdiagnose.plugins.base.Plugin.metrics_to_execute', return_value=metrics_to_execute)
@@ -60,7 +60,9 @@ def test_ecexute_impl(mocker, metrics_to_execute, metric_output, metric_report):
     mock_file = mocker.patch('builtins.open', mock_obj)
     mock_file.write = metric_output
     with pytest.raises(AssertionError):
+        # Test to ensure name is set
         Plugin()
+
     Plugin.name = 'services'
     plugin = Plugin()
     assert plugin.execute_impl(context) is None

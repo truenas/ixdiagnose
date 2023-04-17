@@ -80,5 +80,5 @@ def test_get_smb_shares(mocker, middleware_return_values):
         stderr=''
     ))
     result = get_smb_shares(mock_client, None)
-    assert isinstance(result, str)
+    assert isinstance(result, str) is True
     assert result == output
