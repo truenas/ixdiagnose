@@ -1,0 +1,31 @@
+name: Add pytest coverage to PR
+
+on:
+  pull_request:
+    types:
+      - 'synchronize'
+      - 'opened'
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  add-coverage:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/truenas/ixdiagnose:master
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pytest-cov
+        pip install -U .
+    - name: Run tests
+      run: pytest --cov-report xml --cov=ixdiagnose
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2.1.0
+      with:
+        files: ./coverage.xml
+        token: ${{ secrets.CODECOV }}

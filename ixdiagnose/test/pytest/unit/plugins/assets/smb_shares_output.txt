@@ -1,0 +1,23 @@
+[data]
+	vfs objects = streams_xattr shadow_copy_zfs acl_xattr zfs_core io_uring
+	ea support = False
+	path = /mnt/crave/data
+	tn:purpose = DEFAULT_SHARE
+	comment =
+	guest ok = False
+	fruit:time machine max size = 0
+	tn:path_suffix =
+	tn:home = False
+	read only = False
+	browseable = True
+	fruit:time machine = False
+	access based share enum = False
+	hosts allow =
+	hosts deny =
+	posix locking = False
+	kernel oplocks = False
+	smbd max xattr size = 2097152
+	tn:vuid =
+drwxrwxr-x+ 6 root root 7 Feb 13 05:42 /mnt/crave/data
+Filesystem     Type 1K-blocks   Used Available Use% Mounted on
+crave/data     zfs    3873152 380160   3492992  10% /mnt/crave/data
