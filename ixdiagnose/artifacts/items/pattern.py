@@ -13,11 +13,15 @@ class Pattern(Item):
     def __init__(self, name: str, max_size: Optional[int] = None, truncate_files: Optional[bool] = True):
         super().__init__(name, max_size)
         self.pattern: str = self.name
+        self.truncate_files: bool = truncate_files
+        self.init_vars()
+
+    def init_vars(self) -> None:
         self.items: List[Item] = []
         self.to_skip_items: List[Item] = []
-        self.truncate_files: bool = truncate_files
 
     def initialize_context(self, item_path: str) -> None:
+        self.init_vars()
         for entry in self.to_copy_items(item_path):
             if entry.is_dir():
                 item = Directory(entry.name, max_size=self.max_size)
