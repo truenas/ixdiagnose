@@ -19,7 +19,7 @@ class File(Item):
         self.file_descriptor = os.open(item_path, os.O_RDONLY | os.O_NOFOLLOW)
 
     def size(self, item_path: str) -> int:
-        return os.fstat(os.fdopen(self.file_descriptor).fileno()).st_size
+        return os.fstat(self.file_descriptor).st_size
 
     def copy_impl(self, item_path: str, destination_path: str) -> list:
         shutil.copy2(self.get_fd_path(), destination_path)
@@ -38,6 +38,7 @@ class File(Item):
         if self.file_descriptor:
             with contextlib.suppress(OSError):
                 os.close(self.file_descriptor)
+                self.file_descriptor = None
 
     def __del__(self):
         self.close_descriptor()
