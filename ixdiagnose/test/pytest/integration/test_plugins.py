@@ -19,7 +19,7 @@ PLUGINS_REPORT_SCHEMA = {
         'metric_report': {
             'anyOf': [
                 {
-                    'type': 'array',
+                    'type': ['array', 'null'],
                     'items': {
                         'type': 'object',
                         'properties': {
@@ -33,7 +33,7 @@ PLUGINS_REPORT_SCHEMA = {
                     }
                 },
                 {
-                    'type': 'object',
+                    'type': ['object', 'null'],
                     'properties': {
                         'error': {'type': ['string', 'null']}
                     }
