@@ -12,8 +12,11 @@ class System(Plugin):
         CommandMetric('time_info', [
             Command(['date'], 'System Date', serializable=False),
             Command(['uptime'], 'System Uptime', serializable=False),
-            Command(['ntpq', '-c', 'rv'], 'NTP System Variables', serializable=False),
-            Command(['ntpq', '-pwn'], 'List of NTP peers known to the system', serializable=False),
+            Command(['chronyc', '-n', 'sources'], 'Current time sources', serializable=False),
+            Command(['chronyc', '-n', 'sourcestats'], 'Drift rate and offset estimation for each source',
+                    serializable=False),
+            Command(['chronyc', '-n', 'tracking'], 'System clock performance', serializable=False),
+            Command(['chronyc', 'ntpdata'], 'Last valid measurement for each source', serializable=False),
         ]),
         CommandMetric('dmesg', [Command(['dmesg'], 'Dmesg', serializable=False)]),
         CommandMetric('processes', [Command(['ps', '-auxwwf'], 'All running processes', serializable=False)]),
