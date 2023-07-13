@@ -1,6 +1,7 @@
 from ixdiagnose.utils.factory import Factory
 
 from .active_directory import ActiveDirectory
+from .clustering import Clustering
 from .hardware import Hardware
 from .iscsi import ISCSI
 from .kubernetes import Kubernetes
@@ -21,6 +22,7 @@ from .zfs import ZFS
 plugin_factory = Factory()
 for plugin in [
     ActiveDirectory,
+    Clustering,
     Hardware,
     ISCSI,
     Kubernetes,

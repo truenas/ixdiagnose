@@ -30,7 +30,10 @@ def generate_plugins_debug(percentage: int = 0, total_percentage: int = 100) -> 
 
         plugins_report[plugin_name] = report
         percentage += plugin_percentage
-        send_event(percentage, description)
+        # The discrepancy is due to the accumulation of floating-point precision errors when summing up
+        # `plugin_percentage` the total length of `to_execute_plugins` times.
+        # This is a known issue in numerical computing, refer: https://docs.python.org/3/tutorial/floatingpoint.html.
+        send_event(int(percentage), description)
 
     with open(os.path.join(get_plugin_base_dir(), 'report.json'), 'w') as f:
         f.write(dumps(plugins_report))
