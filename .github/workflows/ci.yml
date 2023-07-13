@@ -6,11 +6,14 @@ jobs:
   build-deb:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/truenas/ixdiagnose:master
+      image: ghcr.io/truenas/middleware:master
 
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
+      - name: Setup apt
+        run: chmod +x /usr/bin/apt* && chmod +x /usr/bin/dpkg
 
       - name: Install Dependencies
         run: apt update && apt install -y debhelper-compat dh-python python3-dev python3-setuptools devscripts

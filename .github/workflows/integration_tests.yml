@@ -1,23 +1,24 @@
 name: integration_tests
 
-on:
-  pull_request:
-    types:
-      - 'synchronize'
-      - 'opened'
+on: [push]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/truenas/ixdiagnose:master
+      image: ghcr.io/truenas/middleware:master
 
     steps:
     - uses: actions/checkout@v2
+    - name: Setup dependencies
+      run: |
+        /usr/bin/install-dev-tools
+
     - name: Deps
       run: |
-        pip install -r requirements.txt
-        pip install -U .
+        pip install --break-system-packages -r requirements.txt
+        pip install --break-system-packages -U .
+
     - name: Running test
       run: pytest -v ixdiagnose/test/pytest/integration/
