@@ -2,6 +2,7 @@ from ixdiagnose.utils.factory import Factory
 
 from .active_directory import ActiveDirectory
 from .clustering import Clustering
+from .ftp import FTP
 from .hardware import Hardware
 from .iscsi import ISCSI
 from .kubernetes import Kubernetes
@@ -23,6 +24,7 @@ plugin_factory = Factory()
 for plugin in [
     ActiveDirectory,
     Clustering,
+    FTP,
     Hardware,
     ISCSI,
     Kubernetes,
