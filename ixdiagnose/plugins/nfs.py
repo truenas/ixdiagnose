@@ -22,6 +22,10 @@ class NFS(Plugin):
                 ['systemctl', 'status', 'rpc-gssd'], 'RPC Gssd Service Status', serializable=False,
                 safe_returncodes=[0, 3],
             ),
+            Command(
+                ['systemctl', 'status', 'gssproxy'], 'Gssproxy Service Status', serializable=False,
+                safe_returncodes=[0, 3],
+            ),
         ]),
         CommandMetric(
             'rpcinfo', [
