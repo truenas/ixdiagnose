@@ -1,4 +1,5 @@
 from ixdiagnose.utils.middleware import MiddlewareCommand
+from ixdiagnose.utils.formatter import remove_keys
 
 from .base import Plugin
 from .metrics import FileMetric, MiddlewareClientMetric
@@ -21,6 +22,12 @@ class Clustering(Plugin):
                 MiddlewareCommand('ctdb.public.ips.query'),
                 MiddlewareCommand('ctdb.general.listnodes'),
                 MiddlewareCommand('ctdb.root_dir.config'),
+            ], prerequisites=[ServiceRunningPrerequisite('glusterd')],
+        ),
+        MiddlewareClientMetric(
+            'clustered_accounts', [
+                MiddlewareCommand('cluster.accounts.user.query', format_output=remove_keys(['smbhash'])),
+                MiddlewareCommand('cluster.accounts.group.query'),
             ], prerequisites=[ServiceRunningPrerequisite('glusterd')],
         ),
         MiddlewareClientMetric(
