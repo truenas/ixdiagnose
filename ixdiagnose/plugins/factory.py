@@ -4,6 +4,7 @@ from .active_directory import ActiveDirectory
 from .clustering import Clustering
 from .ftp import FTP
 from .hardware import Hardware
+from .ipmi import IPMI
 from .iscsi import ISCSI
 from .kubernetes import Kubernetes
 from .ldap import LDAP
@@ -26,6 +27,7 @@ for plugin in [
     Clustering,
     FTP,
     Hardware,
+    IPMI,
     ISCSI,
     Kubernetes,
     LDAP,
