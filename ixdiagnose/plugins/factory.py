@@ -2,6 +2,7 @@ from ixdiagnose.utils.factory import Factory
 
 from .active_directory import ActiveDirectory
 from .clustering import Clustering
+from .cpu import Cpu
 from .ftp import FTP
 from .hardware import Hardware
 from .ipmi import IPMI
@@ -25,6 +26,7 @@ plugin_factory = Factory()
 for plugin in [
     ActiveDirectory,
     Clustering,
+    Cpu,
     FTP,
     Hardware,
     IPMI,
