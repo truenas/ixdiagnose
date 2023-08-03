@@ -12,6 +12,7 @@ from .ldap import LDAP
 from .network import Network
 from .nfs import NFS
 from .replication import Replication
+from .reporting import Reporting
 from .services import Services
 from .smart import SMART
 from .smb import SMB
@@ -36,6 +37,7 @@ for plugin in [
     Network,
     NFS,
     Replication,
+    Reporting,
     Services,
     SMART,
     SMB,
