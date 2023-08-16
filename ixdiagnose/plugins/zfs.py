@@ -31,7 +31,10 @@ def zfs_getacl_impl(dataset_name: str, props_dict: dict) -> str:
 
 
 def resource_output(client: MiddlewareClient, resource_type: str) -> str:
-    cp = run([resource_type, 'get', 'all'], check=False)
+    if resource_type == 'zfs':
+        cp = run(['zfs', 'get', 'all', '-t', 'filesystem'], check=False)
+    else:
+        cp = run([resource_type, 'get', 'all'], check=False)
     if cp.returncode:
         return f'Failed to retrieve {resource_type!r} resources: {cp.stderr}'
 
