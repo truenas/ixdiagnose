@@ -106,7 +106,7 @@ class ZFS(Plugin):
     metrics = [
         CommandMetric(
             'dataset_list', [
-                Command(['zfs', 'list', '-ro', 'space,refer,mountpoint'], 'ZFS Pool(s)', serializable=False),
+                Command(['zfs', 'list', '-ro', 'space,refer,mountpoint'], 'ZFS Dataset(s)', serializable=False),
             ]
         ),
         CommandMetric(
