@@ -3,6 +3,8 @@ from ixdiagnose.utils.factory import Factory
 from .active_directory import ActiveDirectory
 from .certificates import Certificates
 from .clustering import Clustering
+from .cloud_backup import CloudBackup
+from .cloud_sync import CloudSync
 from .cpu import Cpu
 from .ftp import FTP
 from .hardware import Hardware
@@ -14,6 +16,7 @@ from .network import Network
 from .nfs import NFS
 from .replication import Replication
 from .reporting import Reporting
+from .rsync import Rsync
 from .services import Services
 from .smart import SMART
 from .smb import SMB
@@ -28,6 +31,8 @@ plugin_factory = Factory()
 for plugin in [
     ActiveDirectory,
     Certificates,
+    CloudBackup,
+    CloudSync,
     Clustering,
     Cpu,
     FTP,
@@ -40,6 +45,7 @@ for plugin in [
     NFS,
     Replication,
     Reporting,
+    Rsync,
     Services,
     SMART,
     SMB,
