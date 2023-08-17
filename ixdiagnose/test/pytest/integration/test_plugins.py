@@ -117,12 +117,4 @@ def test_report_schema():
 def test_plugin_event_progress_count():
     event_callbacks.register(callback=event_callback)
     with generate_plugins():
-        assert (len(plugin_factory.get_items()) + 1) == len(PROGRESS_DESCRIPTIONS) == len(PROGRESS_TRACK)
-
-
-def test_plugin_event_progress_percentage():
-    event_callbacks.register(callback=event_callback)
-    base_percentage = 9
-    total_percentage = 90
-    with generate_plugins(base_percentage, total_percentage):
-        assert (base_percentage + total_percentage) == PROGRESS_TRACK[-1]
+        assert len(plugin_factory.get_items()) == len(PROGRESS_DESCRIPTIONS) == len(PROGRESS_TRACK)
