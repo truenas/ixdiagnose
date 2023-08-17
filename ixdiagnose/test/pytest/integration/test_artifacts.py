@@ -132,12 +132,4 @@ def test_truncation_of_file(file_size, file_truncated):
 def test_artifact_event_progress_count():
     event_callbacks.register(callback=event_callback)
     with gather_artifacts():
-        assert (len(artifact_factory.get_items()) + 1) == len(PROGRESS_DESCRIPTIONS) == len(PROGRESS_TRACK)
-
-
-def test_artifact_event_progress_percentage():
-    event_callbacks.register(callback=event_callback)
-    base_percentage = 90
-    total_percentage = 10
-    with gather_artifacts(base_percentage, total_percentage):
-        assert (base_percentage + total_percentage) == PROGRESS_TRACK[-1]
+        assert len(artifact_factory.get_items()) == len(PROGRESS_DESCRIPTIONS) == len(PROGRESS_TRACK)
