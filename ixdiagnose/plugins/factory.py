@@ -6,6 +6,7 @@ from .clustering import Clustering
 from .cloud_backup import CloudBackup
 from .cloud_sync import CloudSync
 from .cpu import Cpu
+from .cronjob import Cronjob
 from .ftp import FTP
 from .hardware import Hardware
 from .ipmi import IPMI
@@ -35,6 +36,7 @@ for plugin in [
     CloudSync,
     Clustering,
     Cpu,
+    Cronjob,
     FTP,
     Hardware,
     IPMI,
