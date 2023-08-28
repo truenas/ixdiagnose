@@ -26,8 +26,10 @@ class System(Plugin):
             Command(['df', '-T', '-h'], 'Filesystem Resource Usage', serializable=False),
         ]),
         CommandMetric('memory', [
-            Command(['top', '-SHbi', '-d1', '-n2'], 'System Processes/Threads Top', serializable=False),
             Command(['vmstat'], 'Virtual Memory Statistics', serializable=False),
+        ]),
+        CommandMetric('top', [
+            Command(['top', '-SHbi', '-d1', '-n2'], 'System Processes/Threads Top', serializable=False),
         ]),
         CommandMetric('kernel_modules', [Command(['lsmod'], 'List of Kernel Modules', serializable=False)]),
         MiddlewareClientMetric('coredump', [MiddlewareCommand('system.coredumps')]),
