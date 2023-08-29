@@ -22,6 +22,7 @@ class Logs(Artifact):
         File('wsdd.log'),
         Pattern('daemon.+'),
         Pattern('failover.+'),
+        Pattern('fenced.+'),
         Pattern('middlewared.+'),
         Pattern('zettarepl.+'),
     ]
