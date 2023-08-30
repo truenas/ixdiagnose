@@ -9,6 +9,7 @@ from .cpu import Cpu
 from .cronjob import Cronjob
 from .ftp import FTP
 from .hardware import Hardware
+from .initshutdown_scripts import InitShutDownScripts
 from .ipmi import IPMI
 from .iscsi import ISCSI
 from .kubernetes import Kubernetes
@@ -39,6 +40,7 @@ for plugin in [
     Cronjob,
     FTP,
     Hardware,
+    InitShutDownScripts,
     IPMI,
     ISCSI,
     Kubernetes,
