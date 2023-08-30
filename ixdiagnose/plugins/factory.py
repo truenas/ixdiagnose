@@ -12,6 +12,7 @@ from .hardware import Hardware
 from .initshutdown_scripts import InitShutDownScripts
 from .ipmi import IPMI
 from .iscsi import ISCSI
+from .jobs import CoreGetJobs
 from .kubernetes import Kubernetes
 from .ldap import LDAP
 from .network import Network
@@ -43,6 +44,7 @@ for plugin in [
     InitShutDownScripts,
     IPMI,
     ISCSI,
+    CoreGetJobs,
     Kubernetes,
     LDAP,
     Network,
