@@ -1,6 +1,7 @@
 import click
 
 from ixdiagnose.event import event_callbacks
+from typing import Callable, List, Optional
 
 from .artifact import gather_artifacts
 from .config import conf
@@ -12,25 +13,50 @@ text = ['Specified configuration for debug generation is ']
 
 
 @click.group()
-def main():
+def main() -> None:
     pass
 
 
 timeout_option = click.option(
     '-t', '--timeout', type=click.INT, default=20, show_default=True,
-    help='timeout value in minutes'
+    help='timeout value in seconds'
 )
 
 debug_path_option = click.option(
-    '--debug-path', type=click.Path(), help='path where you want to save debug'
+    '--debug-path', type=click.Path(), required=True,  help='path where you want to save debug'
 )
 
 
-def list_type(values):
+def list_type(values: str) -> List[str]:
     return [value.strip() for value in values.split(',')]
 
 
-def progress_bar(func):
+def update_configuration(
+    timeout: int, compress: Optional[bool] = None, debug_path: Optional[str] = None,
+    excluded_artifacts: Optional[List[str]] = None, excluded_plugins: Optional[List[str]] = None,
+) -> None:
+    if compress:
+        conf.compress = True
+        text.append('- save debug as a compressed folder.')
+
+    if timeout:
+        conf.timeout = timeout
+        text.append(f'- timeout for debug generation: {timeout} seconds.')
+
+    if excluded_artifacts:
+        conf.exclude_artifacts = excluded_artifacts
+        text.append(f'- exclude artifacts: {excluded_artifacts}')
+
+    if excluded_plugins:
+        conf.exclude_plugins = excluded_plugins
+        text.append(f'- exclude plugins: {excluded_plugins}')
+
+    if debug_path:
+        conf.debug_path = debug_path
+        text.append(f'- debug path set to {debug_path}')
+
+
+def progress_bar(func: Callable) -> str:
     bar = click.progressbar(length=100, label='Generating debug')
     cumulative_progress = 0
     last_iteration_label = 'Completed debug'
@@ -64,27 +90,17 @@ def progress_bar(func):
     '-Xp', '--exclude-plugins', type=list_type,
     help='plugins you want to exclude in debug (smb,vm,network). A comma separated list without space or in quotes'
 )
-def run(serialized, compress, timeout, exclude_artifacts, exclude_plugins):
+def run(
+    serialized: bool, compress: bool, timeout: int, exclude_artifacts: List[str],
+    exclude_plugins: List[str]
+) -> None:
     if serialized:
         conf.structured_data = True
         text.append('- generate debug in structured form.')
     else:
         text.append('- generate debug in default non-structured form.')
 
-    if compress:
-        conf.compress = True
-        text.append('- save debug as a compressed folder.')
-
-    if timeout:
-        conf.timeout = timeout
-        text.append(f'- timeout for debug generation: {timeout} minute.')
-
-    if exclude_artifacts:
-        conf.exclude_artifacts = exclude_artifacts
-        text.append(f'- exclude artifacts: {exclude_artifacts}')
-    if exclude_plugins:
-        conf.exclude_plugins = exclude_plugins
-        text.append(f'- exclude plugins: {exclude_plugins}')
+    update_configuration(timeout, compress, None, exclude_artifacts, exclude_plugins)
 
     click.echo('\n'.join(text))
     path = progress_bar(generate_debug)
@@ -98,20 +114,8 @@ def run(serialized, compress, timeout, exclude_artifacts, exclude_plugins):
     '-X', '--exclude', type=list_type,
     help='artifacts you want to exclude in debug (logs,sys_info). A comma separated list without space or in quotes'
 )
-def artifact(debug_path, timeout, exclude):
-    if debug_path:
-        conf.debug_path = debug_path
-        text.append(f'- debug path set to {debug_path}')
-    else:
-        raise click.UsageError('Artifact command requires the --debug-path option to be specified.')
-
-    if timeout:
-        conf.timeout = timeout
-        text.append(f'- timeout for debug generation: {timeout} minute.')
-
-    if exclude:
-        conf.exclude_artifacts = exclude
-        text.append(f'- exclude artifacts: {exclude}')
+def artifact(debug_path: str, timeout: int, exclude: List[str]) -> None:
+    update_configuration(timeout, debug_path=debug_path, excluded_artifacts=exclude)
 
     click.echo('\n'.join(text))
     progress_bar(gather_artifacts)
@@ -125,20 +129,8 @@ def artifact(debug_path, timeout, exclude):
     '-X', '--exclude', type=list_type,
     help='plugins you want to exclude in debug (smb,vm,network). A comma separated list without space or in quotes'
 )
-def plugin(debug_path, timeout, exclude):
-    if debug_path:
-        conf.debug_path = debug_path
-        text.append(f'- debug path set to {debug_path}')
-    else:
-        raise click.UsageError('Plugin command requires the --debug-path option to be specified.')
-
-    if timeout:
-        conf.timeout = timeout
-        text.append(f'- timeout for debug generation: {timeout} minute.')
-
-    if exclude:
-        conf.exclude_plugins = exclude
-        text.append(f'- exclude plugins: {exclude}')
+def plugin(debug_path: str, timeout: int, exclude: List[str]) -> None:
+    update_configuration(timeout, debug_path=debug_path, excluded_plugins=exclude)
 
     click.echo('\n'.join(text))
     progress_bar(generate_plugins_debug)
