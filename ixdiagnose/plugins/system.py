@@ -58,5 +58,4 @@ class System(Plugin):
             MiddlewareCommand('system.license', result_key='System License'),
             MiddlewareCommand('system.gather_update_failed', result_key='Failed Updates'),
         ]),
-        MiddlewareClientMetric('websocket_messages', [MiddlewareCommand('core.get_websocket_messages')]),
     ]
