@@ -33,7 +33,7 @@ def test_plugin_with_required_args(cli):
 def test_plugin_without_debug_path(cli):
     result = runner.invoke(main, ['plugin'])
     assert result.exit_code == 2
-    assert 'Plugin command requires the --debug-path option to be specified.' in result.output
+    assert 'Missing option \'--debug-path\'' in result.output
 
 
 def test_plugin_with_exclude_option(cli):
@@ -58,7 +58,7 @@ def test_artifact_with_required_args(cli):
 def test_artifact_without_debug_path(cli):
     result = runner.invoke(main, ['artifact'])
     assert result.exit_code == 2
-    assert 'Artifact command requires the --debug-path option to be specified.' in result.output
+    assert 'Missing option \'--debug-path\'' in result.output
 
 
 def test_artifact_with_exclude_option(cli):
@@ -98,6 +98,6 @@ def test_run_command_custom_options(cli):
     assert result.exit_code == 0
     assert 'generate debug in structured form.' in result.output
     assert 'save debug as a compressed folder.' in result.output
-    assert 'timeout for debug generation: 5 minute.' in result.output
+    assert 'timeout for debug generation: 5 seconds.' in result.output
     assert 'exclude artifacts: [\'logs\', \'sys_info\']' in result.output
     assert 'exclude plugins: [\'vm\', \'network\']' in result.output
