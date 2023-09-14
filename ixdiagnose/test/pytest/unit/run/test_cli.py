@@ -1,4 +1,5 @@
 import pytest
+import os
 
 from click.testing import CliRunner
 from ixdiagnose.cli import main
@@ -22,6 +23,11 @@ def reset_config():
     conf.exclude_plugins = []
     conf.structured_data = False
     conf.timeout = 20
+
+    yield
+
+    if conf.compress:
+        os.remove(conf.compressed_path)
 
 
 def test_plugin_with_required_args(cli):
@@ -94,10 +100,25 @@ def test_run_with_exclude_artifacts(cli):
 
 
 def test_run_command_custom_options(cli):
-    result = runner.invoke(main, ['run', '-s', '-c', '-t', '5', '-Xa', 'logs,sys_info', '-Xp', 'vm,network'])
+    result = runner.invoke(
+        main, [
+            'run', '-s', '-c', '/tmp/compress', '--debug-path', '/tmp/debug',
+            '-t', '5', '-Xa', 'logs,sys_info', '-Xp', 'vm,network'
+        ]
+    )
     assert result.exit_code == 0
     assert 'generate debug in structured form.' in result.output
-    assert 'save debug as a compressed folder.' in result.output
+    assert 'save debug as a compressed folder at: /tmp/compress' in result.output
     assert 'timeout for debug generation: 5 seconds.' in result.output
+    assert 'debug path set to /tmp/debug' in result.output
     assert 'exclude artifacts: [\'logs\', \'sys_info\']' in result.output
     assert 'exclude plugins: [\'vm\', \'network\']' in result.output
+
+
+def test_path_validation(cli):
+    result = runner.invoke(main, ['run', '--debug-path', 'tmp/debug'])
+    result2 = runner.invoke(main, ['run', '-c', 'tmp/compress'])
+    assert result.exit_code == 2
+    assert result2.exit_code == 2
+    assert 'Path must be absolute' in result.output
+    assert 'Path must be absolute' in result2.output

@@ -1,4 +1,5 @@
 import click
+import os
 
 from ixdiagnose.event import event_callbacks
 from typing import Callable, List, Optional
@@ -17,27 +18,18 @@ def main() -> None:
     pass
 
 
-timeout_option = click.option(
-    '-t', '--timeout', type=click.INT, default=20, show_default=True,
-    help='timeout value in seconds'
-)
-
-debug_path_option = click.option(
-    '--debug-path', type=click.Path(), required=True,  help='path where you want to save debug'
-)
-
-
 def list_type(values: str) -> List[str]:
     return [value.strip() for value in values.split(',')]
 
 
 def update_configuration(
-    timeout: int, compress: Optional[bool] = None, debug_path: Optional[str] = None,
+    timeout: int, compress: Optional[str] = None, debug_path: Optional[str] = None,
     excluded_artifacts: Optional[List[str]] = None, excluded_plugins: Optional[List[str]] = None,
 ) -> None:
     if compress:
         conf.compress = True
-        text.append('- save debug as a compressed folder.')
+        conf.compressed_path = compress
+        text.append(f'- save debug as a compressed folder at: {compress}')
 
     if timeout:
         conf.timeout = timeout
@@ -78,9 +70,40 @@ def progress_bar(func: Callable) -> str:
     return path
 
 
+def validate_path(ctx, param, value):
+    if ctx.info_name in ['artifact', 'plugin']:
+        if value is None:
+            raise click.UsageError('Missing option \'--debug-path\'.')
+
+    if value and not os.path.isabs(value):
+        raise click.UsageError('Path must be absolute')
+
+    if ctx.info_name == 'run':
+
+        if value and param.name == 'compress' and os.path.exists(value):
+            raise click.UsageError('Compressed path already exists')
+
+    return value
+
+
+timeout_option = click.option(
+    '-t', '--timeout', type=click.INT, default=20, show_default=True,
+    help='timeout value for middleware client in seconds'
+)
+
+debug_path_option = click.option(
+    '--debug-path', type=click.Path(), callback=validate_path, required=False,
+    help='path where you want to save debug'
+)
+
+
 @main.command(short_help='Generate complete debug')
 @click.option('-s', '--serialized', is_flag=True, default=False, help='generate debug in structured form')
-@click.option('-c', '--compress', is_flag=True, default=False, help='get compressed debug')
+@click.option(
+    '-c', '--compress', type=str, callback=validate_path,
+    help='get compressed debug, provide file name with complete path'
+)
+@debug_path_option
 @timeout_option
 @click.option(
     '-Xa', '--exclude-artifacts', type=list_type,
@@ -91,7 +114,7 @@ def progress_bar(func: Callable) -> str:
     help='plugins you want to exclude in debug (smb,vm,network). A comma separated list without space or in quotes'
 )
 def run(
-    serialized: bool, compress: bool, timeout: int, exclude_artifacts: List[str],
+    serialized: bool, compress: str, debug_path: str, timeout: int, exclude_artifacts: List[str],
     exclude_plugins: List[str]
 ) -> None:
     if serialized:
@@ -100,7 +123,7 @@ def run(
     else:
         text.append('- generate debug in default non-structured form.')
 
-    update_configuration(timeout, compress, None, exclude_artifacts, exclude_plugins)
+    update_configuration(timeout, compress, debug_path, exclude_artifacts, exclude_plugins)
 
     click.echo('\n'.join(text))
     path = progress_bar(generate_debug)

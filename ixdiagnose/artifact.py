@@ -17,6 +17,7 @@ def gather_artifacts(percentage: int = 0, total_percentage: int = 100) -> None:
     artifacts_report = {}
     artifact_percentage = total_percentage / (len(to_execute_artifacts) or 1)  # We want to handle this quietly
     for artifact_name, artifact in to_execute_artifacts.items():
+        send_event(int(percentage + 0.5), f'Gathering artifact {artifact_name!r}')
 
         try:
             report = artifact.gather()
@@ -29,7 +30,7 @@ def gather_artifacts(percentage: int = 0, total_percentage: int = 100) -> None:
 
         artifacts_report[artifact_name] = report
         percentage += artifact_percentage
-        send_event(int(percentage + 0.5), f'Gathered artifact {artifact_name!r}')
 
+    send_event(total_percentage, 'Gathered artifacts')
     with open(os.path.join(get_artifacts_base_dir(), 'report.json'), 'w') as f:
         f.write(dumps(artifacts_report))
