@@ -66,7 +66,9 @@ class SMB(Plugin):
                 MiddlewareCommand('sharing.smb.query'),
             ]
         ),
-        PythonMetric('smb_shares', callback=get_smb_shares, description='SMB Shares and Permissions', serializable=False),
+        PythonMetric(
+            'smb_shares', callback=get_smb_shares, description='SMB Shares and Permissions', serializable=False,
+        ),
     ]
     raw_metrics = [
         CommandMetric(
