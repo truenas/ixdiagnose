@@ -117,4 +117,4 @@ def test_report_schema():
 def test_plugin_event_progress_count():
     event_callbacks.register(callback=event_callback)
     with generate_plugins():
-        assert len(plugin_factory.get_items()) == len(PROGRESS_DESCRIPTIONS) == len(PROGRESS_TRACK)
+        assert len(plugin_factory.get_items()) + 1 == len(PROGRESS_DESCRIPTIONS) == len(PROGRESS_TRACK)
