@@ -1,7 +1,7 @@
 import pytest
 
 from subprocess import CompletedProcess
-from ixdiagnose.plugins.zfs import zfs_getacl_impl, resource_output, kstat_output
+from ixdiagnose.plugins.zfs import zfs_getacl_impl, resource_output
 from ixdiagnose.test.pytest.unit.utils import get_asset
 
 
@@ -114,77 +114,3 @@ def test_resource_output(mocker, resource_type, args, returncode, file_name, std
         assert resource_output(mock_client, resource_type) == output
     else:
         assert resource_output(mock_client, resource_type) != output
-
-
-@pytest.mark.parametrize('pools,file_name,should_work', [
-    (
-        [
-            {
-                'name': 'rootd',
-                'id': 'rootd',
-                'guid': '6009907550966676357',
-                'hostname': 'truenas',
-                'status': 'ONLINE',
-                'healthy': True,
-                'warning': False,
-            },
-        ],
-        'input_kstat_output1.txt',
-        True
-    ),
-    (
-        [
-            {
-                'name': 'rootd',
-                'id': 'rootd',
-                'guid': '6009907550966676357',
-                'hostname': 'truenas',
-                'status': 'ONLINE',
-                'healthy': True,
-                'warning': False,
-            },
-        ],
-        'input_kstat_output2.txt',
-        False
-    ),
-    (
-        [
-            {
-                'name': 'rootd',
-                'id': 'rootd',
-                'guid': '6009907550966676357',
-                'hostname': 'truenas',
-                'status': 'ONLINE',
-                'healthy': True,
-                'warning': False,
-            },
-        ],
-        'input_kstat_output3.txt',
-        False
-    )
-])
-def test_kstat_output(mocker, pools, file_name, should_work):
-    output = get_asset('kstat_output.txt')
-    input_content = get_asset(file_name)
-    mock_client = mocker.Mock()
-    mocker.patch('builtins.map', return_value=['rootd'])
-    mocker.patch(
-        'os.path.join', side_effect=[
-            '/proc/spl/kstat/zfs/fletcher_4_bench',
-            '/proc/spl/kstat/zfs/vdev_raidz_bench',
-            '/proc/spl/kstat/zfs/dbgmsg',
-            '/proc/spl/kstat/zfs/root/multihost',
-            '/proc/spl/kstat/zfs/rootd/state',
-            '/proc/spl/kstat/zfs/rootd/txgs'
-        ],
-    )
-    mocker.patch('os.path.exists', side_effect=[False, False, False, False, True, True])
-    mock_open = mocker.patch('builtins.open')
-    mock_open.return_value.__enter__.side_effect = [
-        mocker.mock_open(read_data='ONLINE').return_value,
-        mocker.mock_open(read_data=input_content).return_value
-    ]
-    if should_work:
-        assert kstat_output(mock_client, None) == output
-    else:
-        assert kstat_output(mock_client, None) != output
