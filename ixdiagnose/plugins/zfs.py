@@ -78,32 +78,6 @@ def encryption_summary(client: MiddlewareClient, context: Any) -> str:
     return dumps(summary)
 
 
-def kstat_output(client: MiddlewareClient, context: Any) -> str:
-    kstats = ['fletcher_4_bench', 'vdev_raidz_bench', 'dbgmsg']
-    for pool in map(lambda p: p['name'], client.call('zfs.pool.query')):
-        kstats.extend([
-            f'{pool}/multihost',
-            f'{pool}/state',
-            f'{pool}/txgs',
-        ])
-
-    output = ''
-    for index, kstat in enumerate(kstats):
-        kstat_header = f'kstat {kstat!r}'
-        newline = '\n\n' if index != 0 else ''
-        header = f'{newline}{"=" * (len(kstat_header) + 5)}\n  {kstat_header}\n{"=" * (len(kstat_header) + 5)}\n'
-        output += header
-        kstat_path = os.path.join('/proc/spl/kstat/zfs', kstat)
-        if os.path.exists(kstat_path):
-            with open(kstat_path, 'r') as f:
-                data = f.read()
-            output += f'\n{data}\n'
-        else:
-            output += f'\n{kstat_path!r} does not exist\n'
-
-    return output
-
-
 class ZFS(Plugin):
     name = 'zfs'
     metrics = [
@@ -119,13 +93,13 @@ class ZFS(Plugin):
             'pool_status', [Command(['zpool', 'status', '-v'], 'ZFS Pool(s) Status', serializable=False)]
         ),
         CommandMetric('pool_history', [Command(['zpool', 'history'], 'ZFS Pool(s) History', serializable=False)]),
+        CommandMetric('arc_summary', [Command(['arc_summary'], 'ARC Summary', serializable=False)]),
         MiddlewareClientMetric(
             'pool_scrub_tasks', [
                 MiddlewareCommand('pool.scrub.query', result_key='scrub_tasks'),
             ]
         ),
         PythonMetric('encryption_summary', encryption_summary),
-        PythonMetric('kstat', kstat_output, serializable=False),
     ]
     raw_metrics = [
         CommandMetric('snapshot_config', [
