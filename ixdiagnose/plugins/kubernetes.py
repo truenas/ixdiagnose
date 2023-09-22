@@ -26,6 +26,7 @@ class Kubernetes(Plugin):
                 ], 'Kubernetes Resources', serializable=False)
             ], prerequisites=[ServiceRunningPrerequisite('k3s')],
         ),
+        MiddlewareClientMetric('backups', [MiddlewareCommand('kubernetes.list_backups')]),
         MiddlewareClientMetric('config', [MiddlewareCommand('kubernetes.config')]),
         MiddlewareClientMetric('catalogs', [MiddlewareCommand('catalog.query')]),
         MiddlewareClientMetric(
