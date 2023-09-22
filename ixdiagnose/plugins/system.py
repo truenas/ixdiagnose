@@ -48,7 +48,6 @@ class System(Plugin):
         MiddlewareClientMetric('alerts_sources_stats', [MiddlewareCommand('alert.sources_stats')]),
         MiddlewareClientMetric('middleware_tasks', [MiddlewareCommand('core.get_tasks')]),
         MiddlewareClientMetric('middleware_thread_stacks', [MiddlewareCommand('core.threads_stacks')]),
-        MiddlewareClientMetric('jobs', [MiddlewareCommand('core.get_jobs', [[], {'extra': {'raw_result': False}}])]),
         MiddlewareClientMetric('system_info', [
             MiddlewareCommand('system.is_enterprise', result_key='Enterprise System'),
             MiddlewareCommand(
