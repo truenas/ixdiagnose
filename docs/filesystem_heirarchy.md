@@ -29,7 +29,7 @@ ixdiagnose/ixdiagnose
 ├── event.py
 ├── exceptions.py
 ├── __init__.py
-├── main.py
+├── cli.py
 ├── plugin.py
 ├── plugins (Directory)
 ├── run.py
@@ -42,7 +42,7 @@ ixdiagnose/ixdiagnose
 - `artifact.py` contains the logic which is used to gather the artifacts.
 - `config.py` contains the logic which is used to parse the configuration file.
 - `event.py` contains the logic which is used to manage the event management used to give real updates on debug generation.
-- `main.py` contains the logic which is used to parse the command line arguments and run the application.
+- `cli.py` contains the logic which is used to parse the command line arguments and run the application.
 - `plugin.py` contains the logic which is used to manage the plugins.
 - `run.py` contains the logic which is used to run the plugins.
 - `utils` contains the utility functions used by the application.

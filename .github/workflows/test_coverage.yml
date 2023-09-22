@@ -13,15 +13,18 @@ jobs:
   add-coverage:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/truenas/ixdiagnose:master
+      image: ghcr.io/truenas/middleware:master
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Install dependencies
+    - name: Setup dependencies
       run: |
-        pip install -r requirements.txt
-        pip install pytest-cov
-        pip install -U .
+        /usr/bin/install-dev-tools
+    - name: Deps
+      run: |
+        pip install --break-system-packages -r requirements.txt
+        pip install --break-system-packages pytest-cov
+        pip install --break-system-packages -U .
     - name: Run tests
       run: pytest --cov-report xml --cov=ixdiagnose
     - name: Upload coverage to Codecov
