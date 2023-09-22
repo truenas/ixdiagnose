@@ -53,6 +53,6 @@ class Network(Plugin):
                 Command(['ip', '-j', 'rule', 'list'], 'ip_rules'),
             ]
         ),
-        CommandMetric('interface_statistics', [Command(['ip', '-j', '-s', 'addr'], 'Interface Statistics')]),
+        CommandMetric('interface_statistics', [Command(['ip', '-j', '-s', '-s', 'addr'], 'Interface Statistics')]),
         CommandMetric('nft_rules', [Command(['nft', '-j', '-a', 'list', 'ruleset'], 'NFTables rulesets')]),
     ]
