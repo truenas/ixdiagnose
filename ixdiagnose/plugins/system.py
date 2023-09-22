@@ -56,5 +56,6 @@ class System(Plugin):
             ),
             MiddlewareCommand('system.license', result_key='System License'),
             MiddlewareCommand('system.gather_update_failed', result_key='Failed Updates'),
+            MiddlewareCommand('system.info', result_key='system_info'),
         ]),
     ]
