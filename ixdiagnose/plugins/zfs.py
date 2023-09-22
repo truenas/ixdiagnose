@@ -1,10 +1,9 @@
-import os.path
+from typing import Any
 
 from ixdiagnose.utils.command import Command
 from ixdiagnose.utils.formatter import dumps
 from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
 from ixdiagnose.utils.run import run
-from typing import Any
 
 from .base import Plugin
 from .metrics import CommandMetric, MiddlewareClientMetric, PythonMetric

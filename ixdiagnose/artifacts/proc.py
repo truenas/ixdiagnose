@@ -1,5 +1,5 @@
 from .base import Artifact
-from .items import Directory, File, Pattern
+from .items import Directory
 
 
 class ProcFS(Artifact):
