@@ -10,7 +10,7 @@ from .metrics import MiddlewareClientMetric, PythonMetric
 def twofactor_details_of_users(client: MiddlewareClient, context: Any) -> str:
     summary = client.call('auth.twofactor.get_users_config')
     for user in summary:
-        user['secret_configured'] = bool(user.pop('secret'))
+        user['secret_configured'] = bool(user.pop('secret_hex'))
 
     return dumps(summary)
 
