@@ -18,7 +18,7 @@ def nfs_client_count_by_type(client: MiddlewareClient, context: Any) -> str:
     output += f'{"NFSv3":^10}{"NFSv4.0":^10}{"NFSv4.1":^10}{"NFSv4.2":^10}\n'
     output += f'{"-----":^10}{"-------":^10}{"-------":^10}{"-------":^10}\n'
     output += f'{len(num_nfs3):^10}'
-    output += f'{nfs4_ver_info.count(0):^10}{nfs4_ver_info.count(1):^10}{nfs4_ver_info.count(2):^10}'
+    output += f'{nfs4_ver_info.count(0):^10}{nfs4_ver_info.count(1):^10}{nfs4_ver_info.count(2):^10}\n'
 
     return output
 
