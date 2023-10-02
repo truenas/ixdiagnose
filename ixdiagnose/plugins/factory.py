@@ -26,6 +26,7 @@ from .smb import SMB
 from .ssl import SSL
 from .sysctl import Sysctl
 from .system import System
+from .system_state import SystemState
 from .two_factor_auth import TwoFactorAuth
 from .vm import VM
 from .zfs import ZFS
@@ -59,6 +60,7 @@ for plugin in [
     SSL,
     Sysctl,
     System,
+    SystemState,
     TwoFactorAuth,
     VM,
     ZFS,

@@ -1,13 +1,14 @@
 from ixdiagnose.utils.factory import Factory
 
 from .logs import Logs
-from .sys_info import SystemInfo
 from .proc import ProcFS
+from .sys_info import SystemInfo
+
 
 artifact_factory = Factory()
 for artifact in [
     Logs,
-    SystemInfo,
     ProcFS,
+    SystemInfo,
 ]:
     artifact_factory.register(artifact())
