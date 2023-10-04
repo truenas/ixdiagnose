@@ -1,14 +1,13 @@
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
-from .metrics import FileMetric, MiddlewareClientMetric
+from .metrics import MiddlewareClientMetric
 from .prerequisites import VMPrerequisite
 
 
 class VM(Plugin):
     name = 'vm'
     metrics = [
-        FileMetric('haproxy', '/etc/haproxy/haproxy.cfg', extension='.cfg', prerequisites=[VMPrerequisite()]),
         MiddlewareClientMetric(
             'gpu', [MiddlewareCommand('device.get_gpus', result_key='gpus')],
             prerequisites=[VMPrerequisite()]
