@@ -1,3 +1,4 @@
+from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
@@ -21,11 +22,19 @@ class VM(Plugin):
             prerequisites=[VMPrerequisite()]
         ),
         MiddlewareClientMetric(
-            'vms', [MiddlewareCommand('vm.query', result_key='vms')],
+            'vms', [
+                MiddlewareCommand(
+                    'vm.query', result_key='vms', format_output=remove_keys(['devices.attributes.password'])
+                )
+            ],
             prerequisites=[VMPrerequisite()]
         ),
         MiddlewareClientMetric(
-            'vm_devices', [MiddlewareCommand('vm.device.query', result_key='devices')],
+            'vm_devices', [
+                MiddlewareCommand(
+                    'vm.device.query', result_key='devices', format_output=remove_keys(['attributes.password'])
+                )
+            ],
             prerequisites=[VMPrerequisite()]
         ),
     ]
