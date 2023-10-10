@@ -22,4 +22,4 @@ Step 4:
 
 step 5:
 : The **iXdiagnose** application should now be installed and ready to use. You can run it and generate debug using the following command:
-: `ixdiagnose2 --debug-path="specify/path/to/debug" run`
+: `ixdiagnose run --debug-path="specify/path/to/debug"`
