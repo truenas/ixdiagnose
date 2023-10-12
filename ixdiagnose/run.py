@@ -28,7 +28,8 @@ def generate_debug() -> str:
         conf.clean_debug_path = conf.compress
         conf.debug_path = tempfile.TemporaryDirectory().name
 
-    os.makedirs(conf.debug_path, exist_ok=True)
+    os.makedirs(conf.debug_path, 0o700, exist_ok=True)
+    os.chmod(conf.debug_path, 0o700)
 
     send_event(0, 'Generating debug')
     generate_plugins_debug(total_percentage=90)
@@ -51,6 +52,8 @@ def compress_debug() -> None:
     with tarfile.open(conf.compressed_path, 'w:gz') as tar:
         for entry in os.listdir(conf.debug_path):
             tar.add(os.path.join(conf.debug_path, entry), arcname=entry)
+
+    os.chmod(conf.compressed_path, 0o700)
 
     if conf.clean_debug_path:
         shutil.rmtree(conf.debug_path, ignore_errors=True)
