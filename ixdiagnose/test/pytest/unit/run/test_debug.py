@@ -73,6 +73,7 @@ def test_compression_validation(mocker, path_is_abs, debug_path, path_exists, co
 
     for method in (
         'os.makedirs',
+        'os.chmod',
         'ixdiagnose.run.generate_plugins_debug',
         'ixdiagnose.run.gather_artifacts',
         'ixdiagnose.run.compress_debug',
