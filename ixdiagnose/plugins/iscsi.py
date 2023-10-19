@@ -17,7 +17,8 @@ class ISCSI(Plugin):
             MiddlewareCommand('iscsi.targetextent.query', result_key='targetextents'),
             MiddlewareCommand('iscsi.portal.query', result_key='portals'),
             MiddlewareCommand('iscsi.initiator.query', result_key='initiators'),
-            MiddlewareCommand('iscsi.auth.query', result_key='auths', format_output=remove_keys(['secret', 'peersecret'])),
+            MiddlewareCommand('iscsi.auth.query', result_key='auths',
+                              format_output=remove_keys(['secret', 'peersecret'])),
         ]),
         CommandMetric(
             'iscsi_state', [
