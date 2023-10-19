@@ -1,4 +1,5 @@
 from ixdiagnose.utils.command import Command
+from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
@@ -13,6 +14,11 @@ class ISCSI(Plugin):
             MiddlewareCommand('iscsi.global.config', result_key='global_config'),
             MiddlewareCommand('iscsi.target.query', result_key='targets'),
             MiddlewareCommand('iscsi.extent.query', result_key='extents'),
+            MiddlewareCommand('iscsi.targetextent.query', result_key='targetextents'),
+            MiddlewareCommand('iscsi.portal.query', result_key='portals'),
+            MiddlewareCommand('iscsi.initiator.query', result_key='initiators'),
+            MiddlewareCommand('iscsi.auth.query', result_key='auths',
+                              format_output=remove_keys(['secret', 'peersecret'])),
         ]),
         CommandMetric(
             'iscsi_state', [
