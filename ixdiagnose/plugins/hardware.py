@@ -32,7 +32,8 @@ class Hardware(Plugin):
             'block_devices', [
                 Command([
                     'lsblk', '-o',
-                    'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,SIZE,PARTTYPENAME,PATH',
+                    'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,SIZE,PARTTYPENAME,'
+                    'PATH',
                 ], 'List of Block Devices', serializable=False),
             ],
         ),
@@ -43,7 +44,8 @@ class Hardware(Plugin):
             'block_devices', [
                 Command([
                     'lsblk', '-J', '-o',
-                    'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,SIZE,PARTTYPENAME,PATH',
+                    'NAME,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,RA,WSAME,HCTL,SIZE,PARTTYPENAME,'
+                    'PATH',
                 ], 'List of Block Devices'),
             ],
         ),
