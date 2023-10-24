@@ -1,9 +1,18 @@
+from collections import defaultdict
 from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
-from .metrics import FileMetric, MiddlewareClientMetric
+from .metrics import FileMetric, MiddlewareClientMetric, PythonMetric
 from .prerequisites import VMPrerequisite
+
+
+def get_iommu_groups(client, context):
+    pci_devices = client.call('vm.device.passthrough_device_choices')
+    iommu_groups = defaultdict(list)
+    for pci_id, data in pci_devices.items():
+        iommu_groups[data['iommu_group']['number']].append(pci_id)
+    return iommu_groups
 
 
 class VM(Plugin):
@@ -37,4 +46,5 @@ class VM(Plugin):
             ],
             prerequisites=[VMPrerequisite()]
         ),
+        PythonMetric('iommu_group',  get_iommu_groups),
     ]
