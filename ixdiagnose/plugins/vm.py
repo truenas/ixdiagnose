@@ -11,7 +11,7 @@ def get_iommu_groups(client, context):
     pci_devices = client.call('vm.device.passthrough_device_choices')
     iommu_groups = defaultdict(list)
     for pci_id, data in pci_devices.items():
-        group_no = data['iommu_group']['number']
+        group_no = data['iommu_group']['number'] if data['iommu_group'] else None
         iommu_groups[group_no if group_no is not None else 'UNDEFINED'].append(pci_id)
     return iommu_groups
 
