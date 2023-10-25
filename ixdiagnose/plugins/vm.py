@@ -13,8 +13,8 @@ def passthrough_choices(client, context):
         'passthrough_device_choices': client.call('vm.device.passthrough_device_choices'),
         'iommu_groups': defaultdict(list),
     }
-    for pci_id, data in data['passthrough_device_choices'].items():
-        group_no = data['iommu_group']['number'] if data['iommu_group'] else None
+    for pci_id, pci_data in data['passthrough_device_choices'].items():
+        group_no = pci_data['iommu_group']['number'] if pci_data['iommu_group'] else None
         data['iommu_groups'][group_no if group_no is not None else 'UNDEFINED'].append(pci_id)
 
     return data
