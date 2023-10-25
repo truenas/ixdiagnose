@@ -1,8 +1,6 @@
 FROM ghcr.io/truenas/middleware:master
 
-RUN chmod +x /usr/bin/apt*
-RUN apt update
-RUN apt install -y python3-pip
+RUN /usr/bin/install-dev-tools
 
 ENV PYTHONUNBUFFERED 1
 
