@@ -7,13 +7,17 @@ from .metrics import MiddlewareClientMetric, PythonMetric
 from .prerequisites import VMPrerequisite
 
 
-def get_iommu_groups(client, context):
-    pci_devices = client.call('vm.device.passthrough_device_choices')
-    iommu_groups = defaultdict(list)
-    for pci_id, data in pci_devices.items():
+def passthrough_choices(client, context):
+    data = {
+        'usb_passthrough_choices': client.call('vm.device.usb_passthrough_choices'),
+        'passthrough_device_choices': client.call('vm.device.passthrough_device_choices'),
+        'iommu_groups': defaultdict(list),
+    }
+    for pci_id, data in data['passthrough_device_choices'].items():
         group_no = data['iommu_group']['number'] if data['iommu_group'] else None
-        iommu_groups[group_no if group_no is not None else 'UNDEFINED'].append(pci_id)
-    return iommu_groups
+        data['iommu_groups'][group_no if group_no is not None else 'UNDEFINED'].append(pci_id)
+
+    return data
 
 
 class VM(Plugin):
@@ -21,13 +25,6 @@ class VM(Plugin):
     metrics = [
         MiddlewareClientMetric(
             'gpu', [MiddlewareCommand('device.get_gpus', result_key='gpus')],
-            prerequisites=[VMPrerequisite()]
-        ),
-        MiddlewareClientMetric(
-            'passthrough_choices', [
-                MiddlewareCommand('vm.device.usb_passthrough_choices', result_key='usb_passthrough_choices'),
-                MiddlewareCommand('vm.device.passthrough_device_choices', result_key='passthrough_device_choices'),
-            ],
             prerequisites=[VMPrerequisite()]
         ),
         MiddlewareClientMetric(
@@ -46,5 +43,5 @@ class VM(Plugin):
             ],
             prerequisites=[VMPrerequisite()]
         ),
-        PythonMetric('iommu_group',  get_iommu_groups),
+        PythonMetric('passthrough_choices',  passthrough_choices, prerequisites=[VMPrerequisite()]),
     ]
