@@ -12,8 +12,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Setup apt
-        run: chmod +x /usr/bin/apt* && chmod +x /usr/bin/dpkg
+      - name: Setup dev environment
+        run: /usr/bin/install-dev-tools
 
       - name: Install Dependencies
         run: apt update && apt install -y debhelper-compat dh-python python3-dev python3-setuptools devscripts
