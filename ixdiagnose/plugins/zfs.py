@@ -91,6 +91,10 @@ class ZFS(Plugin):
         CommandMetric(
             'pool_status', [Command(['zpool', 'status', '-v'], 'ZFS Pool(s) Status', serializable=False)]
         ),
+        CommandMetric(
+            'pool_status_guid', [Command(['zpool', 'status', '-g'], 'ZFS Pool(s) Status (with vdev GUIDs)',
+                                         serializable=False)]
+        ),
         CommandMetric('pool_history', [Command(['zpool', 'history'], 'ZFS Pool(s) History', serializable=False)]),
         CommandMetric('arc_summary', [Command(['arc_summary'], 'ARC Summary', serializable=False)]),
         MiddlewareClientMetric(
