@@ -50,3 +50,9 @@ def test_ixdiagnose_clean_debug(clean_debug):
             assert os.path.exists(conf.debug_path) is False
         else:
             assert os.path.exists(conf.debug_path) is True
+
+
+def test_path_perms():
+    with debug_generate(False):
+        assert (os.stat(conf.debug_path).st_mode & 0o777) == 0o700
+        assert (os.stat(conf.compressed_path).st_mode & 0o777) == 0o700
