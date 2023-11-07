@@ -5,8 +5,10 @@ path: **ixdiagnose/artifacts**
 The artifacts help to copy system logs and files into the debug that are generated automatically by the system
 and can be used to gain insight into the system's performance, problems, etc.
 
-Currently, there are two types of artifacts available in **iXdiagnose**:
+Currently, there are following types of artifacts available in **iXdiagnose**:
 - Logs
+- Proc FileSystem
+- SysFS Parameters
 - System Info
 
 The design of artifacts is based on each artifact generating a directory in the debug directory. The directory name is
