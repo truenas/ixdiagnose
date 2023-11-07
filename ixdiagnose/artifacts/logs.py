@@ -9,6 +9,7 @@ class Logs(Artifact):
     items = [
         Directory('ctdb'),
         Directory('libvirt'),
+        Directory('netdata'),
         Directory('openvpn'),
         Directory('pods'),
         Directory('proftpd'),
