@@ -3,9 +3,10 @@
 path: **ixdiagnose/artifacts/items**
 
 Items define logic that is used to copy files or directories from system to **iXdiagnose** debug folder.
-There are three items available currently:
+There are four items available currently:
 - Directory
 - File
+- Glob
 - Pattern
 
 ### Item Base Class
@@ -71,33 +72,73 @@ the copy operation. The report includes an `error`,`traceback`, and a list of th
 
 ### Directory Item
 path: **ixdiagnose/artifacts/items/directory.py**
+
 The **Directory** class implements methods to copy a directory recursively, validate if the directory exists and
 check its size.
 
-Functions
-get_directory_size(directory: str) -> int
+Methods
+- get_directory_size(directory: str) -> int
 : Calculates the size of a given directory by summing the size of each file and subdirectory within it using the
 `Path.rglob()` method. The result is the sum of all file sizes and the size of the root directory itself.
 
-copy2(copied_files: list, src: str, dst: str) -> str
+- copy2(copied_files: list, src: str, dst: str) -> str
 : A function that is used as the `copy_function` parameter in the `shutil.copytree()` method. This function copies a
 file from source to destination using `shutil.copy2()` and appends the src path to a list of `copied_files`.
 
 #### Class
 Directory(Item)
-to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]
+- to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]
 : A method that checks if the directory exists and can be copied. If it can be copied, it calls the `size_check()`
 method to check if the directory size exceeds the maximum size. If the directory does not exist or cannot be
 copied, it returns a tuple containing `False` and an error message. If the directory can be copied, it returns a
 tuple containing `True` and `None`.
 
-size(self, item_path: str) -> int
+- size(self, item_path: str) -> int
 : A method that returns the size of the given directory using the `get_directory_size()` function.
 
-copy_impl(self, item_path: str, destination_path: str) -> list
+- copy_impl(self, item_path: str, destination_path: str) -> list
 : A method that copies the directory from the source path `item_path` to the destination path `destination_path`
 using `shutil.copytree()`. It also uses the `copy2()` function as the `copy_function` parameter to append the paths
 of the copied files to a list and returns this list of copied items.
+
+### Glob Item
+path: **ixdiagnose/artifacts/items/glob.py**
+
+The **Glob** class implements methods to copy files and directories matching a glob pattern, validates their existence and checks their size.
+
+
+#### Class
+Glob(Item)
+- __init__(self, name: str, max_size: Optional[int] = None, to_skip_items: Optional[list] = None)
+: Constructor for the **Glob** class. Initializes the **Glob** object with a name, maximum size, and a list of items to skip during the copy process. Calls `super().__init__(name, max_size)` to initialize the parent **Item** class. If `to_skip_items` is not provided, it defaults to an empty list.
+
+- init_vars(self) -> None
+: Initializes variables for the **Glob** object. Sets the `items` list to an empty list.
+
+- initialize_context(self, item_path: str) -> None
+: Initializes the context for the **Glob** object. This method resets the `items` list and populates it with items that match the glob pattern in the specified `item_path`. It differentiates between files and directories, capturing their attributes.
+
+- to_copy_items(self, items_path: str) -> list
+: Returns a list of items matching the specified glob pattern in `items_path`.
+
+- exists(self, item_path: str) -> Tuple[bool, str]
+: Checks if there are any items to copy based on the glob pattern. Returns a tuple with a boolean indicating existence and an empty string if items exist, or an error message if no matching items are found.
+
+- destination_item_path(self, destination_dir: str) -> str
+: Returns the destination path for copied items, which is the `destination_dir`.
+
+- size(self, item_path: str) -> int
+: Calculates the total size of the items in the `items` list.
+
+- copy_validation(self, item: dict) -> Tuple[bool, str]
+: Validates each item in the `items` list based on size and readability. If an item's size exceeds the maximum size or is not readable, it returns a tuple with a boolean indicating whether to copy the item and an error message if not.
+
+- to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[dict]]
+: Checks if items in the `items` list can be copied using copy_validation() method. It returns a tuple with a boolean indicating whether any items should be skipped and a dictionary of items and their respective error messages.
+
+- copy_impl(self, item_path: str, destination_path: str) -> list
+: Implements the copy operation for items in the `items` list. Copies files using `shutil.copy2()` and directories using `shutil.copytree()`. It appends the paths of copied items to a list and returns this list of copied items.
+
 
 ### Pattern
 The purpose of this class is to represent a pattern that matches a set of items in a directory. The items that match
