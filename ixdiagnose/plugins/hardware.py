@@ -25,6 +25,7 @@ class Hardware(Plugin):
         ),
         FileMetric('usb_devices', '/sys/kernel/debug/usb/devices'),
         MiddlewareClientMetric('disks', [MiddlewareCommand('device.get_disks')]),
+        MiddlewareClientMetric('disks_config', [MiddlewareCommand('disk.query')]),
         MiddlewareClientMetric('enclosures', [MiddlewareCommand('enclosure.query')]),
     ]
     raw_metrics = [
