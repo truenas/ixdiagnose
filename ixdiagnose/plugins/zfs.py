@@ -97,6 +97,7 @@ class ZFS(Plugin):
         ),
         CommandMetric('pool_history', [Command(['zpool', 'history'], 'ZFS Pool(s) History', serializable=False)]),
         CommandMetric('arc_summary', [Command(['arc_summary'], 'ARC Summary', serializable=False)]),
+        MiddlewareClientMetric('pool_query', [MiddlewareCommand('pool.query')]),
         MiddlewareClientMetric(
             'pool_scrub_tasks', [
                 MiddlewareCommand('pool.scrub.query', result_key='scrub_tasks'),
