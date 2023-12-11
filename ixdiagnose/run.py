@@ -1,4 +1,5 @@
 import os
+import pathlib
 import shutil
 import tarfile
 import tempfile
@@ -8,6 +9,7 @@ from .config import conf
 from .exceptions import CallError
 from .event import event_callbacks, send_event
 from .plugin import generate_plugins_debug
+from .utils.paths import get_debug_dir
 
 
 def generate_debug() -> str:
@@ -34,6 +36,15 @@ def generate_debug() -> str:
     send_event(0, 'Generating debug')
     generate_plugins_debug(total_percentage=90)
     gather_artifacts(90, total_percentage=8)
+    debug_dir = get_debug_dir()
+    debug_dir_path = pathlib.Path(debug_dir)
+    for path, contents in conf.extra.items():
+        target_path = os.path.normpath(os.path.join(debug_dir, path))
+        if debug_dir_path in pathlib.Path(target_path).parents:
+            if not os.path.exists(target_path):
+                os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                with open(target_path, 'w') as f:
+                    f.write(contents)
     if conf.compress:
         send_event(99, 'Compressing debug')
         compress_debug()

@@ -1,5 +1,5 @@
 from jsonschema import validate
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 
 class Configuration:
@@ -13,6 +13,7 @@ class Configuration:
             'debug_path': {'type': ['string', 'null']},
             'exclude_artifacts': {'type': 'array', 'items': {'type': 'string'}},
             'exclude_plugins': {'type': 'array', 'items': {'type': 'string'}},
+            'extra': {'type': 'object'},
             'structured_data': {'type': 'boolean'},
             'timeout': {'type': 'integer'},
         },
@@ -25,6 +26,7 @@ class Configuration:
         self.debug_path: Optional[str] = None
         self.exclude_artifacts: List[str] = []
         self.exclude_plugins: List[str] = []
+        self.extra: Dict[str, str] = {}
         self.structured_data: bool = False
         self.timeout: int = 20
 
