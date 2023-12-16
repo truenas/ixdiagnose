@@ -5,6 +5,7 @@ from .certificates import Certificates
 from .clustering import Clustering
 from .cloud_backup import CloudBackup
 from .cloud_sync import CloudSync
+from .containers import Containers
 from .cpu import Cpu
 from .cronjob import Cronjob
 from .ftp import FTP
@@ -38,6 +39,7 @@ for plugin in [
     CloudBackup,
     CloudSync,
     Clustering,
+    Containers,
     CoreGetJobs,
     Cpu,
     Cronjob,
