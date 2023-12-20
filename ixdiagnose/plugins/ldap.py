@@ -19,7 +19,11 @@ class LDAP(Plugin):
         FileMetric('nsswitch', '/etc/nsswitch.conf', extension='.conf'),
         FileMetric('krb5', '/etc/krb5.conf', extension='.conf'),
         FileMetric('ldap', '/etc/openldap/ldap.conf', extension='.conf'),
-        FileMetric('nslcd', '/etc/nslcd.conf', extension='.conf'),
+        CommandMetric(
+            'nslcd', [
+                Command(['grep', '-iv', 'bindpw', '/etc/nslcd.conf'], 'Config file', serializable=False),
+            ]
+        ),
         MiddlewareClientMetric(
             'ldap_config', [
                 MiddlewareCommand('ldap.config', format_output=remove_keys(['bindpw'])),
