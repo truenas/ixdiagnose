@@ -18,6 +18,7 @@ from .kubernetes import Kubernetes
 from .ldap import LDAP
 from .network import Network
 from .nfs import NFS
+from .rbac import RBAC
 from .replication import Replication
 from .reporting import Reporting
 from .rsync import Rsync
@@ -53,6 +54,7 @@ for plugin in [
     LDAP,
     Network,
     NFS,
+    RBAC,
     Replication,
     Reporting,
     Rsync,
