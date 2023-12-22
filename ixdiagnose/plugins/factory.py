@@ -2,7 +2,6 @@ from ixdiagnose.utils.factory import Factory
 
 from .active_directory import ActiveDirectory
 from .certificates import Certificates
-from .clustering import Clustering
 from .cloud_backup import CloudBackup
 from .cloud_sync import CloudSync
 from .containers import Containers
@@ -40,7 +39,6 @@ for plugin in [
     Certificates,
     CloudBackup,
     CloudSync,
-    Clustering,
     Containers,
     CoreGetJobs,
     Cpu,
