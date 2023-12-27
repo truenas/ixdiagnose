@@ -13,4 +13,14 @@ class RBAC(Plugin):
                 MiddlewareCommand('privilege.always_has_root_password_enabled'),
             ],
         ),
+        MiddlewareClientMetric(
+            'authenticated_sessions', [
+                MiddlewareCommand('auth.sessions'),
+            ],
+        ),
+        MiddlewareClientMetric(
+            'privileged_local_users', [
+                MiddlewareCommand('user.query', [[['roles', '!=', []]], {'select': ['username', 'uid', 'roles']}]),
+            ],
+        ),
     ]
