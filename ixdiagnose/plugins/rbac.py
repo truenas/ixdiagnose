@@ -10,6 +10,7 @@ class RBAC(Plugin):
         MiddlewareClientMetric(
             'privilege_information', [
                 MiddlewareCommand('privilege.query'),
+                MiddlewareCommand('privilege.always_has_root_password_enabled'),
             ],
         ),
     ]
