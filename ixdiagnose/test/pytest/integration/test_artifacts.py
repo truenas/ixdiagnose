@@ -3,7 +3,9 @@ import json
 import os
 import pytest
 import shutil
+import tempfile
 
+from ixdiagnose.artifacts.items import Directory
 from ixdiagnose.artifact import artifact_factory, gather_artifacts as gather_artifacts_impl
 from ixdiagnose.event import event_callbacks
 from ixdiagnose.config import conf
@@ -36,6 +38,29 @@ ARTIFACT_REPORT_SCHEMA = {
         'item_execution_traceback': {'type': ['string', 'null']},
     },
 }
+
+
+@contextlib.contextmanager
+def create_items():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        source_dir = os.path.join(tmp_dir, 'source')
+        dest_dir = os.path.join(tmp_dir, 'dest')
+        os.makedirs(source_dir)
+        all_items = []
+
+        for test_dir in ['dir1', 'dir2', 'dir1/dir3']:
+            dir_path = os.path.join(source_dir, test_dir)
+            os.mkdir(dir_path)
+            all_items.append(dir_path)
+
+            file_path = os.path.join(dir_path, 'file')
+            with open(file_path, 'w'):
+                pass
+            all_items.append(file_path)
+
+        to_ignore = ['dir2', 'dir1/file', 'dir1/dir3/file']
+
+        yield source_dir, dest_dir, all_items, to_ignore
 
 
 @contextlib.contextmanager
@@ -133,3 +158,23 @@ def test_artifact_event_progress_count():
     event_callbacks.register(callback=event_callback)
     with gather_artifacts():
         assert len(artifact_factory.get_items()) + 1 == len(PROGRESS_DESCRIPTIONS) == len(PROGRESS_TRACK)
+
+
+def test_ignore_items():
+    with create_items() as (source_dir, dest_dir, all_items, to_ignore):
+        ignore_items = [os.path.join(source_dir, item) for item in to_ignore]
+
+        directory_obj = Directory(name='test', ignore_items=ignore_items)
+        directory_obj.copy_impl(source_dir, dest_dir)
+
+        # Assert ignored items not in destination
+        for dest_item in to_ignore:
+            assert os.path.exists(os.path.join(dest_dir, dest_item)) is False
+
+        # Assert not ignored items in destination
+        for dest_item in [i for i in all_items if i not in ignore_items]:
+            assert os.path.exists(os.path.join(dest_dir, dest_item)) is True
+
+        # Assert all items in source
+        for source_item in all_items:
+            assert os.path.exists(source_item) is True
