@@ -20,6 +20,7 @@ def get_smb_shares(client: MiddlewareClient, context: Any) -> str:
     }
     for smb_share in smb_shares:
         command += f'net conf showshare {smb_share["name"]}\n'
+        command += f'sharesec -v {smb_share["name"]}\n'
         command += f'ls -ld {smb_share["path"]}\n'
         command += f'df -T {smb_share["path"]}\n'
         if ds := ds_with_rawvalue_on.get(smb_share['path']):
@@ -61,7 +62,6 @@ class SMB(Plugin):
                 MiddlewareCommand('smb.config'),
                 MiddlewareCommand('smb.status'),
                 MiddlewareCommand('smb.groupmap_list'),
-                MiddlewareCommand('smb.sharesec.query'),
                 MiddlewareCommand('smb.passdb_list'),
                 MiddlewareCommand('sharing.smb.query'),
             ]
