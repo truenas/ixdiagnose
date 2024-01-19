@@ -56,6 +56,13 @@ class ActiveDirectory(Plugin):
             'kerberos_principal_choices', [MiddlewareCommand('kerberos.keytab.kerberos_principal_choices')],
         ),
         MiddlewareClientMetric(
+            'kerberos_configuration', [
+                MiddlewareCommand('kerberos.realm.query'),
+                MiddlewareCommand('kerberos.config'),
+                MiddlewareCommand('kerberos.realm.query', format_output=remove_keys(['file'])),
+            ], prerequisites=[ActiveDirectoryStatePrerequisite()],
+        ),
+        MiddlewareClientMetric(
             'machine_account_status', [
                 MiddlewareCommand('activedirectory.machine_account_status'),
             ], prerequisites=[ActiveDirectoryStatePrerequisite()]
@@ -67,7 +74,7 @@ class ActiveDirectory(Plugin):
         ),
         MiddlewareClientMetric(
             'spn_list', [
-                MiddlewareCommand('activedirectory.lookup_dc'),
+                MiddlewareCommand('activedirectory.get_spn_list'),
             ], prerequisites=[ActiveDirectoryStatePrerequisite()]
         ),
         MiddlewareClientMetric('idmap', [MiddlewareCommand('idmap.query')]),
