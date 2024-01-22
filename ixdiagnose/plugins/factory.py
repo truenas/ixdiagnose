@@ -7,6 +7,7 @@ from .cloud_sync import CloudSync
 from .containers import Containers
 from .cpu import Cpu
 from .cronjob import Cronjob
+from .failover import Failover
 from .ftp import FTP
 from .hardware import Hardware
 from .initshutdown_scripts import InitShutDownScripts
@@ -43,6 +44,7 @@ for plugin in [
     CoreGetJobs,
     Cpu,
     Cronjob,
+    Failover,
     FTP,
     Hardware,
     InitShutDownScripts,
