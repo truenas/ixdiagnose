@@ -27,7 +27,7 @@ class Directory(Item):
 
     def __init__(self, name: str, max_size: Optional[int] = None, ignore_items: Optional[List] = None):
         super().__init__(name, max_size)
-        self.ignore_items: Optional[List[str]] = ignore_items
+        self.ignore_items: List[str] = ignore_items or []
 
     def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]:
         to_copy, error = (True, None) if os.path.isdir(item_path) else (False, f'{item_path!r} is not a directory')
