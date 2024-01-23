@@ -160,6 +160,16 @@ def test_artifact_event_progress_count():
         assert len(artifact_factory.get_items()) + 1 == len(PROGRESS_DESCRIPTIONS) == len(PROGRESS_TRACK)
 
 
+def test_directory_copy():
+    with create_items() as (source_dir, dest_dir, all_items, to_ignore):
+        directory_obj = Directory('test')
+        directory_obj.copy_impl(source_dir, dest_dir)
+
+        for item in all_items:
+            dest_item = os.path.join(dest_dir, os.path.relpath(item, source_dir))
+            assert os.path.exists(dest_item) is True
+
+
 def test_ignore_items():
     with create_items() as (source_dir, dest_dir, all_items, to_ignore):
         ignore_items = [os.path.join(source_dir, item) for item in to_ignore]
