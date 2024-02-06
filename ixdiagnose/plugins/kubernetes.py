@@ -31,7 +31,7 @@ class Kubernetes(Plugin):
         MiddlewareClientMetric('catalogs', [MiddlewareCommand('catalog.query')]),
         MiddlewareClientMetric(
             'chart_releases', [
-                MiddlewareCommand('chart.release.query', [[], {'extra': {'history': True}}]),
+                MiddlewareCommand('chart.release.query')
             ], prerequisites=[ServiceRunningPrerequisite('k3s')],
         ),
     ]
