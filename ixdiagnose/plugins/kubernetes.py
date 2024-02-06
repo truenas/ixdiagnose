@@ -1,4 +1,5 @@
 from ixdiagnose.utils.command import Command
+from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
@@ -31,7 +32,7 @@ class Kubernetes(Plugin):
         MiddlewareClientMetric('catalogs', [MiddlewareCommand('catalog.query')]),
         MiddlewareClientMetric(
             'chart_releases', [
-                MiddlewareCommand('chart.release.query')
+                MiddlewareCommand('chart.release.query', format_output=remove_keys(['config']))
             ], prerequisites=[ServiceRunningPrerequisite('k3s')],
         ),
     ]
