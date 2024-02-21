@@ -9,4 +9,4 @@ class VMPrerequisite(Prerequisite):
         return MiddlewareCommand('vm.supports_virtualization').execute().output
 
     def __str__(self):
-        return f'{self.cache_key!r} vm service state check'
+        return 'VM service state check'
