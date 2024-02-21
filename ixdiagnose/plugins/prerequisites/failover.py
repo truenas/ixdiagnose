@@ -9,4 +9,4 @@ class FailoverPrerequisite(Prerequisite):
         return MiddlewareCommand('failover.licensed').execute().output
 
     def __str__(self):
-        return f'{self.cache_key!r} failover is licensed check'
+        return 'Failover is licensed check'
