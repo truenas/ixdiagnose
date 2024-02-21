@@ -10,7 +10,7 @@ class ActiveDirectoryStatePrerequisite(Prerequisite):
         return (response.output or {}).get('activedirectory') != 'DISABLED'
 
     def __str__(self):
-        return f'{self.cache_key!r} active directory service state check'
+        return 'Active directory service state check'
 
 
 class LDAPStatePrerequisite(Prerequisite):
@@ -20,4 +20,4 @@ class LDAPStatePrerequisite(Prerequisite):
         return (response.output or {}).get('ldap') != 'DISABLED'
 
     def __str__(self):
-        return f'{self.cache_key!r} ldap service state check'
+        return 'LDAP service state check'
