@@ -16,6 +16,10 @@ class Item:
         exists = os.path.exists(item_path)
         return exists, '' if exists else f'{item_path!r} does not exist'
 
+    @property
+    def report_name_key(self):
+        return self.name
+
     def size(self, item_path: str) -> int:
         raise NotImplementedError()
 

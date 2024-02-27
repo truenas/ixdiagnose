@@ -133,7 +133,7 @@ def test_report_schema():
                 artifact_report = json.loads(f.read())
 
             artifact = artifacts[os.path.basename(artifact_dir)]
-            assert {item.name for item in artifact.items} == set(artifact_report)
+            assert {item.report_name_key for item in artifact.items} == set(artifact_report)
 
             for item_report in artifact_report.values():
                 validate(item_report, ARTIFACT_REPORT_SCHEMA)
