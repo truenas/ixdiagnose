@@ -78,7 +78,6 @@ class System(Plugin):
                 format_output=remove_keys(['truecommand_ip', 'truecommand_url'])
             ),
             MiddlewareCommand('system.license', result_key='System License'),
-            MiddlewareCommand('system.gather_update_failed', result_key='Failed Updates'),
             MiddlewareCommand('system.info', result_key='system_info'),
         ]),
         MiddlewareClientMetric('system_dataset', [MiddlewareCommand('systemdataset.config')]),
