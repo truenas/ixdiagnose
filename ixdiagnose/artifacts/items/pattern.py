@@ -10,11 +10,19 @@ from .file import File
 
 class Pattern(Item):
 
-    def __init__(self, name: str, max_size: Optional[int] = None, truncate_files: Optional[bool] = True):
+    def __init__(
+        self, name: str, max_size: Optional[int] = None, truncate_files: Optional[bool] = True,
+        add_to_base_item_path: Optional[str] = None,
+    ):
         super().__init__(name, max_size)
         self.pattern: str = self.name
         self.truncate_files: bool = truncate_files
+        self.add_to_base_item_path: Optional[str] = add_to_base_item_path
         self.init_vars()
+
+    @property
+    def report_name_key(self):
+        return os.path.join(self.add_to_base_item_path, self.pattern) if self.add_to_base_item_path else self.name
 
     def init_vars(self) -> None:
         self.items: List[Item] = []
@@ -36,9 +44,13 @@ class Pattern(Item):
         return exists, '' if exists else f'No items found matching {self.pattern!r} pattern'
 
     def source_item_path(self, item_dir: str) -> str:
-        return item_dir
+        return os.path.join(item_dir, self.add_to_base_item_path) if self.add_to_base_item_path else item_dir
 
     def destination_item_path(self, destination_dir: str) -> str:
+        destination_dir = os.path.join(
+            destination_dir, self.add_to_base_item_path
+        ) if self.add_to_base_item_path else destination_dir
+        os.makedirs(destination_dir, exist_ok=True)
         return destination_dir
 
     def to_copy_items(self, items_path: str) -> list:
@@ -69,3 +81,18 @@ class Pattern(Item):
             ))
             item.post_copy_hook(item.destination_item_path(destination_path))
         return copied_items
+
+
+class DirectoryPattern(Pattern):
+
+    def __init__(
+        self, name: str, max_size: Optional[int] = None, truncate_files: Optional[bool] = True, pattern: str = '.*',
+    ):
+        super().__init__(name=pattern, max_size=max_size, truncate_files=truncate_files, add_to_base_item_path=name)
+
+    @property
+    def report_name_key(self):
+        if self.add_to_base_item_path:
+            return self.add_to_base_item_path if self.name == '.*' else f'{self.add_to_base_item_path}/{self.name}'
+        else:
+            return self.name

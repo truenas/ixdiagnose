@@ -62,7 +62,7 @@ class Artifact:
                 item_execution_error = str(exc)
                 item_execution_traceback = traceback.format_exc()
 
-            self.debug_report[item.name] = {
+            self.debug_report[item.report_name_key] = {
                 'execution_time': time.time() - start_time,
                 'item_execution_error': item_execution_error,
                 'item_execution_traceback': item_execution_traceback,
