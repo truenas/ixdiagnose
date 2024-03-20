@@ -21,6 +21,8 @@ class Logs(Artifact):
         File('error'),
         File('kern.log'),
         File('messages'),
+        File('scst.log'),
+        File('scst.log.1'),
         File('syslog'),
         File('wsdd.log'),
         Pattern('daemon.+'),
