@@ -2,10 +2,11 @@ import contextlib
 import json
 
 from ixdiagnose.utils.command import Command
+from ixdiagnose.utils.middleware import MiddlewareCommand
 from ixdiagnose.utils.run import run
 
 from .base import Plugin
-from .metrics import CommandMetric, FileMetric, PythonMetric
+from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric, PythonMetric
 
 
 def get_ds_list() -> list:
@@ -62,5 +63,6 @@ class SystemState(Plugin):
         for ds in get_ds_list()
     ] + [
         FileMetric('root_dataset_configuration', '/conf/truenas_root_ds.json', extension='.json'),
+        MiddlewareClientMetric('bootenvs', [MiddlewareCommand('bootenv.query')]),
         PythonMetric('developer_mode', get_root_ds),
     ]
