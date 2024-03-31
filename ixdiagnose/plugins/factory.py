@@ -30,6 +30,7 @@ from .sysctl import Sysctl
 from .system import System
 from .system_state import SystemState
 from .two_factor_auth import TwoFactorAuth
+from .ups import UPS
 from .vm import VM
 from .zfs import ZFS
 
@@ -66,6 +67,7 @@ for plugin in [
     System,
     SystemState,
     TwoFactorAuth,
+    UPS,
     VM,
     ZFS,
 ]:
