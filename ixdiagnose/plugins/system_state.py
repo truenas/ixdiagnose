@@ -63,7 +63,6 @@ class SystemState(Plugin):
         for ds in get_ds_list()
     ] + [
         FileMetric('root_dataset_configuration', '/conf/truenas_root_ds.json', extension='.json'),
-        FileMetric('alembic_migration_errors', '/data/update.failed', extension='.failed'),
         MiddlewareClientMetric('bootenvs', [MiddlewareCommand('bootenv.query')]),
         PythonMetric('developer_mode', get_root_ds),
     ]
