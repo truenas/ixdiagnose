@@ -77,7 +77,7 @@ class System(Plugin):
         MiddlewareClientMetric('system_info', [
             MiddlewareCommand('system.is_enterprise', result_key='Enterprise System'),
             MiddlewareCommand(
-                'truecommand.connected', result_key='Truecommand Status',
+                'truecommand.info', result_key='Truecommand Status',
                 format_output=remove_keys(['truecommand_ip', 'truecommand_url'])
             ),
             MiddlewareCommand('system.license', result_key='System License'),
