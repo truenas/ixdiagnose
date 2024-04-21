@@ -20,6 +20,7 @@ class Logs(Artifact):
         File('dpkg.log'),
         File('error'),
         File('kern.log'),
+        File('k8s_api.log'),
         File('messages'),
         File('scst.log'),
         File('scst.log.1'),
