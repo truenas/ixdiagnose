@@ -22,6 +22,7 @@ class Logs(Artifact):
         File('kern.log'),
         File('k8s_api.log'),
         File('messages'),
+        File('netdata_api.log'),
         File('scst.log'),
         File('scst.log.1'),
         File('syslog'),
