@@ -21,6 +21,7 @@ class Logs(Artifact):
         File('error'),
         File('kern.log'),
         File('messages'),
+        File('netdata_api.log'),
         File('syslog'),
         File('wsdd.log'),
         Pattern('daemon.+'),
