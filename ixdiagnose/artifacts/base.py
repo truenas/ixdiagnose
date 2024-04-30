@@ -25,7 +25,7 @@ class Artifact:
 
         if self.individual_item_max_size_limit is not None:
             for item in self.items:
-                item.max_size = self.individual_item_max_size_limit
+                item.max_size = item.max_size or self.individual_item_max_size_limit
 
     @property
     def output_dir(self) -> str:
