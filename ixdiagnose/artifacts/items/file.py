@@ -19,10 +19,21 @@ class File(Item):
         self.file_descriptor = os.open(item_path, os.O_RDONLY | os.O_NOFOLLOW)
 
     def size(self, item_path: str) -> int:
+        if not self.file_descriptor:
+            return os.lstat(item_path).st_size
+
         return os.fstat(self.file_descriptor).st_size
 
     def copy_impl(self, item_path: str, destination_path: str) -> list:
-        shutil.copy2(self.get_fd_path(), destination_path)
+        if must_close := self.file_descriptor is None:
+            self.initialize_context(item_path)
+
+        try:
+            shutil.copy2(self.get_fd_path(), destination_path)
+        finally:
+            if must_close:
+                self.close_descriptor()
+
         return [item_path]
 
     def get_fd_path(self) -> str:
