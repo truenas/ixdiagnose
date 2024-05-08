@@ -14,7 +14,6 @@ class Logs(Artifact):
             'netdata', pattern=r'^(access|error|debug|health)\.log$', max_size=2 * 1024 * 1024,
         ),
         DirectoryPattern('openvpn'),
-        DirectoryPattern('pods'),
         DirectoryPattern('proftpd'),
         DirectoryPattern('samba4'),
         File('auth.log'),
