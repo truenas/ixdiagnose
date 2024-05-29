@@ -11,25 +11,45 @@ from .metrics import MiddlewareClientMetric, PythonMetric
 
 def smart_output(client: MiddlewareClient, context: Any) -> str:
     include = '8,65,66,67,68,69,70,71,128,129,130,131,132,133,134,135,254,259'
-    cp = run(['lsblk', '-ndo', 'name', '-I', include], check=False)
+    cp = run(['lsblk', '-ndo', 'name,vendor', '-I', include], check=False)
     if cp.returncode:
         return cp.stderr
 
     serializable = context['serializable']
     output = {} if serializable else ''
-    for disk in filter(bool, cp.stdout.splitlines()):
-        cp = run(['smartctl', '-a', f'/dev/{disk}'] + (['-j'] if serializable else []), check=False, timeout=3)
+    for line in cp.stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+
+        try:
+            disk, vendor = line.split()
+        except Exception:
+            continue
+
+        cmd = ['smartctl', '-a', f'/dev/{disk}']
+        nvme_msg = ''
+        if any(('nvme' in disk, vendor.lower().strip() == 'nvme')):
+            # is an nvme device
+            nvme_msg = ' (NVMe device detected)'
+            cmd.extend(['-d', 'nvme'])
 
         if serializable:
-            try:
-                disk_output = cp.stderr if cp.returncode else json.loads(cp.stdout)
-            except json.JSONDecodeError as e:
-                disk_output = str(e)
+            # -j for json
+            # -c "compressed" json (removes unnecessary newlines, etc)
+            cmd.extend(['-jc'])
 
-            output[disk] = disk_output
+        cp = run(cmd, check=False, timeout=3)
+        if serializable:
+            if cp.returncode:
+                output[disk] = cp.stderr
+            else:
+                try:
+                    output[disk] = json.loads(cp.stdout)
+                except Exception as e:
+                    output[disk] = str(e)
         else:
-            msg = '(NVME device detected)' if 'nvme' in disk else ''
-            msg = f'Block Device: /dev/{disk} {msg}'
+            msg = f'Block Device: /dev/{disk}{nvme_msg}'
             output += f'{"=" * (len(msg) + 5)}\n'
             output += f'  {msg}\n'
             output += f'{"=" * (len(msg) + 5)}\n\n{cp.stderr if cp.returncode else cp.stdout}\n\n'
