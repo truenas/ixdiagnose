@@ -64,7 +64,6 @@ ixdiagnose/plugins
 ├── hardware.py
 ├── __init__.py
 ├── iscsi.py
-├── kubernetes.py
 ├── ldap.py
 ├── metrics
 │   ├── base.py

@@ -14,7 +14,6 @@ from .initshutdown_scripts import InitShutDownScripts
 from .ipmi import IPMI
 from .iscsi import ISCSI
 from .jobs import CoreGetJobs
-from .kubernetes import Kubernetes
 from .ldap import LDAP
 from .network import Network
 from .nfs import NFS
@@ -51,7 +50,6 @@ for plugin in [
     InitShutDownScripts,
     IPMI,
     ISCSI,
-    Kubernetes,
     LDAP,
     Network,
     NFS,
