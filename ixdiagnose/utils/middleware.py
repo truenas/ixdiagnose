@@ -2,7 +2,7 @@ import contextlib
 
 from dataclasses import dataclass
 from ixdiagnose.config import conf
-from middlewared.client import Client
+from truenas_api_client import Client
 from typing import Any, Callable, List, Optional
 
 

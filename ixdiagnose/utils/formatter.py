@@ -1,6 +1,7 @@
-from middlewared.client.ejson import dumps as middleware_dumps, loads # noqa
-from middlewared.utils import get
 from typing import Callable, Dict, List, Union
+
+from truenas_api_client.ejson import dumps as middleware_dumps, loads # noqa
+from middlewared.utils import get
 
 
 def dumps(*args, **kwargs) -> str:
