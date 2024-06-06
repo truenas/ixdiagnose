@@ -3,7 +3,9 @@ from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
 from typing import Any
 
 from .base import Plugin
-from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric, PythonMetric
+from .metrics import (
+    CommandMetric, DirectoryTreeMetric, FileMetric, MiddlewareClientMetric, PythonMetric
+)
 from .prerequisites import ServiceRunningPrerequisite
 
 
@@ -49,9 +51,20 @@ class NFS(Plugin):
                 Command(['rpcinfo', '-p'], 'Status of the RPC Server', serializable=False),
             ], prerequisites=[ServiceRunningPrerequisite('rpc-statd')],
         ),
-        FileMetric('nfs-common', '/etc/default/nfs-common'),
-        FileMetric('nfs-kernel-server', '/etc/default/nfs-kernel-server'),
-        FileMetric('nfs-exports', '/etc/exports'),
+        FileMetric('etc-nfs-confd-local', '/etc/nfs.conf.d/local.conf'),
+        FileMetric('etc-nfs-conf', '/etc/nfs.conf'),
+        FileMetric('etc-default-nfs-common', '/etc/default/nfs-common'),
+        FileMetric('etc-default-nfs-kernel-server', '/etc/default/nfs-kernel-server'),
+        FileMetric('etc-exports', '/etc/exports'),
+        FileMetric('proc-fs-nfsd-portlist', '/proc/fs/nfsd/portlist'),
+        FileMetric('proc-fs-nfsd-threads', '/proc/fs/nfsd/threads'),
+        FileMetric('proc-fs-nfsd-pool_threads', '/proc/fs/nfsd/pool_threads'),
+        FileMetric('proc-fs-nfsd-pool_stats', '/proc/fs/nfsd/pool_stats'),
+        FileMetric('proc-fs-nfsd-file_cache', '/proc/fs/nfsd/file_cache'),
+        FileMetric('proc-fs-nfsd-reply_cache_stats', '/proc/fs/nfsd/reply_cache_stats'),
+        FileMetric('proc-fs-nfsd-max_block_size', '/proc/fs/nfsd/max_block_size'),
+        FileMetric('proc-fs-nfsd-max_connections', '/proc/fs/nfsd/max_connections'),
+        DirectoryTreeMetric('etc-nfs-confd', '/etc/nfs.conf.d'),
         MiddlewareClientMetric('nfs_config', [
             MiddlewareCommand('nfs.config'),
             MiddlewareCommand('sharing.nfs.query'),
