@@ -1,9 +1,10 @@
 from collections import defaultdict
+
 from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
-from .metrics import MiddlewareClientMetric, PythonMetric
+from .metrics import DirectoryTreeMetric, MiddlewareClientMetric, PythonMetric
 from .prerequisites import VMPrerequisite
 
 
@@ -23,6 +24,7 @@ def passthrough_choices(client, context):
 class VM(Plugin):
     name = 'vm'
     metrics = [
+        DirectoryTreeMetric('iommu_groups', '/sys/kernel/iommu_groups'),
         MiddlewareClientMetric(
             'gpu', [MiddlewareCommand('device.get_gpus', result_key='gpus')],
             prerequisites=[VMPrerequisite()]
