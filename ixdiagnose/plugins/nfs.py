@@ -56,6 +56,8 @@ class NFS(Plugin):
         FileMetric('etc-default-nfs-common', '/etc/default/nfs-common'),
         FileMetric('etc-default-nfs-kernel-server', '/etc/default/nfs-kernel-server'),
         FileMetric('etc-exports', '/etc/exports'),
+        FileMetric('etc-fstab', '/etc/fstab'),
+        FileMetric('proc-mounts', '/proc/mounts'),
         FileMetric('proc-fs-nfsd-portlist', '/proc/fs/nfsd/portlist'),
         FileMetric('proc-fs-nfsd-threads', '/proc/fs/nfsd/threads'),
         FileMetric('proc-fs-nfsd-pool_threads', '/proc/fs/nfsd/pool_threads'),
