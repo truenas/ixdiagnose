@@ -14,7 +14,7 @@ class Audit(Plugin):
         ),
         MiddlewareClientMetric(
             'recent_audited_method_calls', [
-                MiddlewareCommand('audit.query', {
+                MiddlewareCommand('audit.query', [{
                     'services': ['MIDDLEWARE'],
                     'query-filters': [['event', '=', 'METHOD_CALL']],
                     'query-options': {
@@ -22,7 +22,7 @@ class Audit(Plugin):
                         'select': ['audit_id', 'message_timestamp', 'username', 'event_data', 'success'],
                         'order_by': ['-message_timestamp']
                     }
-                }),
+                }]),
             ],
         ),
     ]
