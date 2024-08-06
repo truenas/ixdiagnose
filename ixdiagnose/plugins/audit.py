@@ -18,7 +18,6 @@ class Audit(Plugin):
                     'services': ['MIDDLEWARE'],
                     'query-filters': [['event', '=', 'METHOD_CALL']],
                     'query-options': {
-                        'limit': 100,
                         'select': ['audit_id', 'message_timestamp', 'username', 'event_data', 'success'],
                         'order_by': ['-message_timestamp']
                     }
