@@ -17,6 +17,7 @@ class Apps(Plugin):
         MiddlewareClientMetric('apps_gpu_choices', [MiddlewareCommand('app.gpu_choices')]),
         MiddlewareClientMetric('apps_used_ports', [MiddlewareCommand('app.used_ports')]),
         MiddlewareClientMetric('catalog', [MiddlewareCommand('catalog.config')]),
+        MiddlewareClientMetric('catalog_trains', [MiddlewareCommand('catalog.trains')]),
         MiddlewareClientMetric('docker_config', [MiddlewareCommand('docker.config')]),
         MiddlewareClientMetric('docker_status', [MiddlewareCommand('docker.status')]),
     ]
