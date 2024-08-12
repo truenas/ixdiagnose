@@ -3,7 +3,6 @@ from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
 from .metrics import CommandMetric, MiddlewareClientMetric
-from .prerequisites import ServiceRunningPrerequisite
 
 
 class Apps(Plugin):
@@ -12,20 +11,8 @@ class Apps(Plugin):
         CommandMetric('docker_logs', [
             Command('journalctl -u docker | tail -n 1000', 'Docker logs', serializable=False),
         ]),
-        MiddlewareClientMetric(
-            'apps', [
-                MiddlewareCommand('app.query')
-            ],
-            prerequisites=[ServiceRunningPrerequisite('docker')],
-        ),
-        MiddlewareClientMetric(
-            'docker_config', [
-                MiddlewareCommand('docker.config'),
-            ],
-        ),
-        MiddlewareClientMetric(
-            'docker_status', [
-                MiddlewareCommand('docker.status'),
-            ],
-        ),
+        MiddlewareClientMetric('apps', [MiddlewareCommand('app.query')]),
+        MiddlewareClientMetric('catalog', [MiddlewareCommand('catalog.config')]),
+        MiddlewareClientMetric('docker_config', [MiddlewareCommand('docker.config')]),
+        MiddlewareClientMetric('docker_status', [MiddlewareCommand('docker.status')]),
     ]
