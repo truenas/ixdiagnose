@@ -1,6 +1,7 @@
 from ixdiagnose.utils.factory import Factory
 
 from .active_directory import ActiveDirectory
+from .apps import Apps
 from .audit import Audit
 from .certificates import Certificates
 from .cloud_backup import CloudBackup
@@ -38,6 +39,7 @@ from .zfs import ZFS
 plugin_factory = Factory()
 for plugin in [
     ActiveDirectory,
+    Apps,
     Audit,
     Certificates,
     CloudBackup,
