@@ -11,6 +11,8 @@ class Apps(Plugin):
         CommandMetric('docker_logs', [
             Command('journalctl -u docker | tail -n 1000', 'Docker logs', serializable=False),
         ]),
+        MiddlewareClientMetric('app_images', [MiddlewareCommand('app.image.query')]),
+        MiddlewareClientMetric('app_dockerhub_limit', [MiddlewareCommand('app.image.dockerhub_rate_limit')]),
         MiddlewareClientMetric('apps', [MiddlewareCommand('app.query')]),
         MiddlewareClientMetric('apps_gpu_choices', [MiddlewareCommand('app.gpu_choices')]),
         MiddlewareClientMetric('apps_used_ports', [MiddlewareCommand('app.used_ports')]),
