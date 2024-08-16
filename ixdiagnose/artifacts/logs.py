@@ -29,6 +29,7 @@ class Logs(Artifact):
         File('scst.log.1'),
         File('syslog'),
         File('syslog.1'),
+        File('truenas_verify.log'),
         File('wsdd.log'),
         Pattern('daemon.+'),
         Pattern('failover.+'),
