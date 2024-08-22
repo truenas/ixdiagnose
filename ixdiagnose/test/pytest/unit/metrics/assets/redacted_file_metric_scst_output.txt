@@ -1,0 +1,38 @@
+HANDLER vdisk_fileio {
+}
+HANDLER vdisk_blockio {
+    DEVICE test1 {
+        filename /dev/zvol/tank/test1
+        blocksize 512
+        read_only 0
+        usn cce1fa1b063f9d3
+        naa_id 0x6589cfc0000007ddc48032452639e00e
+        prod_id "iSCSI Disk"
+        rotational 0
+        t10_vend_id TrueNAS
+        t10_dev_id cce1fa1b063f9d3
+        threads_num 32
+    }
+
+}
+
+TARGET_DRIVER iscsi {
+    IncomingUser "User1 **REDACTED**"
+    enabled 1
+    link_local 0
+
+    TARGET iqn.2005-10.org.freenas.ctl:test1 {
+        rel_tgt_id 1
+        enabled 1
+        per_portal_acl 1
+        IncomingUser "User1 **REDACTED**"
+        OutgoingUser "User2 **REDACTED**"
+
+        GROUP security_group {
+            INITIATOR *\#1.2.3.4
+
+            LUN 0 test1
+        }
+    }
+}
+
