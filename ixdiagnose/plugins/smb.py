@@ -62,7 +62,9 @@ class SMB(Plugin):
                 MiddlewareCommand('smb.config'),
                 MiddlewareCommand('smb.status'),
                 MiddlewareCommand('smb.groupmap_list'),
-                MiddlewareCommand('smb.passdb_list'),
+                MiddlewareCommand('smb.passdb_list', [[], {'select': [
+                    'username', 'domain', 'user_rid', 'acct_ctrl', 'times'
+                ]}]),
                 MiddlewareCommand('sharing.smb.query'),
             ]
         ),
