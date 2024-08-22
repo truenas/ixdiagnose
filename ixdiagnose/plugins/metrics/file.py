@@ -53,7 +53,8 @@ class RedactedFileMetric(FileMetric):
         output = ''
         try:
             with open(self.file_path, "r", encoding="utf-8") as input_file:
-                with open(self.output_file_path(self.execution_context['output_dir']), "w", encoding="utf-8") as output_file:
+                output_filepath = self.output_file_path(self.execution_context['output_dir'])
+                with open(output_filepath, "w", encoding="utf-8") as output_file:
                     for line in input_file:
                         if self.redact_callback:
                             line = self.redact_callback(line)
