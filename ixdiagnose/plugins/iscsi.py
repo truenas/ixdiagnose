@@ -1,10 +1,18 @@
+import re
+
 from ixdiagnose.utils.command import Command
 from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
-from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric
+from .metrics import CommandMetric, MiddlewareClientMetric, RedactedFileMetric
 from .prerequisites import ServiceRunningPrerequisite
+
+SENSITIVE_LINE = re.compile(r'^(\s*)(IncomingUser "|OutgoingUser ")(\S*) (\S*)"$')
+
+
+def redact_chap_passwords(line):
+    return SENSITIVE_LINE.sub(r'\1\2\3 **REDACTED**"', line)
 
 
 class ISCSI(Plugin):
@@ -30,7 +38,7 @@ class ISCSI(Plugin):
                 Command(['scstadmin', '-list_scst_attr'], 'Lists SCST core attributes', serializable=False),
             ], prerequisites=[ServiceRunningPrerequisite('scst')],
         ),
-        FileMetric('scst', '/etc/scst.conf', extension='.conf'),
+        RedactedFileMetric('scst', '/etc/scst.conf', extension='.conf', redact_callback=redact_chap_passwords),
     ]
     raw_metrics = [
         CommandMetric(
