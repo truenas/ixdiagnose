@@ -7,5 +7,5 @@ from .metrics import MiddlewareClientMetric
 class CoreGetJobs(Plugin):
     name = 'jobs'
     metrics = [
-        MiddlewareClientMetric('jobs', [MiddlewareCommand('core.get_jobs', [], {'extra': {'raw_result': False}})]),
+        MiddlewareClientMetric('jobs', [MiddlewareCommand('core.get_jobs', [[], {'extra': {'raw_result': False}}])]),
     ]
