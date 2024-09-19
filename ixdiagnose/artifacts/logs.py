@@ -16,6 +16,8 @@ class Logs(Artifact):
         DirectoryPattern('openvpn'),
         DirectoryPattern('proftpd'),
         DirectoryPattern('samba4'),
+        File('app_lifecycle.log'),
+        File('app_migrations.log'),
         File('auth.log'),
         File('debug'),
         File('dpkg.log'),
