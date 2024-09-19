@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Setup dev environment
         run: /usr/bin/install-dev-tools
@@ -33,7 +33,7 @@ jobs:
         run: mv ../*.deb artifacts
         if: success()
 
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v4
         with:
           name: python3-ixdiagnose
           path: artifacts
