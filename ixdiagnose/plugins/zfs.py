@@ -97,10 +97,18 @@ class ZFS(Plugin):
         ),
         CommandMetric('pool_history', [Command(['zpool', 'history'], 'ZFS Pool(s) History', serializable=False)]),
         CommandMetric('arc_summary', [Command(['arc_summary'], 'ARC Summary', serializable=False)]),
+        CommandMetric('pool_status_serialized', [
+            Command(['zpool', 'status', '-jP', '--json-int'], 'ZFS Pool(s) Status', serializable=True)
+        ]),
         MiddlewareClientMetric('pool_query', [MiddlewareCommand('pool.query')]),
         MiddlewareClientMetric(
             'pool_scrub_tasks', [
                 MiddlewareCommand('pool.scrub.query', result_key='scrub_tasks'),
+            ]
+        ),
+        MiddlewareClientMetric(
+            'middleware_pool_status', [
+                MiddlewareCommand('zpool.status', [{'real_paths': True}], result_key='middleware_pool_status'),
             ]
         ),
         PythonMetric('encryption_summary', encryption_summary),
