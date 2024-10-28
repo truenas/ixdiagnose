@@ -30,13 +30,14 @@ def zfs_getacl_impl(dataset_name: str, props_dict: dict) -> str:
 
 
 def resource_output(client: MiddlewareClient, resource_type: str) -> str:
-    if resource_type == 'zfs':
-        cp = run(['zfs', 'get', 'all', '-t', 'filesystem'], check=False)
+    if resource_type in ('filesystem', 'volume'):
+        cp = run(['zfs', 'get', 'all', '-t', resource_type], check=False)
     else:
         cp = run([resource_type, 'get', 'all'], check=False)
     if cp.returncode:
         return f'Failed to retrieve {resource_type!r} resources: {cp.stderr}'
 
+    base = 'zpool get all' if resource_type == 'zpool' else 'zfs get all'
     prop_list = {'acltype', 'mounted', 'mountpoint'}
     resource_context = resource_name = None
     output = ''
@@ -46,24 +47,24 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
     for index, resource_line in enumerate(filter(bool, map(str.strip, output_lines[1:]))):
         resource_name = resource_line.split()[0].strip()
         if resource_context != resource_name:
-            if resource_context is not None and resource_type == 'zfs':
+            if resource_context is not None and resource_type == 'filesystem':
                 output += zfs_getacl(resource_context, prop_dict)
 
             prop_dict = {}
-            header_str = f'{resource_type} get all {resource_name}'
+            header_str = f'{base} {resource_name}'
             next_line = '\n\n' if index != 0 else ''
             output += f'{next_line}{"=" * (len(header_str) + 5)}\n  {header_str}\n{"=" * (len(header_str) + 5)}\n\n'
             output += f'{props_header}\n'
             resource_context = resource_name
 
-        if resource_type == 'zfs':
+        if resource_type == 'filesystem':
             prop = resource_line.split()[1]
             if prop in prop_list:
                 prop_dict[prop] = resource_line.split()[2]
 
         output += f'{resource_line}\n'
 
-    if resource_name is not None and resource_type == 'zfs':
+    if resource_name is not None and resource_type == 'filesystem':
         output += zfs_getacl(resource_name, prop_dict)
 
     return output
@@ -128,7 +129,8 @@ class ZFS(Plugin):
                 ),
             ]
         ),
-        PythonMetric('dataset_config', resource_output, 'zfs', 'ZFS Datasets Configuration', serializable=False),
+        PythonMetric('dataset_config', resource_output, 'filesystem', 'ZFS Datasets Configuration', serializable=False),
+        PythonMetric('zvol_config', resource_output, 'volume', 'ZFS ZVOL Configuration', serializable=False),
         PythonMetric('pool_config', resource_output, 'zpool', 'ZFS Pools Configuration', serializable=False),
     ]
     serializable_metrics = [
