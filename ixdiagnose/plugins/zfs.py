@@ -37,6 +37,7 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
     if cp.returncode:
         return f'Failed to retrieve {resource_type!r} resources: {cp.stderr}'
 
+    base = 'zpool get all' if resource_type == 'zpool' else 'zfs get all'
     prop_list = {'acltype', 'mounted', 'mountpoint'}
     resource_context = resource_name = None
     output = ''
@@ -50,7 +51,7 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
                 output += zfs_getacl(resource_context, prop_dict)
 
             prop_dict = {}
-            header_str = f'{resource_type} get all {resource_name}'
+            header_str = f'{base} {resource_name}'
             next_line = '\n\n' if index != 0 else ''
             output += f'{next_line}{"=" * (len(header_str) + 5)}\n  {header_str}\n{"=" * (len(header_str) + 5)}\n\n'
             output += f'{props_header}\n'
