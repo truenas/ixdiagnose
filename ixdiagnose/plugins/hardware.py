@@ -1,8 +1,27 @@
+import os
+import re
+import typing
+
 from ixdiagnose.utils.command import Command
-from ixdiagnose.utils.middleware import MiddlewareCommand
+from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
+from ixdiagnose.utils.run import run
 
 from .base import Plugin
-from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric
+from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric, PythonMetric
+
+
+def nvdimm_info(client: MiddlewareClient, context: typing.Any) -> str:
+    nmem = re.compile(r'^nmem\d+$')
+    output = ''
+    with os.scandir('/dev/') as sdir:
+        for i in filter(lambda x: nmem.match(x.name), sdir):
+            output += f"{'=' * 20} {i.path} {'=' * 20}"
+            cp = run(f'/usr/local/sbin/ixnvdimm {i.path}', check=False)
+            if cp.returncode:
+                output += f'Failed to retrieve nvdimm info: {cp.stderr}\n\n'
+            else:
+                output += f'{cp.stdout}\n\n'
+    return output
 
 
 class Hardware(Plugin):
@@ -28,6 +47,7 @@ class Hardware(Plugin):
         MiddlewareClientMetric('disks_config', [MiddlewareCommand('disk.query')]),
         MiddlewareClientMetric('enclosure2', [MiddlewareCommand('enclosure2.query')]),
         MiddlewareClientMetric('enclosures', [MiddlewareCommand('enclosure.query')]),
+        PythonMetric('nvdimm_info', nvdimm_info),
     ]
     raw_metrics = [
         CommandMetric(
