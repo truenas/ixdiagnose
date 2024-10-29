@@ -54,7 +54,7 @@ def test_zfs_getacl_impl(mocker, dataset_name, props_dict, args, return_code, st
         False
     ),
     (
-        'zfs',
+        'filesystem',
         ('zfs', 'get', 'all'),
         0,
         'input_resource_output2.txt',
@@ -78,7 +78,7 @@ def test_zfs_getacl_impl(mocker, dataset_name, props_dict, args, return_code, st
         True
     ),
     (
-        'zfs',
+        'filesystem',
         ('zfs', 'get', 'all'),
         0,
         'input_resource_output3.txt',
