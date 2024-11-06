@@ -15,7 +15,7 @@ def nvdimm_info(client: MiddlewareClient, context: typing.Any) -> str:
     output = ''
     with os.scandir('/dev/') as sdir:
         for i in filter(lambda x: nmem.match(x.name), sdir):
-            output += f"{'=' * 20} {i.path} {'=' * 20}"
+            output += f"{'=' * 20} {i.path} {'=' * 20}\n"
             cp = run(f'/usr/local/sbin/ixnvdimm {i.path}', check=False)
             if cp.returncode:
                 output += f'Failed to retrieve nvdimm info: {cp.stderr}\n\n'
