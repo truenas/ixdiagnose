@@ -47,6 +47,8 @@ class Hardware(Plugin):
         MiddlewareClientMetric('disks_config', [MiddlewareCommand('disk.query')]),
         MiddlewareClientMetric('enclosure2', [MiddlewareCommand('enclosure2.query')]),
         MiddlewareClientMetric('enclosures', [MiddlewareCommand('enclosure.query')]),
+        MiddlewareClientMetric('virtualization_variant', [MiddlewareCommand('hardware.virtualization.variant')]),
+        MiddlewareClientMetric('is_virtualized', [MiddlewareCommand('hardware.virtualization.is_virtualized')]),
         PythonMetric('nvdimm_info', nvdimm_info, serializable=False),
     ]
     raw_metrics = [
