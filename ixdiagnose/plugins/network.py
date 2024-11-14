@@ -29,6 +29,15 @@ class Network(Plugin):
                 MiddlewareCommand('route.system_routes'),
             ]
         ),
+        MiddlewareClientMetric(
+            'rdma_config', [
+                MiddlewareCommand('rdma.capable_protocols', result_key='capable_protocols'),
+                MiddlewareCommand('rdma.get_card_choices', result_key='card_choices'),
+                MiddlewareCommand('rdma.get_card_choices', [True], result_key='all_card_choices'),
+                MiddlewareCommand('rdma.get_link_choices', result_key='link_choices'),
+                MiddlewareCommand('rdma.interface.query', result_key='interfaces'),
+            ]
+        ),
     ]
     raw_metrics = [
         CommandMetric(
