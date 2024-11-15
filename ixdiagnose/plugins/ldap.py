@@ -20,8 +20,11 @@ class LDAP(Plugin):
         FileMetric('krb5', '/etc/krb5.conf', extension='.conf'),
         FileMetric('ldap', '/etc/openldap/ldap.conf', extension='.conf'),
         CommandMetric(
-            'nslcd', [
-                Command(['grep', '-iv', 'bindpw', '/etc/nslcd.conf'], 'Config file', serializable=False),
+            'sssd', [
+                Command(
+                    ['grep', '-iv', 'ldap_default_authtok', '/etc/sssd/sssd.conf'],
+                    'Config file', serializable=False
+                ),
             ]
         ),
         MiddlewareClientMetric(
