@@ -3,6 +3,7 @@ import re
 import typing
 
 from ixdiagnose.utils.command import Command
+from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
 from ixdiagnose.utils.run import run
 
@@ -49,6 +50,8 @@ class Hardware(Plugin):
         MiddlewareClientMetric('enclosures', [MiddlewareCommand('enclosure.query')]),
         MiddlewareClientMetric('virtualization_variant', [MiddlewareCommand('hardware.virtualization.variant')]),
         MiddlewareClientMetric('is_virtualized', [MiddlewareCommand('hardware.virtualization.is_virtualized')]),
+        MiddlewareClientMetric('jbof_config', [MiddlewareCommand('jbof.query',
+                                                                 format_output=remove_keys(['mgmt_password']))]),
         PythonMetric('nvdimm_info', nvdimm_info, serializable=False),
     ]
     raw_metrics = [
