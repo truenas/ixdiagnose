@@ -1,8 +1,20 @@
+from typing import Any
+
 from ixdiagnose.utils.command import Command
-from ixdiagnose.utils.middleware import MiddlewareCommand
+from ixdiagnose.utils.formatter import dumps
+from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
 
 from .base import Plugin
-from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric
+from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric, PythonMetric
+
+
+def link_choices(client: MiddlewareClient, context: Any) -> str:
+    summary = {}
+    configured_interfaces = client.call('interface.get_configured_interfaces')
+    for link in client.call('rdma.get_link_choices', True):
+        summary[link['netdev']] = link | {'configured_interface': link['netdev'] in configured_interfaces}
+
+    return dumps(summary)
 
 
 class Network(Plugin):
@@ -33,11 +45,10 @@ class Network(Plugin):
             'rdma_config', [
                 MiddlewareCommand('rdma.capable_protocols', result_key='capable_protocols'),
                 MiddlewareCommand('rdma.get_card_choices', result_key='card_choices'),
-                MiddlewareCommand('rdma.get_link_choices', [True], result_key='all_link_choices'),
-                MiddlewareCommand('rdma.get_link_choices', result_key='link_choices'),
                 MiddlewareCommand('rdma.interface.query', result_key='interfaces'),
             ]
         ),
+        PythonMetric('rdma_link_choices', link_choices),
     ]
     raw_metrics = [
         CommandMetric(
