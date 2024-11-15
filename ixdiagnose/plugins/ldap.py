@@ -21,7 +21,10 @@ class LDAP(Plugin):
         FileMetric('ldap', '/etc/openldap/ldap.conf', extension='.conf'),
         CommandMetric(
             'sssd', [
-                Command(['grep', '-iv', 'ldap_default_authtok', '/etc/sssd/sssd.conf'], 'Config file', serializable=False),
+                Command(
+                    ['grep', '-iv', 'ldap_default_authtok', '/etc/sssd/sssd.conf'],
+                    'Config file', serializable=False
+                ),
             ]
         ),
         MiddlewareClientMetric(
