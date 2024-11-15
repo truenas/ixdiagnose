@@ -43,7 +43,6 @@ class Network(Plugin):
         ),
         MiddlewareClientMetric(
             'rdma_config', [
-                MiddlewareCommand('rdma.capable_protocols', result_key='capable_protocols'),
                 MiddlewareCommand('rdma.get_card_choices', result_key='card_choices'),
                 MiddlewareCommand('rdma.interface.query', result_key='interfaces'),
             ]
