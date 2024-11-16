@@ -19,8 +19,8 @@ def get_nvme_devs() -> list[str]:
     return nvmes
 
 
-def run_nvme_cmd(action: str, nvme: str) -> str:
-    header = f"nvme {action} {nvme!r}\n"
+def run_nvme_cmd(action: str, nvme: str, add_header: bool = True) -> str:
+    header = '' if not add_header else f'{nvme:#^30}\n'
     cp = run(["nvme", action, nvme], check=False)
     if cp.returncode:
         footer = f"FAILED: {cp.stderr}\n\n"
@@ -47,7 +47,7 @@ def get_nvme_id_ns(client: MiddlewareClient, context: Any) -> str:
 def get_nvme_smart_log(client: MiddlewareClient, context: Any) -> str:
     output = ""
     for nvme in get_nvme_devs():
-        output += run_nvme_cmd("smart-log", nvme)
+        output += run_nvme_cmd("smart-log", nvme, add_header=False)
     return output
 
 
