@@ -54,7 +54,6 @@ def smart_output(client: MiddlewareClient, context: Any) -> str:
             output += f'  {msg}\n'
             output += f'{"=" * (len(msg) + 5)}\n\n{cp.stderr if cp.returncode else cp.stdout}\n\n'
 
-    # TODO: Check the awk script and see what it normalizes
     return output
 
 
