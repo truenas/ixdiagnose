@@ -19,6 +19,7 @@ from .jobs import CoreGetJobs
 from .ldap import LDAP
 from .network import Network
 from .nfs import NFS
+from .nvme import NVME
 from .rbac import RBAC
 from .replication import Replication
 from .reporting import Reporting
@@ -57,6 +58,7 @@ for plugin in [
     LDAP,
     Network,
     NFS,
+    NVME,
     RBAC,
     Replication,
     Reporting,
