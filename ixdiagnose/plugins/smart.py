@@ -27,7 +27,7 @@ def smart_output(client: MiddlewareClient, context: Any) -> str:
         except Exception:
             continue
 
-        cmd = ['smartctl', '-a', f'/dev/{disk}']
+        cmd = ['smartctl', '-x', f'/dev/{disk}']
         nvme_msg = ''
         if any(('nvme' in disk, vendor.lower().strip() == 'nvme')):
             # is an nvme device
