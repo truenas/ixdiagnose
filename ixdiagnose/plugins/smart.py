@@ -27,7 +27,7 @@ def smart_output(client: MiddlewareClient, context: Any) -> str:
         except Exception:
             continue
 
-        cmd = ['smartctl', '-a', f'/dev/{disk}']
+        cmd = ['smartctl', '-x', f'/dev/{disk}']
         nvme_msg = ''
         if any(('nvme' in disk, vendor.lower().strip() == 'nvme')):
             # is an nvme device
@@ -54,7 +54,6 @@ def smart_output(client: MiddlewareClient, context: Any) -> str:
             output += f'  {msg}\n'
             output += f'{"=" * (len(msg) + 5)}\n\n{cp.stderr if cp.returncode else cp.stdout}\n\n'
 
-    # TODO: Check the awk script and see what it normalizes
     return output
 
 
