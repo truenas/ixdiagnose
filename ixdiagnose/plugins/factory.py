@@ -27,6 +27,7 @@ from .rsync import Rsync
 from .services import Services
 from .smart import SMART
 from .smb import SMB
+from .snmp import SNMP
 from .ssl import SSL
 from .sysctl import Sysctl
 from .system import System
@@ -66,6 +67,7 @@ for plugin in [
     Services,
     SMART,
     SMB,
+    SNMP,
     SSL,
     Sysctl,
     System,
