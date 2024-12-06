@@ -43,6 +43,10 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
     output = ''
     prop_dict = {}
     output_lines = cp.stdout.splitlines()
+    if not output_lines:
+        # happens when no zvols, for example
+        return output
+
     props_header = output_lines[0]
     for index, resource_line in enumerate(filter(bool, map(str.strip, output_lines[1:]))):
         resource_name = resource_line.split()[0].strip()
