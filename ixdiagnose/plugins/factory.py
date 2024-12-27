@@ -32,6 +32,7 @@ from .ssl import SSL
 from .sysctl import Sysctl
 from .system import System
 from .system_state import SystemState
+from .system_vendor import SystemVendor
 from .two_factor_auth import TwoFactorAuth
 from .ups import UPS
 from .vm import VM
@@ -72,6 +73,7 @@ for plugin in [
     Sysctl,
     System,
     SystemState,
+    SystemVendor,
     TwoFactorAuth,
     UPS,
     VM,
