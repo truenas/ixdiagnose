@@ -3,14 +3,7 @@ import json
 from .base import Plugin
 from .metrics import PythonMetric
 
-LOG_FILES = (
-    '/var/log/app_lifecycle.log',
-    '/var/log/app_migrations.log',
-    '/var/log/failover.log',
-    '/var/log/middlewared.log',
-    '/var/log/netdata_api.log',
-    '/var/log/zettarepl.log'
-)
+from middlewared.logger import ALL_LOG_FILES
 
 
 def parse_log_file(path: str) -> list[dict]:
@@ -28,9 +21,9 @@ def parse_log_file(path: str) -> list[dict]:
 
 def gather_exceptions(client: None, resource_type: str) -> dict:
     results = {}
-    for log in LOG_FILES:
+    for log in ALL_LOG_FILES:
         try:
-            results[log] = parse_log_file(log)
+            results[log.logfile] = parse_log_file(log.logfile)
         except FileNotFoundError:
             pass
 
