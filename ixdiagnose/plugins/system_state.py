@@ -53,30 +53,20 @@ def get_root_ds(client: None, resource_type: str) -> dict:
     return report
 
 
-class UsrPostprocess:
-    def __init__(self):
-        self.is_enterprise = None
+def usr_postprocess(lines: str) -> str:
+    result = []
+    for line in lines.splitlines():
+        try:
+            filename = line.split(maxsplit=1)[1].strip()
+        except IndexError:
+            pass
+        else:
+            if can_be_modified(filename):
+                continue
 
-    def __call__(self, execution_context, lines: str) -> str:
-        if self.is_enterprise is None:
-            self.is_enterprise = execution_context['middleware_client'].call('system.is_enterprise')
+        result.append(line)
 
-        if self.is_enterprise:
-            return lines
-
-        result = []
-        for line in lines.splitlines():
-            try:
-                filename = line.split(maxsplit=1)[1].strip()
-            except IndexError:
-                pass
-            else:
-                if can_be_modified(filename):
-                    continue
-
-            result.append(line)
-
-        return "\n".join(result)
+    return "\n".join(result)
 
 
 def can_be_modified(filename: str) -> bool:
@@ -165,9 +155,8 @@ class SystemState(Plugin):
         CommandMetric(f'{ds.split("/")[-1]}_dataset_diff', [
             Command(
                 ['zfs', 'diff', f'{ds}@pristine'],
-                f'changes of {ds} dataset',
-                serializable=False,
-                postprocess=UsrPostprocess() if ds.split('/')[-1] == 'usr' else None,
+                f'changes of {ds} dataset', serializable=False,
+                postprocess=usr_postprocess if ds.split('/')[-1] == 'usr' else None
             )],
         )
         for ds in get_ds_list()
