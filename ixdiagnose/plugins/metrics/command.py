@@ -42,7 +42,6 @@ class CommandMetric(Metric):
         cmd_context = []
         metric_report = []
         for cmd in self.cmds:
-            cmd.execution_context = self.execution_context
             start_time = time.time()
             cp = cmd.execute()
             report = {
