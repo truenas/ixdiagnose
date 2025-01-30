@@ -16,7 +16,7 @@ jobs:
         run: /usr/bin/install-dev-tools
 
       - name: Install Dependencies
-        run: apt update && apt install -y debhelper-compat dh-python python3-dev python3-setuptools devscripts
+        run: apt update && apt install -y debhelper-compat devscripts dh-python
 
       - name: Build deb package
         run: >
