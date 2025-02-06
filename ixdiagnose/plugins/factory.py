@@ -34,6 +34,7 @@ from .sysctl import Sysctl
 from .system import System
 from .system_state import SystemState
 from .system_vendor import SystemVendor
+from .truenas_connect import TruenasConnect
 from .two_factor_auth import TwoFactorAuth
 from .ups import UPS
 from .vm import VM
@@ -76,6 +77,7 @@ for plugin in [
     System,
     SystemState,
     SystemVendor,
+    TruenasConnect,
     TwoFactorAuth,
     UPS,
     VM,
