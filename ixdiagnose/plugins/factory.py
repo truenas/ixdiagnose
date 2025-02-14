@@ -37,7 +37,6 @@ from .system_vendor import SystemVendor
 from .truenas_connect import TruenasConnect
 from .two_factor_auth import TwoFactorAuth
 from .ups import UPS
-from .vm import VM
 from .zfs import ZFS
 
 
@@ -80,7 +79,6 @@ for plugin in [
     TruenasConnect,
     TwoFactorAuth,
     UPS,
-    VM,
     ZFS,
 ]:
     plugin_factory.register(plugin())
