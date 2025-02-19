@@ -34,7 +34,10 @@ class Audit(Plugin):
         ),
         CommandMetric(
             # This generates a file that is collected in the associated FileMetric.
-            'truenas_verify_cmd', [
+            'truenas_verify_data', [
+                Command(
+                    ['shasum', '-a', '256', '/conf/rootfs.mtree'], 'sha256 rootfs.mtree', serializable=False
+                ),
                 Command(
                     ['truenas_verify'], 'Result from truenas_verify', serializable=False,
                     safe_returncodes=[],  # With no safe_returncodes we can silently run the command
