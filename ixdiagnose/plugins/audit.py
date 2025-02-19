@@ -41,6 +41,6 @@ class Audit(Plugin):
                 ),
             ],
         ),
-        # The log depends on the truena_verify command.
+        # The log depends on the truenas_verify command.
         FileMetric('truenas_verify', '/var/log/audit/truenas_verify.log', extension='.log'),
     ]
