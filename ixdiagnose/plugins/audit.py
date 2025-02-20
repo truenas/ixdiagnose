@@ -32,15 +32,36 @@ class Audit(Plugin):
                 }]),
             ],
         ),
+        MiddlewareClientMetric(
+            'recent_audited_system_calls', [
+                MiddlewareCommand('audit.query', [{
+                    'services': ['SYSTEM'],
+                    # No filter, collect all
+                    'query-options': {
+                        'select': [
+                            'audit_id',
+                            'message_timestamp',
+                            'event_data',
+                            'success'
+                        ],
+                        'order_by': ['-message_timestamp'],
+                        'limit': 100
+                    }
+                }]),
+            ],
+        ),
         CommandMetric(
             # This generates a file that is collected in the associated FileMetric.
-            'truenas_verify_data', [
+            'audit_data', [
+                Command(
+                    ['truenas_verify'], 'Result from truenas_verify', serializable=False,
+                    safe_returncodes=[],  # With no safe_returncodes we can silently run the command
+                ),
                 Command(
                     ['shasum', '-a', '256', '/conf/rootfs.mtree'], 'sha256 rootfs.mtree', serializable=False
                 ),
                 Command(
-                    ['truenas_verify'], 'Result from truenas_verify', serializable=False,
-                    safe_returncodes=[],  # With no safe_returncodes we can silently run the command
+                    ['aureport'], 'auditd summary report', serializable=False
                 ),
             ],
         ),
