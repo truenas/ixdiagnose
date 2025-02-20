@@ -5,7 +5,7 @@ from ixdiagnose.event import event_callbacks
 from typing import Callable, List, Optional
 
 from .artifact import gather_artifacts
-from .config import conf
+from .config import conf, TIMEOUT_DEFAULT
 from .plugin import generate_plugins_debug
 from .run import generate_debug
 
@@ -87,7 +87,7 @@ def validate_path(ctx, param, value):
 
 
 timeout_option = click.option(
-    '-t', '--timeout', type=click.INT, default=20, show_default=True,
+    '-t', '--timeout', type=click.INT, default=TIMEOUT_DEFAULT, show_default=True,
     help='timeout value for middleware client in seconds'
 )
 

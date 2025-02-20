@@ -1,6 +1,8 @@
 from jsonschema import validate
 from typing import List, Optional
 
+TIMEOUT_DEFAULT = 30
+
 
 class Configuration:
 
@@ -26,7 +28,7 @@ class Configuration:
         self.exclude_artifacts: List[str] = []
         self.exclude_plugins: List[str] = []
         self.structured_data: bool = False
-        self.timeout: int = 20
+        self.timeout: int = TIMEOUT_DEFAULT
 
     def apply(self, new_config: dict) -> None:
         validate(new_config, self.SCHEMA)
