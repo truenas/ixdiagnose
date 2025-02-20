@@ -46,7 +46,7 @@ class Audit(Plugin):
                     ['aureport'], 'auditd summary report', serializable=False
                 ),
                 Command(
-                    ['ausearch --format csv -m ALL --start week-ago --end now | head -101'],
+                    ['ausearch --format csv -m ALL --start week-ago --end now | head -101 | grep -v TTY'],
                     'Recent auditd enties (csv format)', serializable=False
                 ),
             ],
