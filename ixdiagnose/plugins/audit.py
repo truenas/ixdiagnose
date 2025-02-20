@@ -36,11 +36,18 @@ class Audit(Plugin):
             # This generates a file that is collected in the associated FileMetric.
             'truenas_verify_data', [
                 Command(
+                    ['truenas_verify'], 'Result from truenas_verify', serializable=False,
+                    safe_returncodes=[],  # With no safe_returncodes we can silently run the command
+                ),
+                Command(
                     ['shasum', '-a', '256', '/conf/rootfs.mtree'], 'sha256 rootfs.mtree', serializable=False
                 ),
                 Command(
-                    ['truenas_verify'], 'Result from truenas_verify', serializable=False,
-                    safe_returncodes=[],  # With no safe_returncodes we can silently run the command
+                    ['aureport'], 'auditd summary report', serializable=False
+                ),
+                Command(
+                    ['ausearch --format csv -m ALL --start week-ago --end now | head -101'],
+                    'Recent auditd enties (csv format)', serializable=False
                 ),
             ],
         ),
