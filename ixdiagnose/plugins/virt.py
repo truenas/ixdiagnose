@@ -12,7 +12,9 @@ class Virt(Plugin):
             Command('journalctl -u incus | tail -n 1000', 'Incus logs', serializable=False),
         ]),
         MiddlewareClientMetric('virt_global_config', [MiddlewareCommand('virt.global.config')]),
-        MiddlewareClientMetric('virt_instances', [MiddlewareCommand('virt.instance.query', [], {'extra': {'raw': True}})]),
+        MiddlewareClientMetric(
+            'virt_instances', [MiddlewareCommand('virt.instance.query', [], {'extra': {'raw': True}})]
+        ),
         MiddlewareClientMetric('virt_volumes', [MiddlewareCommand('virt.volume.query')]),
         CommandMetric('incus_commands', [
             Command('incus profile list', 'Incus profiles', serializable=False),
