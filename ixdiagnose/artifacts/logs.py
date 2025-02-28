@@ -7,7 +7,7 @@ class Logs(Artifact):
     name = 'logs'
     individual_item_max_size_limit = 10 * 1024 * 1024
     items = [
-        DirectoryPattern('ctdb'),
+        DirectoryPattern('incus'),
         DirectoryPattern('jobs'),
         DirectoryPattern(
             'netdata', pattern=r'^(access|error|debug|health)\.log$', max_size=2 * 1024 * 1024,
