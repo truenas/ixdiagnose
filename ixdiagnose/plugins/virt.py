@@ -1,4 +1,5 @@
 from ixdiagnose.utils.command import Command
+from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
@@ -13,7 +14,9 @@ class Virt(Plugin):
         ]),
         MiddlewareClientMetric('virt_global_config', [MiddlewareCommand('virt.global.config')]),
         MiddlewareClientMetric(
-            'virt_instances', [MiddlewareCommand('virt.instance.query', [[], {'extra': {'raw': True}}])]
+            'virt_instances', [
+                MiddlewareCommand('virt.instance.query', format_output=remove_keys(['vnc_password']))
+            ]
         ),
         MiddlewareClientMetric('virt_volumes', [MiddlewareCommand('virt.volume.query')]),
         CommandMetric('incus_commands', [
