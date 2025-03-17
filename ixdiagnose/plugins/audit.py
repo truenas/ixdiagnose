@@ -36,10 +36,10 @@ class Audit(Plugin):
             'recent_audited_system_calls', [
                 MiddlewareCommand('audit.query', [{
                     'services': ['SYSTEM'],
-                    'query-filters': {[
+                    'query-filters': [
                         ["event_data.service_action", "!=", "SERVICE_START"],
                         ["event_data.service_action", "!=", "SERVICE_STOP"]
-                    ]},
+                    ],
                     'query-options': {
                         'select': [
                             'audit_id',
