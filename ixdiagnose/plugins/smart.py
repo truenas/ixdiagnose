@@ -11,26 +11,18 @@ from .metrics import MiddlewareClientMetric, PythonMetric
 
 def smart_output(client: MiddlewareClient, context: Any) -> str:
     include = '8,65,66,67,68,69,70,71,128,129,130,131,132,133,134,135,254,259'
-    cp = run(['lsblk', '-ndo', 'name,vendor', '-I', include], check=False)
+    cp = run(['lsblk', '-ndo', 'name,vendor', '-I', include, '-J'], check=False)
     if cp.returncode:
         return cp.stderr
 
     serializable = context['serializable']
     output = {} if serializable else ''
-    for line in cp.stdout.splitlines():
-        line = line.strip()
-        if not line:
-            continue
-
-        try:
-            disk, vendor = line.split()
-        except Exception:
-            continue
-
+    for i in json.loads(cp.stdout)['blockdevices']:
+        disk, vendor = i['name'], i['vendor']
         cmd = ['smartctl', '-x', f'/dev/{disk}']
         nvme_msg = ''
-        if any(('nvme' in disk, vendor.lower().strip() == 'nvme')):
-            # is an nvme device
+        if vendor is not None and vendor.lower().strip() == 'nvme':
+            # is an nvme device sitting behind tri-mode HBA
             nvme_msg = ' (NVMe device detected)'
             cmd.extend(['-d', 'nvme'])
 
