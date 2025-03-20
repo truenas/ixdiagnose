@@ -14,6 +14,7 @@ Testsuite: autopkgtest-pkg-python
 Package: python3-ixdiagnose
 Architecture: any
 Depends: python3-jsonschema,
+         smartmontools,
          ${shlibs:Depends},
          ${misc:Depends},
          ${python3:Depends}
