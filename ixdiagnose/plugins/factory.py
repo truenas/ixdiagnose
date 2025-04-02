@@ -11,6 +11,7 @@ from .cpu import Cpu
 from .cronjob import Cronjob
 from .exceptions import LoggedExceptions
 from .failover import Failover
+from .fc import FibreChannel
 from .ftp import FTP
 from .hardware import Hardware
 from .initshutdown_scripts import InitShutDownScripts
@@ -54,6 +55,7 @@ for plugin in [
     Cpu,
     Cronjob,
     Failover,
+    FibreChannel,
     FTP,
     Hardware,
     InitShutDownScripts,
