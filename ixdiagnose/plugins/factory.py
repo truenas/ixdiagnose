@@ -22,6 +22,7 @@ from .ldap import LDAP
 from .network import Network
 from .nfs import NFS
 from .nvme import NVME
+from .nvmet import NVMet
 from .rbac import RBAC
 from .replication import Replication
 from .reporting import Reporting
@@ -66,6 +67,7 @@ for plugin in [
     Network,
     NFS,
     NVME,
+    NVMet,
     RBAC,
     Replication,
     Reporting,
