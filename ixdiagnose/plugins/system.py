@@ -84,4 +84,5 @@ class System(Plugin):
             MiddlewareCommand('system.info', result_key='system_info'),
         ]),
         MiddlewareClientMetric('system_dataset', [MiddlewareCommand('systemdataset.config')]),
+        MiddlewareClientMetric('system_security', [MiddlewareCommand('system.security.config')]),
     ]
