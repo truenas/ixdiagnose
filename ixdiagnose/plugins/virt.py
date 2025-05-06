@@ -1,9 +1,22 @@
 from ixdiagnose.utils.command import Command
-from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
 from .metrics import CommandMetric, MiddlewareClientMetric
+
+
+def redact_instances(instances: list) -> list:
+    for instance in instances:
+        instance.pop('vnc_password', None)
+        raw = instance['raw']
+
+        if 'config' in raw:
+            raw['config'].pop('user.ix_vnc_config', None)
+
+        if 'expanded_config' in raw:
+            raw['expanded_config'].pop('user.ix_vnc_config', None)
+
+    return instances
 
 
 class Virt(Plugin):
@@ -15,7 +28,11 @@ class Virt(Plugin):
         MiddlewareClientMetric('virt_global_config', [MiddlewareCommand('virt.global.config')]),
         MiddlewareClientMetric(
             'virt_instances', [
-                MiddlewareCommand('virt.instance.query', format_output=remove_keys(['vnc_password']))
+                MiddlewareCommand(
+                    'virt.instance.query',
+                    api_payload=[[], {'extra': {'raw': True}}],
+                    format_output=redact_instances
+                )
             ]
         ),
         MiddlewareClientMetric('virt_volumes', [MiddlewareCommand('virt.volume.query')]),
