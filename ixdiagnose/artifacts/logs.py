@@ -15,6 +15,7 @@ class Logs(Artifact):
         DirectoryPattern('openvpn'),
         DirectoryPattern('proftpd'),
         DirectoryPattern('samba4'),
+        DirectoryPattern('sssd', pattern=r'^(ldap_child|sssd)_?(.*)?(\.log)(\.1)?$'),
         File('app_lifecycle.log'),
         File('app_migrations.log'),
         File('auth.log'),
