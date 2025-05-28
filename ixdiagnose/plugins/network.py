@@ -1,3 +1,4 @@
+import subprocess
 from typing import Any
 
 from ixdiagnose.utils.command import Command
@@ -13,6 +14,16 @@ def link_choices(client: MiddlewareClient, context: Any) -> str:
     configured_interfaces = client.call('interface.get_configured_interfaces')
     for link in client.call('rdma.get_link_choices', True):
         summary[link['netdev']] = link | {'configured_interface': link['netdev'] in configured_interfaces}
+
+    return dumps(summary)
+
+
+def ethtool_callback(client: MiddlewareClient, context: Any) -> str:
+    """Run `ethtool -m interface` for every interface returned by `interface.query`."""
+    summary = {}
+    for interface in client.call('interface.query'):
+        iname = interface['name']
+        summary[iname] = subprocess.run(['ethtool', '-m', interface['name']], capture_output=True).stdout
 
     return dumps(summary)
 
@@ -49,6 +60,7 @@ class Network(Plugin):
             ]
         ),
         PythonMetric('rdma_link_choices', link_choices),
+        PythonMetric('ethtool', ethtool_callback),
     ]
     raw_metrics = [
         CommandMetric(
