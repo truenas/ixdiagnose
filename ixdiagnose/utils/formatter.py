@@ -1,7 +1,10 @@
-from typing import Callable, Dict, List, Union
+from typing import Callable, Iterable, TypeVar
 
 from truenas_api_client.ejson import dumps as middleware_dumps, loads # noqa
 from middlewared.utils import get
+
+
+_T = TypeVar('_T', dict, list)
 
 
 def dumps(*args, **kwargs) -> str:
@@ -15,8 +18,12 @@ def pop_key(output, to_find, to_remove):
         sub_obj.pop(to_remove, None)
 
 
-def remove_keys(keys: List[str]) -> Callable:
-    def remove(output: Union[Dict, List]) -> Union[Dict, List]:
+def remove_keys(keys: Iterable[str]) -> Callable[[_T], _T]:
+    """Return a function that recursively removes the specified keys from its argument.
+
+    :param keys: Keys to remove. Nested keys can be specified with dot notation, e.g. `outer.inner`. 
+    """
+    def remove(output: _T) -> _T:
         if isinstance(output, dict):
             for key in keys:
                 if '.' in key:
@@ -41,7 +48,8 @@ def remove_keys(keys: List[str]) -> Callable:
 
 def redact_str(value):
     if isinstance(value, str):
-        return '*' * len(value)
+        # Replace with an arbitrary number of asterisks.
+        return '*' * 8
     return value
 
 
@@ -51,8 +59,13 @@ def redact_key(output, to_find, to_remove):
         sub_obj[to_remove] = redact_str(sub_obj[to_remove])
 
 
-def redact_keys(keys: List[str]) -> Callable:
-    def redact(output: Union[Dict, List]) -> Union[Dict, List]:
+def redact_keys(keys: Iterable[str]) -> Callable[[_T], _T]:
+    """Return a function that recursively redacts the specified keys
+    from its argument, i.e. replaces the values with '***'.
+
+    :param keys: Keys to redact. Nested keys can be specified with dot notation, e.g. `outer.inner`.
+    """
+    def redact(output: _T) -> _T:
         if isinstance(output, dict):
             for key in keys:
                 if '.' in key:

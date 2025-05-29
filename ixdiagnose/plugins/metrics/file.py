@@ -8,7 +8,13 @@ from .base import Metric
 
 class FileMetric(Metric):
 
-    def __init__(self, name: str, file_path: str, prerequisites: List[Prerequisite] = None, extension: str = '.txt'):
+    def __init__(self, name: str, file_path: str, prerequisites: List[Prerequisite] | None = None, extension: str = '.txt'):
+        """
+        :param name: Name of the output file (not including the file extension).
+        :param file_path: Path of the file to copy into the debug.
+        :param prerequisites: List of `Prerequisite`s that must all evaluate to true before executing this `Metric`.
+        :param extension: File extension to use for the output file.
+        """
         super().__init__(name, prerequisites)
         self.extension: str = extension
         self.file_path: str = file_path

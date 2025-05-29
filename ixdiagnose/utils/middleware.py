@@ -3,7 +3,7 @@ import contextlib
 from dataclasses import dataclass
 from ixdiagnose.config import conf
 from truenas_api_client import Client
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, Optional
 
 
 MiddlewareClient: Client = Client
@@ -25,14 +25,21 @@ class MiddlewareResponse:
 
 class MiddlewareCommand:
     def __init__(
-        self, endpoint: str, api_payload: Optional[List] = None, format_output: Optional[Callable] = None,
+        self, endpoint: str, api_payload: Optional[list] = None, format_output: Optional[Callable[[Any], Any]] = None,
         result_key: Optional[str] = None, job: bool = False,
     ):
-        self.endpoint: str = endpoint
-        self.overridden_format_output: Optional[Callable] = format_output
-        self.payload: List = api_payload or []
-        self.result_key: str = result_key or self.endpoint.replace('.', '_')
-        self.job: bool = job
+        """
+        :param endpoint: The API method to call.
+        :param api_payload: Arguments to pass to `endpoint`.
+        :param format_output: Optional function that takes the API method's result and returns it in a new form.
+        :param result_key: Defaults to `endpoint` with periods replaced with underscores.
+        :param job: `endpoint` is a job.
+        """
+        self.endpoint = endpoint
+        self.overridden_format_output = format_output
+        self.payload = api_payload or []
+        self.result_key = result_key or self.endpoint.replace('.', '_')
+        self.job = job
 
     def format_output(self, output: Any) -> Any:
         return self.overridden_format_output(output) if self.overridden_format_output else output

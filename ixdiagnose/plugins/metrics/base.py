@@ -6,10 +6,10 @@ from typing import Any, List, Tuple
 
 class Metric:
 
-    def __init__(self, name: str, prerequisites: List[Prerequisite] = None):
+    def __init__(self, name: str, prerequisites: List[Prerequisite] | None = None):
         self.execution_context: Any = None
-        self.name: str = name
-        self.prerequisites: List[Prerequisite] = prerequisites or []
+        self.name = name
+        self.prerequisites = prerequisites or []
 
         assert type(name) is str and bool(name) is True
         assert type(self.prerequisites) is list
