@@ -23,7 +23,14 @@ def ethtool_callback(client: MiddlewareClient, context: Any) -> str:
     summary = {}
     for interface in client.call('interface.query'):
         iname = interface['name']
-        summary[iname] = subprocess.run(['ethtool', '-m', iname], capture_output=True, text=True).stdout
+        ethtool_output = subprocess.run(['ethtool', '-m', iname], capture_output=True, text=True).stdout
+
+        iname_stats = {}
+        for line in ethtool_output.splitlines():
+            field_name, value = [field.strip() for field in line.split(':', 1)]
+            iname_stats[field_name] = value
+
+        summary[iname] = iname_stats
 
     return dumps(summary)
 
