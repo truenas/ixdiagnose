@@ -11,7 +11,7 @@ class CloudSync(Plugin):
         MiddlewareClientMetric(
             'cloud_sync', [
                 MiddlewareCommand('cloudsync.query', format_output=remove_keys([
-                    'credentials.attributes', 'encryption_password', 'encryption_salt',
+                    'credentials.provider', 'encryption_password', 'encryption_salt',
                 ])),
             ]
         ),
