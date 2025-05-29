@@ -19,10 +19,12 @@ def link_choices(client: MiddlewareClient, context: Any) -> str:
 
 
 def ethtool_callback(client: MiddlewareClient, context: Any) -> str:
-    """Run `ethtool -m interface` for every interface returned by `interface.query`."""
+    """Run `ethtool -m interface` for every interface, including RDMA."""
     summary = {}
-    for interface in client.call('interface.query'):
-        iname = interface['name']
+    iface_names = {iface['name'] for iface in client.call('interface.query', [], {'select': ['name']})}
+    rdma_names = {rdma['netdev'] for rdma in client.call('rdma.get_link_choices', True)}
+
+    for iname in iface_names | rdma_names:
         ethtool_output = subprocess.run(['ethtool', '-m', iname], capture_output=True, text=True).stdout
 
         iname_stats = {}
