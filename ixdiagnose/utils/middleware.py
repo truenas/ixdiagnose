@@ -3,10 +3,10 @@ import contextlib
 from dataclasses import dataclass
 from ixdiagnose.config import conf
 from truenas_api_client import Client
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, TypeAlias
 
 
-MiddlewareClient: Client = Client
+MiddlewareClient: TypeAlias = Client
 
 
 @contextlib.contextmanager
