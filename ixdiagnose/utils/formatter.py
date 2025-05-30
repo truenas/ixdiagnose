@@ -48,7 +48,7 @@ def remove_keys(keys: Iterable[str]) -> Callable[[_T], _T]:
 
 def redact_str(value):
     if isinstance(value, str):
-        # Replace with an arbitrary number of asterisks.
+        # Replace with an arbitrary number of asterisks to conceal length.
         return '*' * 8
     return value
 
