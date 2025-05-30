@@ -1,7 +1,8 @@
+from ixdiagnose.utils.command import Command
 from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
-from .metrics import MiddlewareClientMetric
+from .metrics import MiddlewareClientMetric, CommandMetric
 
 
 class IPMI(Plugin):
@@ -14,5 +15,9 @@ class IPMI(Plugin):
             MiddlewareCommand('ipmi.lan.query', result_key='lan_info'),
             MiddlewareCommand('ipmi.sensors.query', result_key='sensors_info'),
             MiddlewareCommand('ipmi.chassis.info', result_key='chassis_info'),
-        ])
+        ]),
+        CommandMetric(
+            'ipmitool',
+            [Command(['ipmitool', 'fru', 'print'], 'FRU Manufacturing Details', serializable=False)],
+        ),
     ]
