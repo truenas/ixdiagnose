@@ -31,6 +31,7 @@ from .services import Services
 from .smart import SMART
 from .smb import SMB
 from .snmp import SNMP
+from .ssh import SSH
 from .ssl import SSL
 from .sysctl import Sysctl
 from .system import System
@@ -76,6 +77,7 @@ for plugin in [
     SMART,
     SMB,
     SNMP,
+    SSH,
     SSL,
     Sysctl,
     System,
