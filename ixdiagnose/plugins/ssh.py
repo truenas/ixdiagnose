@@ -12,11 +12,9 @@ class SSH(Plugin):
             'ssh_config',
             [MiddlewareCommand(
                 'ssh.config',
-                format_output=redact_keys([
-                    'privatekey', 'host_dsa_key', 'host_dsa_key_pub', 'host_dsa_key_cert_pub', 'host_ecdsa_key',
-                    'host_ecdsa_key_pub', 'host_ecdsa_key_cert_pub', 'host_ed25519_key', 'host_ed25519_key_pub',
-                    'host_ed25519_key_cert_pub', 'host_key', 'host_key_pub', 'host_rsa_key', 'host_rsa_key_pub',
-                    'host_rsa_key_cert_pub',
+                format_output=redact_keys(include=[
+                    'id', 'bindiface', 'tcpport', 'password_login_groups', 'passwordauth', 'kerberosauth', 'tcpfwd',
+                    'compression', 'sftp_log_level', 'sftp_log_facility', 'weak_ciphers', 'options',
                 ])
             )]
         ),
