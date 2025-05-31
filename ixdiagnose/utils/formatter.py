@@ -21,7 +21,7 @@ def pop_key(output, to_find, to_remove):
 def remove_keys(keys: Iterable[str]) -> Callable[[_T], _T]:
     """Return a function that recursively removes the specified keys from its argument.
 
-    :param keys: Keys to remove. Nested keys can be specified with dot notation, e.g. `outer.inner`. 
+    :param keys: Keys to remove. Nested keys can be specified with dot notation, e.g. `outer.inner`.
     """
     def remove(output: _T) -> _T:
         if isinstance(output, dict):
