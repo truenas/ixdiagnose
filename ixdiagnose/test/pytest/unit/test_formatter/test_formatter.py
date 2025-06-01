@@ -3,12 +3,13 @@ import pytest
 from ixdiagnose.utils.formatter import remove_keys, redact_keys, REDACTED
 
 
-test_input = {
-    'a': {'f1': 1, 'f2': {'f3': 3, 'f4': 4}},
-    'b': {'f1': 1, 'f2': {'f3': 3, 'f4': 4}},
-    'c': {'f1': 1, 'f2': {'f3': 3, 'f4': 4}},
-    'd': {'f1': 1, 'f2': {'f3': 3, 'f4': 4}},
-}
+def formatter_input():
+    return {
+        'a': {'f1': 1, 'f2': {'f3': 3, 'f4': 4}},
+        'b': {'f1': 1, 'f2': {'f3': 3, 'f4': 4}},
+        'c': {'f1': 1, 'f2': {'f3': 3, 'f4': 4}},
+        'd': {'f1': 1, 'f2': {'f3': 3, 'f4': 4}},
+    }
 
 
 @pytest.mark.parametrize(
@@ -156,7 +157,7 @@ def test_remove_keys(keys, input_data, expected_output):
     [
         (
             {'include': ('a', 'b.f1', 'd.f2.f3')},
-            test_input,
+            formatter_input(),
             {
                 'a': {'f1': 1, 'f2': {'f3': 3, 'f4': 4}},
                 'b': {'f1': 1, 'f2': REDACTED},
@@ -166,7 +167,7 @@ def test_remove_keys(keys, input_data, expected_output):
         ),
         (
             {'include': ('a', 'b.f1', 'd.f2.f3')},
-            [test_input],
+            [formatter_input()],
             [{
                 'a': {'f1': 1, 'f2': {'f3': 3, 'f4': 4}},
                 'b': {'f1': 1, 'f2': REDACTED},
@@ -176,7 +177,7 @@ def test_remove_keys(keys, input_data, expected_output):
         ),
         (
             {'exclude': ('a', 'b.f1', 'd.f2.f3')},
-            test_input,
+            formatter_input(),
             {
                 'a': REDACTED,
                 'b': {'f1': REDACTED, 'f2': {'f3': 3, 'f4': 4}},
@@ -186,7 +187,7 @@ def test_remove_keys(keys, input_data, expected_output):
         ),
         (
             {'exclude': ('a', 'b.f1', 'd.f2.f3')},
-            [test_input],
+            [formatter_input()],
             [{
                 'a': REDACTED,
                 'b': {'f1': REDACTED, 'f2': {'f3': 3, 'f4': 4}},

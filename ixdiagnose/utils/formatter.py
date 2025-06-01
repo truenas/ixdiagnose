@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import Callable, Iterable, MutableMapping, TypeVar, overload
 
-from truenas_api_client.ejson import dumps as middleware_dumps, loads # noqa
+from truenas_api_client.ejson import dumps as middleware_dumps, loads  # noqa
 from middlewared.utils import get
 
 
@@ -62,7 +62,7 @@ def _key_tree(keys: Iterable[str]) -> defaultdict[str, set[str]]:
     result = defaultdict(set)
     for k in keys:
         if '.' in k:
-            pk, ck = k.split('.',1)
+            pk, ck = k.split('.', 1)
             result[pk].add(ck)
         else:
             result[k]  # initialize the set if not already initialized
@@ -73,6 +73,8 @@ def _key_tree(keys: Iterable[str]) -> defaultdict[str, set[str]]:
 def redact_keys(*, include: Iterable[str]) -> Callable[[_T], _T]: ...
 @overload
 def redact_keys(*, exclude: Iterable[str]) -> Callable[[_T], _T]: ...
+
+
 def redact_keys(*, include: Iterable[str] | None = None, exclude: Iterable[str] | None = None) -> Callable[[_T], _T]:
     """Return a function that recursively redacts keys from its argument, i.e. replaces the values with '***'.
 
