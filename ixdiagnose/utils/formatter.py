@@ -1,4 +1,5 @@
 from collections import defaultdict
+import functools
 from typing import Callable, Iterable, MutableMapping, TypeVar, overload
 
 from truenas_api_client.ejson import dumps as middleware_dumps, loads  # noqa
@@ -103,4 +104,4 @@ def redact_keys(*, include: Iterable[str] | None = None, exclude: Iterable[str] 
                 redact(item, keys, include=include)
         return data
 
-    return lambda x: redact(x, include if include_provided else exclude, include=include_provided)
+    return functools.partial(redact, keys=include if include_provided else exclude, include=include_provided)
