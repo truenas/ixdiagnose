@@ -1,7 +1,17 @@
-from typing import Callable, Dict, List, Union
+from collections import defaultdict
+import functools
+from typing import Callable, Iterable, MutableMapping, TypeVar, overload
 
-from truenas_api_client.ejson import dumps as middleware_dumps, loads # noqa
+from truenas_api_client.ejson import dumps as middleware_dumps, loads  # noqa
 from middlewared.utils import get
+
+
+_Iter = TypeVar('_Iter', dict, Iterable)
+_T = TypeVar('_T')
+
+
+REDACTED = '*' * 8
+"""Replace with an arbitrary number of asterisks to conceal length."""
 
 
 def dumps(*args, **kwargs) -> str:
@@ -15,8 +25,12 @@ def pop_key(output, to_find, to_remove):
         sub_obj.pop(to_remove, None)
 
 
-def remove_keys(keys: List[str]) -> Callable:
-    def remove(output: Union[Dict, List]) -> Union[Dict, List]:
+def remove_keys(keys: Iterable[str]) -> Callable[[_Iter], _Iter]:
+    """Return a function that recursively removes the specified keys from its argument.
+
+    :param keys: Keys to remove. Nested keys can be specified with dot notation, e.g. `outer.inner`.
+    """
+    def remove(output: _Iter) -> _Iter:
         if isinstance(output, dict):
             for key in keys:
                 if '.' in key:
@@ -37,3 +51,57 @@ def remove_keys(keys: List[str]) -> Callable:
 
         return output
     return remove
+
+
+def _key_tree(keys: Iterable[str]) -> defaultdict[str, set[str]]:
+    """Convert an iterable of dot-notation keys into a mapping of top-level keys to their sub-keys.
+
+    Example:
+
+        {'a', 'b.c', 'e.f', 'e.g.h'} -> {'a': set(), 'b': {'c'}, 'e': {'f', 'g.h'}}
+    """
+    result = defaultdict(set)
+    for k in keys:
+        if '.' in k:
+            pk, ck = k.split('.', 1)
+            result[pk].add(ck)
+        else:
+            result[k]  # initialize the set if not already initialized
+    return result
+
+
+@overload
+def redact_keys(*, include: Iterable[str]) -> Callable[[_T], _T]: ...
+@overload
+def redact_keys(*, exclude: Iterable[str]) -> Callable[[_T], _T]: ...
+
+
+def redact_keys(*, include: Iterable[str] | None = None, exclude: Iterable[str] | None = None) -> Callable[[_T], _T]:
+    """Return a function that recursively redacts keys from its argument, i.e. replaces the values with '***'.
+
+    Nested keys can be specified with dot notation, e.g. `outer.inner`. Specify either keys to include or keys to
+    exclude, but not both.
+
+    :param include: Redact all keys not provided.
+    :param exclude: Redact all keys provided.
+    :return: A function that takes a data structure and applies the specified redactions to it.
+    """
+    include_provided = bool(include)
+    if include_provided is bool(exclude):
+        raise ValueError('Either provide keys to include or exclude but not both')
+
+    def redact(data: _T, keys: Iterable[str], *, include: bool) -> _T:
+        if isinstance(data, MutableMapping):
+            keys = _key_tree(keys)
+            for key in data:
+                if subkeys := keys.get(key):
+                    redact(data[key], subkeys, include=include)
+                elif (subkeys is None) is include:
+                    # key not in keys to include, OR key is in keys to exclude
+                    data[key] = REDACTED
+        elif isinstance(data, Iterable):
+            for item in data:
+                redact(item, keys, include=include)
+        return data
+
+    return functools.partial(redact, keys=include if include_provided else exclude, include=include_provided)
