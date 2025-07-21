@@ -9,6 +9,7 @@ class Logs(Artifact):
     items = [
         DirectoryPattern('incus'),
         DirectoryPattern('jobs'),
+        DirectoryPattern('libvirt'),
         DirectoryPattern(
             'netdata', pattern=r'^(access|error|debug|health)\.log$', max_size=2 * 1024 * 1024,
         ),
