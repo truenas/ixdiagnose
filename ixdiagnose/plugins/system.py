@@ -69,7 +69,6 @@ class System(Plugin):
         ]),
         MiddlewareClientMetric('alerts', [MiddlewareCommand('alert.list')]),
         MiddlewareClientMetric('alerts_sources_stats', [MiddlewareCommand('alert.sources_stats')]),
-        MiddlewareClientMetric('middleware_tasks', [MiddlewareCommand('core.get_tasks')]),
         MiddlewareClientMetric('middleware_thread_stacks', [MiddlewareCommand('core.threads_stacks')]),
         MiddlewareClientMetric(
             'system_global_id', [MiddlewareCommand('system.global.id', result_key='System Global ID')],
