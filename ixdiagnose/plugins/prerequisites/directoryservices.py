@@ -14,13 +14,11 @@ class ActiveDirectoryStatePrerequisite(Prerequisite):
 
 
 class DomainJoinedPrerequisite(Prerequisite):
-    # Check whether the directory service has some join state 
+    # Check whether the directory service has some join state
     def evaluate_impl(self) -> bool:
         response = MiddlewareCommand('directoryservices.status').execute()
 
-        return (response.output or {}).get('type') in ('IPA', 'ACTIVEDIRECTORY') 
+        return (response.output or {}).get('type') in ('IPA', 'ACTIVEDIRECTORY')
 
     def __str__(self):
         return 'Domain joined state check'
-
-

@@ -1,7 +1,6 @@
 from ixdiagnose.utils.command import Command
 from ixdiagnose.utils.formatter import remove_keys
 from ixdiagnose.utils.middleware import MiddlewareCommand
-from typing import Optional
 
 from .base import Plugin
 from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric
