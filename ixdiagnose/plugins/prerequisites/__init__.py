@@ -1,4 +1,4 @@
-from .active_directory import ActiveDirectoryStatePrerequisite, LDAPStatePrerequisite
+from .directoryservices import ActiveDirectoryStatePrerequisite, DomainJoinedPrerequisite
 from .base import Prerequisite
 from .failover import FailoverPrerequisite
 from .fc import FibreChannelPrerequisite
@@ -7,9 +7,9 @@ from .vm import VMPrerequisite
 
 __all__ = [
     'ActiveDirectoryStatePrerequisite',
+    'DomainJoinedPrerequisite',
     'FailoverPrerequisite',
     'FibreChannelPrerequisite',
-    'LDAPStatePrerequisite',
     'VMPrerequisite',
     'Prerequisite',
     'ServiceRunningPrerequisite',

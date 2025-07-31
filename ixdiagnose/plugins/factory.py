@@ -1,6 +1,5 @@
 from ixdiagnose.utils.factory import Factory
 
-from .active_directory import ActiveDirectory
 from .apps import Apps
 from .audit import Audit
 from .certificates import Certificates
@@ -9,6 +8,7 @@ from .cloud_sync import CloudSync
 from .containers import Containers
 from .cpu import Cpu
 from .cronjob import Cronjob
+from .directoryservices import DirectoryServices
 from .exceptions import LoggedExceptions
 from .failover import Failover
 from .fc import FibreChannel
@@ -18,7 +18,6 @@ from .initshutdown_scripts import InitShutDownScripts
 from .ipmi import IPMI
 from .iscsi import ISCSI
 from .jobs import CoreGetJobs
-from .ldap import LDAP
 from .network import Network
 from .nfs import NFS
 from .nvme import NVME
@@ -47,7 +46,6 @@ from .zfs import ZFS
 
 plugin_factory = Factory()
 for plugin in [
-    ActiveDirectory,
     Apps,
     Audit,
     Certificates,
@@ -57,6 +55,7 @@ for plugin in [
     CoreGetJobs,
     Cpu,
     Cronjob,
+    DirectoryServices,
     Failover,
     FibreChannel,
     FTP,
@@ -64,7 +63,6 @@ for plugin in [
     InitShutDownScripts,
     IPMI,
     ISCSI,
-    LDAP,
     LoggedExceptions,
     Network,
     NFS,
