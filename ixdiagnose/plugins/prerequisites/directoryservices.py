@@ -7,7 +7,7 @@ class ActiveDirectoryStatePrerequisite(Prerequisite):
 
     def evaluate_impl(self) -> bool:
         response = MiddlewareCommand('directoryservices.status').execute()
-        return (response.output or {}).get('type') != 'ACTIVEDIRECTORY'
+        return (response.output or {}).get('type') == 'ACTIVEDIRECTORY'
 
     def __str__(self):
         return 'Active directory service state check'
