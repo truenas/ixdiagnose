@@ -7,5 +7,5 @@ class Crashdump(Artifact):
     name = 'crashdump'
     individual_item_max_size_limit = 1 * 1024 * 1024
     items = [
-        Glob('pstore/*/dmesg.txt'),
+        Glob('pstore/*/dmesg.txt', relative_to='/var/lib/systemd'),
     ]

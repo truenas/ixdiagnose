@@ -12,10 +12,14 @@ from .directory import copy2, get_directory_size
 
 class Glob(Item):
 
-    def __init__(self, name: str, max_size: Optional[int] = None, to_skip_items: Optional[list] = None):
+    def __init__(
+        self, name: str, max_size: Optional[int] = None, to_skip_items: Optional[list] = None,
+        relative_to: Optional[str] = None
+    ):
         super().__init__(name, max_size)
         self.init_vars()
         self.to_skip_items: List[str] = to_skip_items or []
+        self.relative_to: Optional[str] = relative_to
 
     def init_vars(self) -> None:
         self.items: List[dict] = []
@@ -76,7 +80,11 @@ class Glob(Item):
         copied_items = []
         for item in filter(lambda i: i['path'] not in self.to_skip_items, self.items):
 
-            destination_parent_path = os.path.join(destination_path, os.path.dirname(item['path'])[1:])
+            if self.relative_to:
+                relative_path = os.path.relpath(item['path'], self.relative_to)
+                destination_parent_path = os.path.join(destination_path, os.path.dirname(relative_path))
+            else:
+                destination_parent_path = os.path.join(destination_path, os.path.dirname(item['path'])[1:])
             os.makedirs(destination_parent_path, exist_ok=True)
             if item['type'] == 'file':
                 shutil.copy2(item['path'], destination_parent_path)
