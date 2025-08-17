@@ -2,11 +2,11 @@ import json
 
 from typing import Any
 
-from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
+from ixdiagnose.utils.middleware import MiddlewareClient
 from ixdiagnose.utils.run import run
 
 from .base import Plugin
-from .metrics import MiddlewareClientMetric, PythonMetric
+from .metrics import PythonMetric
 
 
 def smart_output(client: MiddlewareClient, context: Any) -> str:
@@ -51,16 +51,6 @@ def smart_output(client: MiddlewareClient, context: Any) -> str:
 
 class SMART(Plugin):
     name = 'smart'
-    metrics = [
-        MiddlewareClientMetric(
-            'smartd_config', [
-                MiddlewareCommand(
-                    'service.query', [[['service', '=', 'smartd']], {'get': True}], result_key='SMARTD Status'
-                ),
-                MiddlewareCommand('smart.test.query', result_key='SMART Tests'),
-            ]
-        ),
-    ]
     raw_metrics = [
         PythonMetric(
             'smart_out', smart_output, description='SMART output', serializable=False, context={'serializable': False},
