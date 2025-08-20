@@ -25,6 +25,7 @@ def list_type(values: str) -> List[str]:
 def update_configuration(
     timeout: int, compress: Optional[str] = None, debug_path: Optional[str] = None,
     excluded_artifacts: Optional[List[str]] = None, excluded_plugins: Optional[List[str]] = None,
+    included_plugins: Optional[List[str]] = None,
 ) -> None:
     if compress:
         conf.compress = True
@@ -42,6 +43,10 @@ def update_configuration(
     if excluded_plugins:
         conf.exclude_plugins = excluded_plugins
         text.append(f'- exclude plugins: {excluded_plugins}')
+
+    if included_plugins:
+        conf.include_plugins = included_plugins
+        text.append(f'- include plugins: {included_plugins}')
 
     if debug_path:
         conf.debug_path = debug_path
@@ -113,17 +118,25 @@ debug_path_option = click.option(
     '-Xp', '--exclude-plugins', type=list_type,
     help='plugins you want to exclude in debug (smb,vm,network). A comma separated list without space or in quotes'
 )
+@click.option(
+    '-Ip', '--include-plugins', type=list_type,
+    help='plugins you want to include in debug (smb,vm,network). A comma separated list without space or in quotes'
+)
 def run(
     serialized: bool, compress: str, debug_path: str, timeout: int, exclude_artifacts: List[str],
-    exclude_plugins: List[str]
+    exclude_plugins: List[str], include_plugins: List[str]
 ) -> None:
+    # Validate mutual exclusion of include and exclude plugins
+    if exclude_plugins and include_plugins:
+        raise click.UsageError('Cannot use both --exclude-plugins and --include-plugins at the same time')
+
     if serialized:
         conf.structured_data = True
         text.append('- generate debug in structured form.')
     else:
         text.append('- generate debug in default non-structured form.')
 
-    update_configuration(timeout, compress, debug_path, exclude_artifacts, exclude_plugins)
+    update_configuration(timeout, compress, debug_path, exclude_artifacts, exclude_plugins, include_plugins)
 
     click.echo('\n'.join(text))
     path = progress_bar(generate_debug)
@@ -152,8 +165,16 @@ def artifact(debug_path: str, timeout: int, exclude: List[str]) -> None:
     '-X', '--exclude', type=list_type,
     help='plugins you want to exclude in debug (smb,vm,network). A comma separated list without space or in quotes'
 )
-def plugin(debug_path: str, timeout: int, exclude: List[str]) -> None:
-    update_configuration(timeout, debug_path=debug_path, excluded_plugins=exclude)
+@click.option(
+    '-I', '--include', type=list_type,
+    help='plugins you want to include in debug (smb,vm,network). A comma separated list without space or in quotes'
+)
+def plugin(debug_path: str, timeout: int, exclude: List[str], include: List[str]) -> None:
+    # Validate mutual exclusion of include and exclude plugins
+    if exclude and include:
+        raise click.UsageError('Cannot use both --exclude and --include at the same time')
+
+    update_configuration(timeout, debug_path=debug_path, excluded_plugins=exclude, included_plugins=include)
 
     click.echo('\n'.join(text))
     progress_bar(generate_plugins_debug)
