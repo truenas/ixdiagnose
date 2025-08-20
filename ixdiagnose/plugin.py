@@ -11,7 +11,15 @@ from .utils.paths import get_plugin_base_dir
 def generate_plugins_debug(percentage: int = 0, total_percentage: int = 100) -> None:
     os.makedirs(get_plugin_base_dir(), exist_ok=True)
 
-    to_execute_plugins = {k: v for k, v in plugin_factory.get_items().items() if k not in conf.exclude_plugins}
+    # Filter plugins based on include/exclude configuration
+    all_plugins = plugin_factory.get_items()
+    if conf.include_plugins:
+        # If include plugins is specified, only run those plugins
+        to_execute_plugins = {k: v for k, v in all_plugins.items() if k in conf.include_plugins}
+    else:
+        # Otherwise, run all plugins except excluded ones
+        to_execute_plugins = {k: v for k, v in all_plugins.items() if k not in conf.exclude_plugins}
+
     plugin_percentage = total_percentage / (len(to_execute_plugins) or 1)  # We want to handle this quietly
     plugins_report = {}
     for plugin_name, plugin in to_execute_plugins.items():

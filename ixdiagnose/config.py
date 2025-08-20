@@ -15,6 +15,7 @@ class Configuration:
             'debug_path': {'type': ['string', 'null']},
             'exclude_artifacts': {'type': 'array', 'items': {'type': 'string'}},
             'exclude_plugins': {'type': 'array', 'items': {'type': 'string'}},
+            'include_plugins': {'type': 'array', 'items': {'type': 'string'}},
             'structured_data': {'type': 'boolean'},
             'timeout': {'type': 'integer'},
         },
@@ -27,6 +28,7 @@ class Configuration:
         self.debug_path: Optional[str] = None
         self.exclude_artifacts: List[str] = []
         self.exclude_plugins: List[str] = []
+        self.include_plugins: List[str] = []
         self.structured_data: bool = False
         self.timeout: int = TIMEOUT_DEFAULT
 

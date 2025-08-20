@@ -21,6 +21,7 @@ def reset_config():
     conf.debug_path = None
     conf.exclude_artifacts = []
     conf.exclude_plugins = []
+    conf.include_plugins = []
     conf.structured_data = False
     conf.timeout = 20
 
@@ -122,3 +123,55 @@ def test_path_validation(cli):
     assert result2.exit_code == 2
     assert 'Path must be absolute' in result.output
     assert 'Path must be absolute' in result2.output
+
+
+def test_plugin_with_include_option(cli):
+    result = runner.invoke(main, ['plugin', '--debug-path', '/tmp/debug', '-I', 'apps,system'])
+    assert result.exit_code == 0
+    assert 'include plugins: [\'apps\', \'system\']' in result.output
+    assert 'Generated plugins\' dump at /tmp/debug' in result.output
+
+
+def test_plugin_mutual_exclusion_include_exclude(cli):
+    result = runner.invoke(main, ['plugin', '--debug-path', '/tmp/debug', '-X', 'vm', '-I', 'apps'])
+    assert result.exit_code == 2
+    assert 'Cannot use both --exclude and --include at the same time' in result.output
+
+
+def test_run_with_include_plugins(cli):
+    result = runner.invoke(main, ['run', '-Ip', 'apps,system'])
+    assert result.exit_code == 0
+    assert 'include plugins: [\'apps\', \'system\']' in result.output
+
+
+def test_run_mutual_exclusion_include_exclude_plugins(cli):
+    result = runner.invoke(main, ['run', '-Xp', 'vm', '-Ip', 'apps'])
+    assert result.exit_code == 2
+    assert 'Cannot use both --exclude-plugins and --include-plugins at the same time' in result.output
+
+
+def test_run_include_plugins_with_other_options(cli):
+    result = runner.invoke(
+        main, [
+            'run', '-s', '--debug-path', '/tmp/debug',
+            '-t', '5', '-Xa', 'logs', '-Ip', 'apps,system'
+        ]
+    )
+    assert result.exit_code == 0
+    assert 'generate debug in structured form.' in result.output
+    assert 'timeout for debug generation: 5 seconds.' in result.output
+    assert 'debug path set to /tmp/debug' in result.output
+    assert 'exclude artifacts: [\'logs\']' in result.output
+    assert 'include plugins: [\'apps\', \'system\']' in result.output
+
+
+def test_plugin_with_no_include_argument(cli):
+    result = runner.invoke(main, ['plugin', '--debug-path', '/tmp/debug', '-I'])
+    assert result.exit_code == 2
+    assert 'Option \'-I\' requires an argument.' in result.output
+
+
+def test_run_with_no_include_plugins_argument(cli):
+    result = runner.invoke(main, ['run', '-Ip'])
+    assert result.exit_code == 2
+    assert 'Option \'-Ip\' requires an argument.' in result.output
