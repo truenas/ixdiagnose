@@ -22,20 +22,38 @@ def docker_container_inspect(middleware_client, context):
         for container in containers:
             # Get container attributes
             attrs = container.attrs
+            state = attrs.get('State', {})
+
+            health_data = state.get('Health', {})
+            if health_data:
+                health_info = {
+                    'status': health_data.get('Status', None),
+                    'failing_streak': health_data.get('FailingStreak', 0),
+                    'log_count': len(health_data.get('Log', []))
+                }
+            else:
+                health_info = None
+
             container_info = {
                 'name': container.name,
                 'id': container.short_id,
                 'full_id': container.id,
                 'status': container.status,
                 'restart_count': attrs.get('RestartCount', 0),
-                'started_at': attrs.get('State', {}).get('StartedAt', ''),
-                'finished_at': attrs.get('State', {}).get('FinishedAt', ''),
-                'exit_code': attrs.get('State', {}).get('ExitCode', ''),
-                'oom_killed': attrs.get('State', {}).get('OOMKilled', False),
-                'pid': attrs.get('State', {}).get('Pid', ''),
+                'started_at': state.get('StartedAt', ''),
+                'finished_at': state.get('FinishedAt', ''),
+                'exit_code': state.get('ExitCode', ''),
+                'oom_killed': state.get('OOMKilled', False),
+                'pid': state.get('Pid', ''),
+                'running': state.get('Running', False),
+                'paused': state.get('Paused', False),
+                'restarting': state.get('Restarting', False),
+                'dead': state.get('Dead', False),
+                'error': state.get('Error', ''),
                 'image': attrs.get('Config', {}).get('Image', ''),
                 'created': attrs.get('Created', ''),
                 'restart_policy': attrs.get('HostConfig', {}).get('RestartPolicy', {}),
+                'health': health_info,
             }
             containers_info.append(container_info)
 
