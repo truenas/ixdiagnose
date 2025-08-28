@@ -2,6 +2,7 @@ from .directoryservices import ActiveDirectoryStatePrerequisite, DomainJoinedPre
 from .base import Prerequisite
 from .failover import FailoverPrerequisite
 from .fc import FibreChannelPrerequisite
+from .jbof import JBOFPrerequisite
 from .service import ServiceRunningPrerequisite
 from .vm import VMPrerequisite
 
@@ -10,6 +11,7 @@ __all__ = [
     'DomainJoinedPrerequisite',
     'FailoverPrerequisite',
     'FibreChannelPrerequisite',
+    'JBOFPrerequisite',
     'VMPrerequisite',
     'Prerequisite',
     'ServiceRunningPrerequisite',
