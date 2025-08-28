@@ -9,6 +9,7 @@ from ixdiagnose.utils.run import run
 
 from .base import Plugin
 from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric, PythonMetric
+from .prerequisites import JBOFPrerequisite
 
 
 def nvdimm_info(client: MiddlewareClient, context: typing.Any) -> str:
@@ -32,6 +33,12 @@ class Hardware(Plugin):
             'dmidecode', [
                 Command(['dmidecode'], 'Dmidecode', serializable=False),
             ],
+        ),
+        CommandMetric(
+            "jbof_view", [
+                Command(["jbof_view.py", "--both"], "jbof_view.py --both", serializable=False),
+            ],
+            prerequisites=[JBOFPrerequisite()],
         ),
         CommandMetric(
             'pci', [
