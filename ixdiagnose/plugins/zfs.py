@@ -128,8 +128,8 @@ class ZFS(Plugin):
         CommandMetric(
             'lsblk', [
                 Command(
-                    ['lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230'],
-                    'lsblk -o NAME,FSTYPE,LABEL,UUID,PARTUUID -l -e 230', serializable=False
+                    ['lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID,SERIAL,WWN', '-l', '-e', '230'],
+                    'lsblk -o NAME,FSTYPE,LABEL,UUID,PARTUUID,SERIAL,WWN -l -e 230', serializable=False
                 ),
             ]
         ),
@@ -141,8 +141,8 @@ class ZFS(Plugin):
         CommandMetric(
             'lsblk', [
                 Command(
-                    ['lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID', '-l', '-e', '230', '-J'],
-                    'lsblk -o NAME,FSTYPE,LABEL,UUID,PARTUUID -l -e 230 -J'
+                    ['lsblk', '-o', 'NAME,FSTYPE,LABEL,UUID,PARTUUID,SERIAL,WWN', '-l', '-e', '230', '-J'],
+                    'lsblk -o NAME,FSTYPE,LABEL,UUID,PARTUUID,SERIAL,WWN -l -e 230 -J'
                 ),
             ]
         ),
