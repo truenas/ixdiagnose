@@ -3,7 +3,7 @@ import functools
 from typing import Callable, Iterable, MutableMapping, TypeVar, overload
 
 from truenas_api_client.ejson import dumps as middleware_dumps, loads  # noqa
-from middlewared.utils import get
+from middlewared.utils.filter_list import get
 
 
 _Iter = TypeVar('_Iter', dict, Iterable)
