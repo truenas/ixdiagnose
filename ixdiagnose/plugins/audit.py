@@ -18,7 +18,7 @@ class Audit(Plugin):
                 MiddlewareCommand('audit.query', [{
                     'services': ['MIDDLEWARE'],
                     'query-filters': [
-                        ['event', '=', 'METHOD_CALL']
+                        ['event', '=', 'METHOD_CALL'],
                         ['event_data.method', '!=', 'auth.generate_token']
                     ],
                     'query-options': {
