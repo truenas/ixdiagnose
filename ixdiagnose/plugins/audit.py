@@ -17,17 +17,21 @@ class Audit(Plugin):
             'recent_audited_method_calls', [
                 MiddlewareCommand('audit.query', [{
                     'services': ['MIDDLEWARE'],
-                    'query-filters': [['event', '=', 'METHOD_CALL']],
+                    'query-filters': [
+                        ['event', '=', 'METHOD_CALL']
+                        ['event_data.method', '!=', 'auth.generate_token']
+                    ],
                     'query-options': {
                         'select': [
                             'audit_id',
                             'message_timestamp',
-                            'service_data.origin',
-                            'service_data.credentials',
+                            ['service_data.origin', 'origin'],
+                            ['service_data.credentials', 'credentials'],
                             'event_data',
                             'success'
                         ],
-                        'order_by': ['-message_timestamp']
+                        'order_by': ['-message_timestamp'],
+                        'limit': 1000
                     }
                 }]),
             ],
