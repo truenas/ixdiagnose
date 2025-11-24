@@ -13,7 +13,7 @@ class DirectoryServices(Plugin):
         MiddlewareClientMetric(
             'base_information', [
                 MiddlewareCommand('directoryservices.status'),
-                MiddlewareCommand('directoryservices.config')
+                MiddlewareCommand('directoryservices.config', format_output=remove_keys(['credential']))
             ]
         ),
         MiddlewareClientMetric(
