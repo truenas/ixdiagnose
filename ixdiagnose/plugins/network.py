@@ -3,9 +3,7 @@ from typing import Any
 
 from ixdiagnose.utils.command import Command
 from ixdiagnose.utils.formatter import dumps
-from ixdiagnose.utils.middleware import (
-    AdminMiddlewareCommand, MiddlewareClient, MiddlewareCommand
-)
+from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
 
 from .base import Plugin
 from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric, PythonMetric

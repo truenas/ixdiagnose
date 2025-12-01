@@ -10,7 +10,6 @@ from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric, PythonMe
 
 
 def get_smb_shares(client: MiddlewareClient, context: Any) -> str:
-    command = ''
     smb_shares = client.call('sharing.smb.query')
     for smb_share in smb_shares:
         smb_share['acl'] = client.call('sharing.smb.getacl', {'share_name': smb_share['name']})
@@ -62,7 +61,7 @@ class SMB(Plugin):
         ),
         CommandMetric(
             'samba_account_info', [
-                Command(['pdbedit', '-Lv'], 'Passdb list', serializable=False), 
+                Command(['pdbedit', '-Lv'], 'Passdb list', serializable=False),
                 Command(['net', 'groupmap', 'list', '-v'], 'Groupmap list', serializable=False)
             ]
         ),

@@ -1,4 +1,4 @@
-from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
+from ixdiagnose.utils.middleware import MiddlewareCommand
 
 from .base import Plugin
 from .metrics import MiddlewareClientMetric
