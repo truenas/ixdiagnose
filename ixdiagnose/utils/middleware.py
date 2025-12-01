@@ -12,6 +12,8 @@ MiddlewareClient: TypeAlias = Client
 @contextlib.contextmanager
 def get_middleware_client() -> Client:
     with Client(call_timeout=conf.timeout) as client:
+        # Drop privilege set to readonly admin to ensure that API responses with Secret fields are always redacted
+        client.call('privilege.become_readonly')
         yield client
 
 
