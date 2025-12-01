@@ -4,7 +4,9 @@ import typing
 
 from ixdiagnose.utils.command import Command
 from ixdiagnose.utils.formatter import remove_keys
-from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
+from ixdiagnose.utils.middleware import (
+    MiddlewareClient, MiddlewareCommand, AdminMiddlewareCommand
+)
 from ixdiagnose.utils.run import run
 
 from .base import Plugin
@@ -51,11 +53,11 @@ class Hardware(Plugin):
             ],
         ),
         FileMetric('usb_devices', '/sys/kernel/debug/usb/devices'),
-        MiddlewareClientMetric('disks', [MiddlewareCommand('device.get_disks')]),
+        MiddlewareClientMetric('disks', [AdminMiddlewareCommand('device.get_disks')]),
         MiddlewareClientMetric('disks_config', [MiddlewareCommand('disk.query')]),
         MiddlewareClientMetric('enclosures', [MiddlewareCommand('enclosure2.query')]),
         MiddlewareClientMetric('virtualization_variant', [MiddlewareCommand('hardware.virtualization.variant')]),
-        MiddlewareClientMetric('is_virtualized', [MiddlewareCommand('hardware.virtualization.is_virtualized')]),
+        MiddlewareClientMetric('is_virtualized', [AdminMiddlewareCommand('hardware.virtualization.is_virtualized')]),
         MiddlewareClientMetric('jbof_config', [MiddlewareCommand('jbof.query',
                                                                  format_output=remove_keys(['mgmt_password']))]),
         PythonMetric('nvdimm_info', nvdimm_info, serializable=False),

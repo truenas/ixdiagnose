@@ -1,4 +1,5 @@
 from ixdiagnose.utils.command import Command
+from ixdiagnose.utils.formatter import dumps
 from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
 from ixdiagnose.utils.run import run
 from typing import Any
@@ -11,30 +12,34 @@ from .metrics import CommandMetric, FileMetric, MiddlewareClientMetric, PythonMe
 def get_smb_shares(client: MiddlewareClient, context: Any) -> str:
     command = ''
     smb_shares = client.call('sharing.smb.query')
-    ds_with_rawvalue_on = {
-        ds['properties']['mountpoint']['parsed']: ds for ds in client.call(
-            'zfs.dataset.query', [
-                ['properties.acltype.rawvalue', '!=', 'off'], ['properties.mountpoint.parsed', '!=', None]
-            ]
-        )
-    }
     for smb_share in smb_shares:
-        command += f'net conf showshare {smb_share["name"]}\n'
-        command += f'sharesec -v {smb_share["name"]}\n'
-        command += f'ls -ld {smb_share["path"]}\n'
-        command += f'df -T {smb_share["path"]}\n'
-        if ds := ds_with_rawvalue_on.get(smb_share['path']):
-            acl_type = ds['properties']['acltype']['parsed']
-            if acl_type == 'nfsv4':
-                command += f'nfs4xdr_getfacl {smb_share["path"]};\n'
-            else:
-                f'getfacl {smb_share["path"]};\n'
+        smb_share['acl'] = client.call('sharing.smb.getacl', {'share_name': smb_share['name']})
 
-    cp = run(command, check=False)
-    if cp.returncode:
-        return f'Failed to retrieve SMB Share(s) configuration: {cp.stderr}'
-    else:
-        return cp.stdout
+        # Get the smb.conf section for the share
+        testparm = run(f'testparm -s --section-name {smb_share["name"]}', check=False)
+        if testparm.returncode:
+            smb_share['smb.conf'] = f'Failed to get SMB share configuration: {testparm.stderr}'
+        else:
+            smb_share['smb.conf'] = testparm.stdout
+
+        # Get statfs info for share (helps us to determine how to read ACL)
+        try:
+            statfs = client.call('filesystem.statfs', smb_share['path'])
+        except Exception as exc:
+            smb_share['statfs'] = f'Failed to get statfs for share: {exc}'
+            acl_cmd = None  # Most likely locked path
+        else:
+            smb_share['statfs'] = statfs
+            acl_cmd = 'nfs4xdr_getfacl' if 'NFS4ACL' in statfs['flags'] else 'getfacl'
+
+        if acl_cmd:
+            getacl = run(f'{acl_cmd} {smb_share["path"]}', check=False)
+            if getacl.returncode:
+                smb_share['fsacl'] = f'Failed to get fs acl: {getacl.stderr}'
+            else:
+                smb_share['fsacl'] = getacl.stdout
+
+    return dumps(smb_shares)
 
 
 class SMB(Plugin):
@@ -42,7 +47,6 @@ class SMB(Plugin):
     metrics = [
         CommandMetric(
             'net_config', [
-                Command(['net', 'conf', 'showshare', 'global'], 'SMB Global Configuration', serializable=False),
                 Command(['net', 'getlocalsid'], 'SID of the Local Server', serializable=False),
                 Command(['net', 'getdomainsid'], 'SID of Domain', serializable=False),
                 Command(['net', 'status', 'sessions'], 'Net Status Sessions', serializable=False, max_lines=50),
@@ -56,15 +60,17 @@ class SMB(Plugin):
                 Command(['testparm', '-s'], 'SMB Global Configuration', serializable=False),
             ]
         ),
+        CommandMetric(
+            'samba_account_info', [
+                Command(['pdbedit', '-Lv'], 'Passdb list', serializable=False), 
+                Command(['net', 'groupmap', 'list', '-v'], 'Groupmap list', serializable=False)
+            ]
+        ),
         FileMetric('smb4', '/etc/smb4.conf', extension='.conf'),
         MiddlewareClientMetric(
             'smb_info', [
                 MiddlewareCommand('smb.config'),
                 MiddlewareCommand('smb.status'),
-                MiddlewareCommand('smb.groupmap_list'),
-                MiddlewareCommand('smb.passdb_list', [[], {'select': [
-                    'username', 'domain', 'user_rid', 'acct_ctrl', 'times'
-                ]}]),
                 MiddlewareCommand('sharing.smb.query'),
             ]
         ),
