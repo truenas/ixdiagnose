@@ -25,8 +25,7 @@ class Audit(Plugin):
                         'select': [
                             'audit_id',
                             'message_timestamp',
-                            ['service_data.origin', 'origin'],
-                            ['service_data.credentials', 'credentials'],
+                            'service_data',
                             'event_data',
                             'success'
                         ],
