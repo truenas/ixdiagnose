@@ -1,7 +1,7 @@
 from ixdiagnose.utils.run import run
 from ixdiagnose.utils.command import Command
 from ixdiagnose.utils.formatter import remove_keys
-from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
+from ixdiagnose.utils.middleware import AdminMiddlewareCommand, MiddlewareClient, MiddlewareCommand
 from typing import Any
 
 from .base import Plugin
@@ -55,7 +55,7 @@ class System(Plugin):
             Command(['top', '-SHbi', '-d1', '-n2'], 'System Processes/Threads Top', serializable=False),
         ]),
         CommandMetric('kernel_modules', [Command(['lsmod'], 'List of Kernel Modules', serializable=False)]),
-        MiddlewareClientMetric('coredump', [MiddlewareCommand('system.coredumps')]),
+        MiddlewareClientMetric('coredump', [AdminMiddlewareCommand('system.coredumps')]),
         MiddlewareClientMetric('general_settings', [
             MiddlewareCommand(
                 'system.general.config', format_output=remove_keys([
@@ -68,18 +68,18 @@ class System(Plugin):
             MiddlewareCommand('system.advanced.config', format_output=remove_keys(['sed_user', 'sed_passwd'])),
         ]),
         MiddlewareClientMetric('alerts', [MiddlewareCommand('alert.list')]),
-        MiddlewareClientMetric('alerts_sources_stats', [MiddlewareCommand('alert.sources_stats')]),
-        MiddlewareClientMetric('middleware_thread_stacks', [MiddlewareCommand('core.threads_stacks')]),
+        MiddlewareClientMetric('alerts_sources_stats', [AdminMiddlewareCommand('alert.sources_stats')]),
+        MiddlewareClientMetric('middleware_thread_stacks', [AdminMiddlewareCommand('core.threads_stacks')]),
         MiddlewareClientMetric(
             'system_global_id', [MiddlewareCommand('system.global.id', result_key='System Global ID')],
         ),
         MiddlewareClientMetric('system_info', [
-            MiddlewareCommand('system.is_enterprise', result_key='Enterprise System'),
+            AdminMiddlewareCommand('system.is_enterprise', result_key='Enterprise System'),
             MiddlewareCommand(
                 'truecommand.info', result_key='Truecommand Status',
                 format_output=remove_keys(['truecommand_ip', 'truecommand_url'])
             ),
-            MiddlewareCommand('system.license', result_key='System License'),
+            AdminMiddlewareCommand('system.license', result_key='System License'),
             MiddlewareCommand('system.info', result_key='system_info'),
         ]),
         MiddlewareClientMetric('system_dataset', [MiddlewareCommand('systemdataset.config')]),

@@ -12,6 +12,16 @@ MiddlewareClient: TypeAlias = Client
 @contextlib.contextmanager
 def get_middleware_client() -> Client:
     with Client(call_timeout=conf.timeout) as client:
+        # Drop privilege set to readonly admin to ensure that API responses with Secret fields are always redacted
+        client.call('privilege.become_readonly')
+        yield client
+
+
+@contextlib.contextmanager
+def get_admin_middleware_client() -> Client:
+    """ This middleware client has the full privilege set of the initiaiting process. Since this tool is typically
+    invoked by root, it will have FULL_ADMIN privileges. This is required to call private API methods. """
+    with Client(call_timeout=conf.timeout) as client:
         yield client
 
 
@@ -61,3 +71,12 @@ class MiddlewareCommand:
                 response.error = f'Failed to clean {self.endpoint!r} output: {e}'
 
         return response
+
+
+class AdminMiddlewareCommand(MiddlewareCommand):
+    """ Execute a middleware command with FULL_ADMIN privileges. This allows calling private endpoints,
+    and should be used *very* sparingly since it removes response redaction and can cause sensitive information
+    to leak into debug files. """
+    def execute(self, unused: Optional[MiddlewareClient] = None) -> MiddlewareResponse:
+        with get_admin_middleware_client() as privileged_client:
+            return super().execute(privileged_client)

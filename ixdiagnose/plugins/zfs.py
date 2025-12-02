@@ -2,7 +2,7 @@ from typing import Any
 
 from ixdiagnose.utils.command import Command
 from ixdiagnose.utils.formatter import dumps
-from ixdiagnose.utils.middleware import MiddlewareClient, MiddlewareCommand
+from ixdiagnose.utils.middleware import AdminMiddlewareCommand, MiddlewareClient, MiddlewareCommand
 from ixdiagnose.utils.run import run
 
 from .base import Plugin
@@ -113,7 +113,7 @@ class ZFS(Plugin):
         ),
         MiddlewareClientMetric(
             'middleware_pool_status', [
-                MiddlewareCommand('zpool.status', [{'real_paths': True}], result_key='middleware_pool_status'),
+                AdminMiddlewareCommand('zpool.status', [{'real_paths': True}], result_key='middleware_pool_status'),
             ]
         ),
         PythonMetric('encryption_summary', encryption_summary),
