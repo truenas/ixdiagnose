@@ -46,7 +46,6 @@ class Network(Plugin):
         CommandMetric(
             'ipset_ipvs_rules', [
                 Command(['ipvsadm', '-L'], 'IPVS Rules', serializable=False),
-                Command(['ipset', '--list'], 'IPSET Rules', serializable=False),
                 Command(['netstat', '-nrW'], 'Routing table (netstat)', serializable=False),
             ]
         ),
