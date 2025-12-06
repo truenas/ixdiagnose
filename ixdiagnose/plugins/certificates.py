@@ -22,11 +22,4 @@ class Certificates(Plugin):
                 ])
             )
         ]),
-        MiddlewareClientMetric('certificate_authorities', [
-            MiddlewareCommand(
-                'certificateauthority.query', format_output=remove_keys([
-                    'privatekey', 'issuer', 'signedby',
-                ])
-            )
-        ]),
     ]
