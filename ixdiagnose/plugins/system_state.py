@@ -63,6 +63,6 @@ class SystemState(Plugin):
         for ds in get_ds_list()
     ] + [
         FileMetric('root_dataset_configuration', '/conf/truenas_root_ds.json', extension='.json'),
-        MiddlewareClientMetric('bootenvs', [MiddlewareCommand('bootenv.query')]),
+        MiddlewareClientMetric('bootenvs', [MiddlewareCommand('boot.environment.query')]),
         PythonMetric('developer_mode', get_root_ds),
     ]
