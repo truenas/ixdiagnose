@@ -1,31 +1,9 @@
-from ixdiagnose.utils.run import run
 from ixdiagnose.utils.command import Command
 from ixdiagnose.utils.formatter import remove_keys
-from ixdiagnose.utils.middleware import AdminMiddlewareCommand, MiddlewareClient, MiddlewareCommand
-from typing import Any
+from ixdiagnose.utils.middleware import AdminMiddlewareCommand, MiddlewareCommand
 
 from .base import Plugin
-from .metrics import CommandMetric, MiddlewareClientMetric, PythonMetric
-
-
-def get_swap_info(client: MiddlewareClient, context: Any):
-    disks = []
-    error = None
-    if swap_mirrors := client.call('disk.get_swap_mirrors'):
-        for swap_mirror in swap_mirrors:
-            for providers in swap_mirror['providers']:
-                disks.append(providers['disk'])
-    else:
-        for swap_device in client.call('disk.get_swap_devices'):  # This case is guaranteed to be 1 or 0
-            cp = run(f'cryptsetup status {swap_device} | grep device', check=False)
-            if cp.returncode:
-                error = f'Unable to determine disk of {swap_device!r}: {cp.stderr}'
-                break
-            disks.append(cp.stdout.split(':')[1].strip())
-    return {
-        'swap_disks': disks,
-        'error': error,
-    }
+from .metrics import CommandMetric, MiddlewareClientMetric
 
 
 class System(Plugin):
@@ -47,7 +25,6 @@ class System(Plugin):
             Command(['mount'], 'System Mount Paths', serializable=False),
             Command(['df', '-T', '-h'], 'Filesystem Resource Usage', serializable=False),
         ]),
-        PythonMetric('swap_info', get_swap_info, serializable=True),
         CommandMetric('memory', [
             Command(['vmstat'], 'Virtual Memory Statistics', serializable=False),
         ]),
@@ -75,10 +52,6 @@ class System(Plugin):
         ),
         MiddlewareClientMetric('system_info', [
             AdminMiddlewareCommand('system.is_enterprise', result_key='Enterprise System'),
-            MiddlewareCommand(
-                'truecommand.info', result_key='Truecommand Status',
-                format_output=remove_keys(['truecommand_ip', 'truecommand_url'])
-            ),
             AdminMiddlewareCommand('system.license', result_key='System License'),
             MiddlewareCommand('system.info', result_key='system_info'),
         ]),
