@@ -4,7 +4,7 @@ import tarfile
 import tempfile
 
 from .artifact import gather_artifacts
-from .config import conf
+from .config import conf, RUN_DIR
 from .exceptions import CallError
 from .event import event_callbacks, send_event
 from .plugin import generate_plugins_debug
@@ -26,7 +26,7 @@ def generate_debug() -> str:
 
     if not conf.debug_path:
         conf.clean_debug_path = conf.compress
-        conf.debug_path = tempfile.TemporaryDirectory().name
+        conf.debug_path = tempfile.TemporaryDirectory(dir=RUN_DIR).name
 
     os.makedirs(conf.debug_path, 0o700, exist_ok=True)
     os.chmod(conf.debug_path, 0o700)
@@ -46,7 +46,7 @@ def generate_debug() -> str:
 
 def compress_debug() -> None:
     if conf.compress and not conf.compressed_path:
-        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        with tempfile.NamedTemporaryFile(delete=False, dir=RUN_DIR) as temp_file:
             conf.compressed_path = temp_file.name
 
     with tarfile.open(conf.compressed_path, 'w:gz') as tar:
