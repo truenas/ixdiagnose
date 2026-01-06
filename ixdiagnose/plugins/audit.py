@@ -14,7 +14,7 @@ class Audit(Plugin):
             ],
         ),
         MiddlewareClientMetric(
-            'recent_audited_method_calls', [
+            'recent_audited_middleware_method_calls', [
                 MiddlewareCommand('audit.query', [{
                     'services': ['MIDDLEWARE'],
                     'query-filters': [
@@ -37,7 +37,7 @@ class Audit(Plugin):
             ],
         ),
         MiddlewareClientMetric(
-            'recent_audited_system_calls', [
+            'recent_audited_system_service_action_calls', [
                 MiddlewareCommand('audit.query', [{
                     'services': ['SYSTEM'],
                     'query-filters': [
@@ -57,6 +57,59 @@ class Audit(Plugin):
                 }]),
             ],
         ),
+        MiddlewareClientMetric(
+            'reboot_shutdown_via_middleware', [
+                MiddlewareCommand('audit.query', [{
+                    'services': ['MIDDLEWARE'],
+                    'query-filters': [
+                        ["OR", [
+                            ['event', 'rin', 'REBOOT'],
+                            ['event', 'rin', 'SHUTDOWN'],
+                        ]]
+                    ],
+                    'query-options': {
+                        'select': [
+                            'audit_id',
+                            'message_timestamp',
+                            'username',
+                            'event',
+                            ['event_data.reason', 'reason'],
+                            'success'
+                        ],
+                        'order_by': ['-message_timestamp'],
+                        'limit': 100
+                    }
+                }]),
+            ],
+        ),
+        MiddlewareClientMetric(
+            'reboot_shutdown_via_system', [
+                MiddlewareCommand('audit.query', [{
+                    'services': ['SYSTEM'],
+                    'query-filters': [
+                        ['event', '=', 'ESCALATION'],
+                        ['OR', [
+                            ['event_data.proctitle', 'rin', 'reboot'],
+                            ['event_data.proctitle', 'rin', 'init 6'],
+                            ['event_data.proctitle', 'rin', 'shutdown'],
+                            ['event_data.proctitle', 'rin', 'init 0'],
+                        ]]
+                    ],
+                    'query-options': {
+                        'select': [
+                            'audit_id',
+                            'message_timestamp',
+                            'username',
+                            ['event_data.proctitle', 'proctitle'],
+                            'success'
+                        ],
+                        'order_by': ['-message_timestamp'],
+                        'limit': 100
+                    }
+                }]),
+            ],
+        ),
+
         CommandMetric(
             # This generates a file that is collected in the associated FileMetric.
             'audit_data', [
