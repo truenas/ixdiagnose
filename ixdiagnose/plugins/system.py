@@ -24,6 +24,7 @@ class System(Plugin):
             Command(['swapon', '-s'], 'Swap Usage Summary', serializable=False),
             Command(['mount'], 'System Mount Paths', serializable=False),
             Command(['df', '-T', '-h'], 'Filesystem Resource Usage', serializable=False),
+            Command(['findmnt', '-o', 'TARGET,SOURCE,FSTYPE,OPTIONS'], 'Mount tree', serializable=False),
         ]),
         CommandMetric('memory', [
             Command(['vmstat'], 'Virtual Memory Statistics', serializable=False),
