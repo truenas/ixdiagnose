@@ -15,14 +15,13 @@ def zfs_getacl(dataset_name: str, props_dict: dict) -> str:
 
 def zfs_getacl_impl(dataset_name: str, props_dict: dict) -> str:
     err_str = f'Failed to retrieve ACL info for {dataset_name!r}: '
-    if not all(props_dict.get(k) for k in ('acltype', 'mounted', 'mountpoint')):
+    if not all(props_dict.get(k) for k in ('mounted', 'mountpoint')):
         return f'{err_str}unable to retrieve mounted/mountpoint information for {dataset_name!r}'
 
     if props_dict['mounted'] != 'yes':
         return f'{err_str}dataset is not mounted'
 
-    acl_binary = 'nfs4xdr_getfacl' if props_dict['acltype'] == 'nfsv4' else 'getfacl'
-    cp = run([acl_binary, props_dict['mountpoint']], check=False)
+    cp = run(['truenas_getfacl', props_dict['mountpoint']], check=False)
     if cp.returncode:
         return f'{err_str}unable to retrieve acl details ({cp.stderr})'
 
@@ -38,7 +37,7 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
         return f'Failed to retrieve {resource_type!r} resources: {cp.stderr}'
 
     base = 'zpool get all' if resource_type == 'zpool' else 'zfs get all'
-    prop_list = {'acltype', 'mounted', 'mountpoint'}
+    prop_list = {'mounted', 'mountpoint'}
     resource_context = resource_name = None
     output = ''
     prop_dict = {}

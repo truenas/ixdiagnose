@@ -9,7 +9,7 @@ from ixdiagnose.test.pytest.unit.utils import get_asset
     (
         'crave/ix-applications',
         {'mounted': 'yes', 'mountpoint': '/mnt/crave/ix-applications', 'acltype': 'posix'},
-        ('getfacl', '/mnt/crave/ix-applications'),
+        ('truenas_getfacl', '/mnt/crave/ix-applications'),
         0,
         '# file: mnt/crave/ix-applications\n# owner: root\n# group: root\nuser::rwx\ngroup::r-x\nother::r-x',
         '',
@@ -18,7 +18,7 @@ from ixdiagnose.test.pytest.unit.utils import get_asset
     (
         'boot-pool/ROOT/23.10-MASTER-20230308-062905',
         {'mounted': 'yes', 'mountpoint': 'legacy', 'acltype': 'off'},
-        ('getfacl', 'legacy'),
+        ('truenas_getfacl', 'legacy'),
         1,
         '',
         'getfacl: legacy: No such file or directory\n',
@@ -27,7 +27,7 @@ from ixdiagnose.test.pytest.unit.utils import get_asset
     (
         'boot-pool/ROOT/23.10-MASTER-20230308-062905',
         {'mounted': 'yes', 'mountpoint': 'legacy', 'acltype': 'off'},
-        ('getfacl', 'legacy'),
+        ('truenas_getfacl', 'legacy'),
         1,
         '',
         '',

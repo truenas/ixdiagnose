@@ -29,7 +29,7 @@ def get_smb_shares(client: MiddlewareClient, context: Any) -> str:
             acl_cmd = None  # Most likely locked path
         else:
             smb_share['statfs'] = statfs
-            acl_cmd = 'nfs4xdr_getfacl' if 'NFS4ACL' in statfs['flags'] else 'getfacl'
+            acl_cmd = 'truenas_getfacl'
 
         if acl_cmd:
             getacl = run(f'{acl_cmd} {smb_share["path"]}', check=False)
