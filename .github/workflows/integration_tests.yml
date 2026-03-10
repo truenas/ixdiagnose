@@ -11,10 +11,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup dependencies
-      run: |
-        FAKE_ENV=1 /usr/bin/install-dev-tools
-
     - name: Deps
       run: |
         pip install --break-system-packages -r requirements.txt
