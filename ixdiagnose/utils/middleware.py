@@ -11,7 +11,7 @@ MiddlewareClient: TypeAlias = Client
 
 @contextlib.contextmanager
 def get_middleware_client() -> Client:
-    with Client(call_timeout=conf.timeout) as client:
+    with Client(private_methods=True, call_timeout=conf.timeout) as client:
         # Drop privilege set to readonly admin to ensure that API responses with Secret fields are always redacted
         client.call('privilege.become_readonly')
         yield client
@@ -21,7 +21,7 @@ def get_middleware_client() -> Client:
 def get_admin_middleware_client() -> Client:
     """ This middleware client has the full privilege set of the initiaiting process. Since this tool is typically
     invoked by root, it will have FULL_ADMIN privileges. This is required to call private API methods. """
-    with Client(call_timeout=conf.timeout) as client:
+    with Client(private_methods=True, call_timeout=conf.timeout) as client:
         yield client
 
 
