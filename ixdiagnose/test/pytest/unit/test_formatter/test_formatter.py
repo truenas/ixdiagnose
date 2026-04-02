@@ -1,6 +1,18 @@
 import pytest
 
-from ixdiagnose.utils.formatter import remove_keys, redact_keys, REDACTED
+from ixdiagnose.utils.formatter import get, remove_keys, redact_keys, REDACTED
+
+
+@pytest.mark.parametrize('obj,path,expected', [
+    ({'a': 1}, 'a', 1),
+    ({'a': {'b': 2}}, 'a.b', 2),
+    ({'a': {'b': {'c': 3}}}, 'a.b.c', 3),
+    ({'a': 1}, 'missing', None),
+    ({'a': {'b': 2}}, 'a.missing', None),
+    ({}, 'a', None),
+])
+def test_get(obj, path, expected):
+    assert get(obj, path) == expected
 
 
 def formatter_input():
