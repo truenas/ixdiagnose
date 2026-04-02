@@ -1,19 +1,11 @@
 from collections import defaultdict
 import functools
-from typing import Callable, Iterable, MutableMapping, TypeVar, overload
+from typing import Any, Callable, Iterable, MutableMapping, TypeVar, overload
 
 from truenas_api_client.ejson import dumps as middleware_dumps, loads  # noqa
 import truenas_pyfilter
 
 _CF_EMPTY = truenas_pyfilter.compile_filters([])
-
-
-def get(obj, path):
-    opts = truenas_pyfilter.compile_options(select=[[path, '_v']])
-    result = truenas_pyfilter.match(obj, filters=_CF_EMPTY, options=opts)
-    if result is None:
-        return None
-    return result.get('_v')
 
 
 _Iter = TypeVar('_Iter', dict, Iterable)
@@ -27,6 +19,15 @@ REDACTED = '*' * 8
 def dumps(*args, **kwargs) -> str:
     kwargs.setdefault('indent', 4)
     return middleware_dumps(*args, **kwargs)
+
+
+def get(obj: dict, path: str) -> Any:
+    """Retrieve a value from a dict by dot-notation path, e.g. `outer.inner`."""
+    opts = truenas_pyfilter.compile_options(select=[[path, '_v']])
+    result = truenas_pyfilter.match(obj, filters=_CF_EMPTY, options=opts)
+    if result is None:
+        return None
+    return result.get('_v')
 
 
 def pop_key(output, to_find, to_remove):
