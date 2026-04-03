@@ -20,6 +20,7 @@ class Configuration:
             'include_plugins': {'type': 'array', 'items': {'type': 'string'}},
             'structured_data': {'type': 'boolean'},
             'timeout': {'type': 'integer'},
+            'caller_has_full_admin': {'type': 'boolean'},
         },
     }
 
@@ -33,6 +34,7 @@ class Configuration:
         self.include_plugins: List[str] = []
         self.structured_data: bool = False
         self.timeout: int = TIMEOUT_DEFAULT
+        self.caller_has_full_admin: bool = True
 
     def apply(self, new_config: dict) -> None:
         validate(new_config, self.SCHEMA)
