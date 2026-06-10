@@ -20,7 +20,7 @@ jobs:
     - name: Setup dependencies
       run: |
         FAKE_ENV=1 /usr/bin/install-dev-tools
-        mkdir -p /var/run/middleware
+        mkdir -p /run/middleware
     - name: Deps
       run: |
         pip install --break-system-packages -r requirements.txt

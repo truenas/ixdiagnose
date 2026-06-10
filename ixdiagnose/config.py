@@ -2,7 +2,7 @@ from jsonschema import validate
 from typing import List, Optional
 
 
-RUN_DIR = '/var/run/middleware'
+RUN_DIR = '/run/middleware'
 TIMEOUT_DEFAULT = 30
 
 
