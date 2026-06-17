@@ -3,6 +3,7 @@ from .base import Prerequisite
 from .failover import FailoverPrerequisite
 from .fc import FibreChannelPrerequisite
 from .jbof import JBOFPrerequisite
+from .libvirt import LibvirtContainersPrerequisite
 from .service import ServiceRunningPrerequisite
 from .vm import VMPrerequisite
 
@@ -12,6 +13,7 @@ __all__ = [
     'FailoverPrerequisite',
     'FibreChannelPrerequisite',
     'JBOFPrerequisite',
+    'LibvirtContainersPrerequisite',
     'VMPrerequisite',
     'Prerequisite',
     'ServiceRunningPrerequisite',
