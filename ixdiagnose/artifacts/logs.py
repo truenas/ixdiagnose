@@ -7,6 +7,8 @@ class Logs(Artifact):
     name = 'logs'
     individual_item_max_size_limit = 10 * 1024 * 1024
     items = [
+        DirectoryPattern('audit', pattern=r'^audit_handler\.log'),
+        DirectoryPattern('ctdb'),
         DirectoryPattern('incus'),
         DirectoryPattern('jobs'),
         DirectoryPattern('libvirt'),
@@ -35,9 +37,13 @@ class Logs(Artifact):
         File('truenas_connect.log'),
         File('truenas_verify.log'),
         File('wsdd.log'),
+        Pattern('cron.+'),
         Pattern('daemon.+'),
+        Pattern('docker_image.+'),
         Pattern('failover.+'),
         Pattern('fenced.+'),
+        Pattern('mail.+'),
         Pattern('middlewared.+'),
+        Pattern('truenas-discoveryd.+'),
         Pattern('zettarepl.+'),
     ]
