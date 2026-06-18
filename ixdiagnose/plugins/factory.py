@@ -9,6 +9,7 @@ from .containers import Containers
 from .cpu import Cpu
 from .cronjob import Cronjob
 from .directoryservices import DirectoryServices
+from .discovery import Discovery
 from .exceptions import LoggedExceptions
 from .failover import Failover
 from .fc import FibreChannel
@@ -55,6 +56,7 @@ for plugin in [
     Cpu,
     Cronjob,
     DirectoryServices,
+    Discovery,
     Failover,
     FibreChannel,
     FTP,
