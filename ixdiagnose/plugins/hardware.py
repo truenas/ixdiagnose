@@ -52,6 +52,11 @@ class Hardware(Plugin):
                 Command(['sensors', '-j'], 'List of available sensors'),
             ],
         ),
+        CommandMetric(
+            'cpu_topology', [
+                Command(['lscpu', '-e=CPU,CORE,SOCKET,NODE,ONLINE'], 'CPU per-core topology', serializable=False),
+            ],
+        ),
         FileMetric('usb_devices', '/sys/kernel/debug/usb/devices'),
         MiddlewareClientMetric('disks', [AdminMiddlewareCommand('device.get_disks')]),
         MiddlewareClientMetric('disks_config', [MiddlewareCommand('disk.query')]),
