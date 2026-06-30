@@ -26,6 +26,9 @@ class System(Plugin):
             Command(['df', '-T', '-h'], 'Filesystem Resource Usage', serializable=False),
             Command(['findmnt', '-o', 'TARGET,SOURCE,FSTYPE,OPTIONS'], 'Mount tree', serializable=False),
         ]),
+        CommandMetric('findmnt', [
+            Command(['findmnt', '--json', '-o', 'TARGET,SOURCE,FSTYPE,OPTIONS'], 'Mount tree', serializable=True),
+        ]),
         CommandMetric('memory', [
             Command(['vmstat'], 'Virtual Memory Statistics', serializable=False),
         ]),
