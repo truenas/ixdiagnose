@@ -5,7 +5,7 @@ from .metrics import MiddlewareClientMetric
 
 
 class TruenasConnect(Plugin):
-    name = 'truenas_connect'
+    name = "truenas_connect"
     metrics = [
-        MiddlewareClientMetric('config', [MiddlewareCommand('tn_connect.config')]),
+        MiddlewareClientMetric("config", [MiddlewareCommand("tn_connect.config")]),
     ]

@@ -9,17 +9,16 @@ logger = logging.getLogger(__name__)
 
 
 class EventCallback:
-
     CALLBACKS: List[Callable] = []
 
     def register(self, callback: Callable):
         if not callable(callback):
-            raise CallError('Callback must be a callable')
+            raise CallError("Callback must be a callable")
 
         if len(inspect.signature(callback).parameters) != 2:
             raise CallError(
-                'Only 2 argument must be specified for callback with first being progress percentage and '
-                'second being percentage text'
+                "Only 2 argument must be specified for callback with first being progress percentage and "
+                "second being percentage text"
             )
 
         self.CALLBACKS.append(callback)
@@ -36,4 +35,4 @@ def send_event(progress: int, text: str):
         try:
             callback(progress, text)
         except Exception:
-            logger.debug('Failed to execute callback', exc_info=True)
+            logger.debug("Failed to execute callback", exc_info=True)

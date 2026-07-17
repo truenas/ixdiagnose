@@ -20,7 +20,7 @@ def get_nvme_devs() -> list[str]:
 
 
 def run_nvme_cmd(action: str, nvme: str, add_header: bool = True) -> str:
-    header = '' if not add_header else f'{nvme:#^30}\n'
+    header = "" if not add_header else f"{nvme:#^30}\n"
     cp = run(["nvme", action, nvme], check=False)
     if cp.returncode:
         footer = f"FAILED: {cp.stderr}\n\n"

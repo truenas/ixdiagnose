@@ -6,15 +6,21 @@ from .prerequisites import ServiceRunningPrerequisite
 
 
 class Reporting(Plugin):
-    name = 'reporting'
+    name = "reporting"
     metrics = [
         MiddlewareClientMetric(
-            'graphs', [MiddlewareCommand(
-                'reporting.netdata_graphs', result_key='all_graphs',
-            )], prerequisites=[ServiceRunningPrerequisite('netdata')],
+            "graphs",
+            [
+                MiddlewareCommand(
+                    "reporting.netdata_graphs",
+                    result_key="all_graphs",
+                )
+            ],
+            prerequisites=[ServiceRunningPrerequisite("netdata")],
         ),
         MiddlewareClientMetric(
-            'cpu_temperatures', [AdminMiddlewareCommand('reporting.cpu_temperatures')],
-            prerequisites=[ServiceRunningPrerequisite('netdata')],
+            "cpu_temperatures",
+            [AdminMiddlewareCommand("reporting.cpu_temperatures")],
+            prerequisites=[ServiceRunningPrerequisite("netdata")],
         ),
     ]

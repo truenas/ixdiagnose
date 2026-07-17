@@ -7,7 +7,7 @@ from .prerequisites import FibreChannelPrerequisite
 
 
 class FibreChannel(Plugin):
-    name = 'fc'
+    name = "fc"
     metrics = [
         CommandMetric(
             "fcdump",
@@ -17,20 +17,23 @@ class FibreChannel(Plugin):
             prerequisites=[FibreChannelPrerequisite()],
         ),
         MiddlewareClientMetric(
-            'fc_hosts', [
-                MiddlewareCommand('fc.fc_hosts'),
+            "fc_hosts",
+            [
+                MiddlewareCommand("fc.fc_hosts"),
             ],
             prerequisites=[FibreChannelPrerequisite()],
         ),
         MiddlewareClientMetric(
-            'fc_host_pairs', [
-                MiddlewareCommand('fc.fc_host.query'),
+            "fc_host_pairs",
+            [
+                MiddlewareCommand("fc.fc_host.query"),
             ],
             prerequisites=[FibreChannelPrerequisite()],
         ),
         MiddlewareClientMetric(
-            'fcport', [
-                MiddlewareCommand('fcport.query'),
+            "fcport",
+            [
+                MiddlewareCommand("fcport.query"),
             ],
             prerequisites=[FibreChannelPrerequisite()],
         ),

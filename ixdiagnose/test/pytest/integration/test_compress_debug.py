@@ -13,8 +13,8 @@ from ixdiagnose.utils.paths import get_debug_dir, get_plugin_base_dir, get_artif
 
 @contextlib.contextmanager
 def debug_generate(clean_debug):
-    conf.debug_path = '/tmp/ixdiagnose/debug'
-    conf.compressed_path = '/tmp/ixdiagnose.tgz'
+    conf.debug_path = "/tmp/ixdiagnose/debug"
+    conf.compressed_path = "/tmp/ixdiagnose.tgz"
     conf.compress = True
     conf.clean_debug_path = clean_debug
     try:
@@ -27,10 +27,8 @@ def debug_generate(clean_debug):
 def test_compress_debug_generation():
     with debug_generate(True) as path:
         debug_dir_basename = os.path.basename(get_debug_dir())
-        with tarfile.open(path, 'r') as tar:
-            plugins_dir = tar.getmember(
-                os.path.join(debug_dir_basename, os.path.basename(get_plugin_base_dir()))
-            ).name
+        with tarfile.open(path, "r") as tar:
+            plugins_dir = tar.getmember(os.path.join(debug_dir_basename, os.path.basename(get_plugin_base_dir()))).name
             artifacts_dir = tar.getmember(
                 os.path.join(debug_dir_basename, os.path.basename(get_artifacts_base_dir()))
             ).name
@@ -41,9 +39,7 @@ def test_compress_debug_generation():
                 assert os.path.join(artifacts_dir, artifact_name) in members
 
 
-@pytest.mark.parametrize('clean_debug', [
-    False, True
-])
+@pytest.mark.parametrize("clean_debug", [False, True])
 def test_ixdiagnose_clean_debug(clean_debug):
     with debug_generate(clean_debug):
         if clean_debug:

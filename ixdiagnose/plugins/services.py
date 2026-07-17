@@ -5,7 +5,7 @@ from .metrics import MiddlewareClientMetric
 
 
 class Services(Plugin):
-    name = 'services'
+    name = "services"
     metrics = [
-        MiddlewareClientMetric('services', [MiddlewareCommand('service.query', result_key='services_status')]),
+        MiddlewareClientMetric("services", [MiddlewareCommand("service.query", result_key="services_status")]),
     ]

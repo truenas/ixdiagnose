@@ -9,9 +9,11 @@ from .file import File
 
 
 class Pattern(Item):
-
     def __init__(
-        self, name: str, max_size: Optional[int] = None, truncate_files: Optional[bool] = True,
+        self,
+        name: str,
+        max_size: Optional[int] = None,
+        truncate_files: Optional[bool] = True,
         add_to_base_item_path: Optional[str] = None,
     ):
         super().__init__(name, max_size)
@@ -41,24 +43,20 @@ class Pattern(Item):
 
     def exists(self, item_path: str) -> Tuple[bool, str]:
         exists = bool(self.items)
-        return exists, '' if exists else f'No items found matching {self.pattern!r} pattern'
+        return exists, "" if exists else f"No items found matching {self.pattern!r} pattern"
 
     def source_item_path(self, item_dir: str) -> str:
         return os.path.join(item_dir, self.add_to_base_item_path) if self.add_to_base_item_path else item_dir
 
     def destination_item_path(self, destination_dir: str) -> str:
-        destination_dir = os.path.join(
-            destination_dir, self.add_to_base_item_path
-        ) if self.add_to_base_item_path else destination_dir
+        destination_dir = (
+            os.path.join(destination_dir, self.add_to_base_item_path) if self.add_to_base_item_path else destination_dir
+        )
         os.makedirs(destination_dir, exist_ok=True)
         return destination_dir
 
     def to_copy_items(self, items_path: str) -> list:
-        return [
-            entry for entry in filter(
-                lambda e: re.findall(self.pattern, e.name), os.scandir(items_path)
-            )
-        ]
+        return [entry for entry in filter(lambda e: re.findall(self.pattern, e.name), os.scandir(items_path))]
 
     def size(self, item_path: str) -> int:
         return sum(item.size(item_path) for item in self.items)
@@ -76,23 +74,26 @@ class Pattern(Item):
     def copy_impl(self, item_path: str, destination_path: str) -> list:
         copied_items = []
         for item in filter(lambda i: i not in self.to_skip_items, self.items):
-            copied_items.extend(item.copy_impl(
-                item.source_item_path(item_path), item.destination_item_path(destination_path)
-            ))
+            copied_items.extend(
+                item.copy_impl(item.source_item_path(item_path), item.destination_item_path(destination_path))
+            )
             item.post_copy_hook(item.destination_item_path(destination_path))
         return copied_items
 
 
 class DirectoryPattern(Pattern):
-
     def __init__(
-        self, name: str, max_size: Optional[int] = None, truncate_files: Optional[bool] = True, pattern: str = '.*',
+        self,
+        name: str,
+        max_size: Optional[int] = None,
+        truncate_files: Optional[bool] = True,
+        pattern: str = ".*",
     ):
         super().__init__(name=pattern, max_size=max_size, truncate_files=truncate_files, add_to_base_item_path=name)
 
     @property
     def report_name_key(self):
         if self.add_to_base_item_path:
-            return self.add_to_base_item_path if self.name == '.*' else f'{self.add_to_base_item_path}/{self.name}'
+            return self.add_to_base_item_path if self.name == ".*" else f"{self.add_to_base_item_path}/{self.name}"
         else:
             return self.name

@@ -5,4 +5,4 @@ from .glob import Glob
 from .pattern import DirectoryPattern, Pattern
 
 
-__all__ = ['Directory', 'DirectoryPattern', 'File', 'Glob', 'Item', 'Pattern']
+__all__ = ["Directory", "DirectoryPattern", "File", "Glob", "Item", "Pattern"]

@@ -19,20 +19,23 @@ def test_clear_callbacks():
     assert event_callbacks.CALLBACKS == []
 
 
-@pytest.mark.parametrize('callback,should_work', [
-    (
-        correct_callback,
-        True,
-    ),
-    (
-        incorrect_callback,
-        False,
-    ),
-    (
-        'not a callable',
-        False,
-    )
-])
+@pytest.mark.parametrize(
+    "callback,should_work",
+    [
+        (
+            correct_callback,
+            True,
+        ),
+        (
+            incorrect_callback,
+            False,
+        ),
+        (
+            "not a callable",
+            False,
+        ),
+    ],
+)
 def test_event_callbacks(callback, should_work):
     if should_work:
         assert event_callbacks.register(callback) is None
