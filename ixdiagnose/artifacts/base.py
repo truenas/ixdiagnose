@@ -10,7 +10,6 @@ from .items import Item
 
 
 class Artifact:
-
     base_dir: str = NotImplementedError
     name: str = NotImplementedError
     individual_item_max_size_limit: Optional[int] = None
@@ -32,7 +31,7 @@ class Artifact:
         return os.path.join(get_artifacts_base_dir(), self.name)
 
     def write_debug_report(self) -> None:
-        with open(os.path.join(self.output_dir, 'report.json'), 'w') as f:
+        with open(os.path.join(self.output_dir, "report.json"), "w") as f:
             f.write(dumps(self.debug_report))
 
     def gather(self) -> dict:
@@ -47,9 +46,9 @@ class Artifact:
             tb = traceback.format_exc()
 
         return {
-            'execution_time': time.time() - start_time,
-            'execution_error': error,
-            'execution_traceback': tb,
+            "execution_time": time.time() - start_time,
+            "execution_error": error,
+            "execution_traceback": tb,
         }
 
     def gather_impl(self) -> None:
@@ -63,8 +62,8 @@ class Artifact:
                 item_execution_traceback = traceback.format_exc()
 
             self.debug_report[item.report_name_key] = {
-                'execution_time': time.time() - start_time,
-                'item_execution_error': item_execution_error,
-                'item_execution_traceback': item_execution_traceback,
-                'item_report': item_report,
+                "execution_time": time.time() - start_time,
+                "item_execution_error": item_execution_error,
+                "item_execution_traceback": item_execution_traceback,
+                "item_report": item_report,
             }

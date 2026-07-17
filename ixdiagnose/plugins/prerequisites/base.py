@@ -2,7 +2,6 @@ from typing import Dict, Optional
 
 
 class CacheMeta(type):
-
     def __new__(cls, *args, **kwargs):
         klass = super().__new__(cls, *args, **kwargs)
         klass.CACHE_RESULTS = {}
@@ -10,7 +9,6 @@ class CacheMeta(type):
 
 
 class Prerequisite(metaclass=CacheMeta):
-
     CACHE_RESULTS: Dict[str, bool] = {}
 
     def __init__(self, cache: bool = False):

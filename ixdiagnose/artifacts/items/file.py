@@ -9,7 +9,6 @@ from .base import Item
 
 
 class File(Item):
-
     def __init__(self, name: str, max_size: Optional[int] = None, truncate: Optional[bool] = True):
         super().__init__(name, max_size)
         self.truncate: bool = truncate
@@ -28,7 +27,7 @@ class File(Item):
             return []
 
     def to_be_copied_checks(self, item_path: str) -> Tuple[bool, Optional[str]]:
-        to_copy, error = (True, None) if os.path.isfile(item_path) else (False, f'{item_path!r} is not a file')
+        to_copy, error = (True, None) if os.path.isfile(item_path) else (False, f"{item_path!r} is not a file")
         if to_copy and not self.truncate:
             return self.size_check(item_path)
         return to_copy, error

@@ -6,20 +6,35 @@ from .metrics import MiddlewareClientMetric
 
 
 class Certificates(Plugin):
-    name = 'certificates'
+    name = "certificates"
     metrics = [
-        MiddlewareClientMetric('certificates', [
-            MiddlewareCommand(
-                'certificate.query', [[['cert_type_CSR', '=', False]]],
-                result_key='certificates', format_output=remove_keys([
-                    'privatekey', 'issuer', 'signedby',
-                ])
-            ),
-            MiddlewareCommand(
-                'certificate.query', [[['cert_type_CSR', '=', True]]],
-                result_key='csr', format_output=remove_keys([
-                    'privatekey', 'issuer', 'signedby',
-                ])
-            )
-        ]),
+        MiddlewareClientMetric(
+            "certificates",
+            [
+                MiddlewareCommand(
+                    "certificate.query",
+                    [[["cert_type_CSR", "=", False]]],
+                    result_key="certificates",
+                    format_output=remove_keys(
+                        [
+                            "privatekey",
+                            "issuer",
+                            "signedby",
+                        ]
+                    ),
+                ),
+                MiddlewareCommand(
+                    "certificate.query",
+                    [[["cert_type_CSR", "=", True]]],
+                    result_key="csr",
+                    format_output=remove_keys(
+                        [
+                            "privatekey",
+                            "issuer",
+                            "signedby",
+                        ]
+                    ),
+                ),
+            ],
+        ),
     ]

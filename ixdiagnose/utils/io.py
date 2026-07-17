@@ -7,7 +7,7 @@ def truncate_file(filename: str, max_size: int) -> None:
         return
 
     bytes_to_remove = size - max_size
-    with open(filename, 'r+b') as f:
+    with open(filename, "r+b") as f:
         f.seek(bytes_to_remove)
         remaining_contents = f.read()
         f.seek(0)

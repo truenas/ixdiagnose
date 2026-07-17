@@ -10,40 +10,41 @@ from .prerequisites import VMPrerequisite
 
 def passthrough_choices(client, context):
     data = {
-        'usb_passthrough_choices': client.call('vm.device.usb_passthrough_choices'),
-        'passthrough_device_choices': client.call('vm.device.passthrough_device_choices'),
-        'iommu_groups': defaultdict(list),
+        "usb_passthrough_choices": client.call("vm.device.usb_passthrough_choices"),
+        "passthrough_device_choices": client.call("vm.device.passthrough_device_choices"),
+        "iommu_groups": defaultdict(list),
     }
-    for pci_id, pci_data in data['passthrough_device_choices'].items():
-        group_no = pci_data['iommu_group']['number'] if pci_data['iommu_group'] else None
-        data['iommu_groups'][group_no if group_no is not None else 'UNDEFINED'].append(pci_id)
+    for pci_id, pci_data in data["passthrough_device_choices"].items():
+        group_no = pci_data["iommu_group"]["number"] if pci_data["iommu_group"] else None
+        data["iommu_groups"][group_no if group_no is not None else "UNDEFINED"].append(pci_id)
 
     return data
 
 
 class VM(Plugin):
-    name = 'vm'
+    name = "vm"
     metrics = [
-        DirectoryTreeMetric('iommu_groups', '/sys/kernel/iommu_groups'),
+        DirectoryTreeMetric("iommu_groups", "/sys/kernel/iommu_groups"),
         MiddlewareClientMetric(
-            'gpu', [MiddlewareCommand('device.get_gpus', result_key='gpus')],
-            prerequisites=[VMPrerequisite()]
+            "gpu", [MiddlewareCommand("device.get_gpus", result_key="gpus")], prerequisites=[VMPrerequisite()]
         ),
         MiddlewareClientMetric(
-            'vms', [
+            "vms",
+            [
                 MiddlewareCommand(
-                    'vm.query', result_key='vms', format_output=remove_keys(['devices.attributes.password'])
+                    "vm.query", result_key="vms", format_output=remove_keys(["devices.attributes.password"])
                 )
             ],
-            prerequisites=[VMPrerequisite()]
+            prerequisites=[VMPrerequisite()],
         ),
         MiddlewareClientMetric(
-            'vm_devices', [
+            "vm_devices",
+            [
                 MiddlewareCommand(
-                    'vm.device.query', result_key='devices', format_output=remove_keys(['attributes.password'])
+                    "vm.device.query", result_key="devices", format_output=remove_keys(["attributes.password"])
                 )
             ],
-            prerequisites=[VMPrerequisite()]
+            prerequisites=[VMPrerequisite()],
         ),
-        PythonMetric('passthrough_choices',  passthrough_choices, prerequisites=[VMPrerequisite()]),
+        PythonMetric("passthrough_choices", passthrough_choices, prerequisites=[VMPrerequisite()]),
     ]
