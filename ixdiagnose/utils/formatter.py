@@ -8,26 +8,26 @@ import truenas_pyfilter
 _CF_EMPTY = truenas_pyfilter.compile_filters([])
 
 
-_Iter = TypeVar('_Iter', dict, Iterable)
-_T = TypeVar('_T')
+_Iter = TypeVar("_Iter", dict, Iterable)
+_T = TypeVar("_T")
 
 
-REDACTED = '*' * 8
+REDACTED = "*" * 8
 """Replace with an arbitrary number of asterisks to conceal length."""
 
 
 def dumps(*args, **kwargs) -> str:
-    kwargs.setdefault('indent', 4)
+    kwargs.setdefault("indent", 4)
     return middleware_dumps(*args, **kwargs)
 
 
 def get(obj: dict, path: str) -> Any:
     """Retrieve a value from a dict by dot-notation path, e.g. `outer.inner`."""
-    opts = truenas_pyfilter.compile_options(select=[[path, '_v']])
+    opts = truenas_pyfilter.compile_options(select=[[path, "_v"]])
     result = truenas_pyfilter.match(obj, filters=_CF_EMPTY, options=opts)
     if result is None:
         return None
-    return result.get('_v')
+    return result.get("_v")
 
 
 def pop_key(output, to_find, to_remove):
@@ -41,18 +41,19 @@ def remove_keys(keys: Iterable[str]) -> Callable[[_Iter], _Iter]:
 
     :param keys: Keys to remove. Nested keys can be specified with dot notation, e.g. `outer.inner`.
     """
+
     def remove(output: _Iter) -> _Iter:
         if isinstance(output, dict):
             for key in keys:
-                if '.' in key:
-                    first_attr = get(output, key.split('.')[0])
+                if "." in key:
+                    first_attr = get(output, key.split(".")[0])
                     if isinstance(first_attr, list):
                         for attr in first_attr:
-                            to_find, to_remove = key.rsplit('.', 1)
-                            to_find = to_find.split('.', 1)[1]
+                            to_find, to_remove = key.rsplit(".", 1)
+                            to_find = to_find.split(".", 1)[1]
                             pop_key(attr, to_find, to_remove)
                     else:
-                        to_find, to_remove = key.rsplit('.', 1)
+                        to_find, to_remove = key.rsplit(".", 1)
                         pop_key(output, to_find, to_remove)
                 else:
                     output.pop(key, None)
@@ -61,6 +62,7 @@ def remove_keys(keys: Iterable[str]) -> Callable[[_Iter], _Iter]:
                 remove(item)
 
         return output
+
     return remove
 
 
@@ -73,8 +75,8 @@ def _key_tree(keys: Iterable[str]) -> defaultdict[str, set[str]]:
     """
     result = defaultdict(set)
     for k in keys:
-        if '.' in k:
-            pk, ck = k.split('.', 1)
+        if "." in k:
+            pk, ck = k.split(".", 1)
             result[pk].add(ck)
         else:
             result[k]  # initialize the set if not already initialized
@@ -99,7 +101,7 @@ def redact_keys(*, include: Iterable[str] | None = None, exclude: Iterable[str] 
     """
     include_provided = bool(include)
     if include_provided is bool(exclude):
-        raise ValueError('Either provide keys to include or exclude but not both')
+        raise ValueError("Either provide keys to include or exclude but not both")
 
     def redact(data: _T, keys: Iterable[str], *, include: bool) -> _T:
         if isinstance(data, MutableMapping):

@@ -6,13 +6,20 @@ from .metrics import MiddlewareClientMetric
 
 
 class CloudBackup(Plugin):
-    name = 'cloud_backup'
+    name = "cloud_backup"
     metrics = [
         MiddlewareClientMetric(
-            'cloud_backup', [
-                MiddlewareCommand('cloud_backup.query', format_output=remove_keys([
-                    'credentials.attributes', 'password',
-                ])),
-            ]
+            "cloud_backup",
+            [
+                MiddlewareCommand(
+                    "cloud_backup.query",
+                    format_output=remove_keys(
+                        [
+                            "credentials.attributes",
+                            "password",
+                        ]
+                    ),
+                ),
+            ],
         ),
     ]

@@ -9,13 +9,12 @@ from .base import Metric
 
 
 class MiddlewareClientMetric(Metric):
-
     methods_metadata: Optional[dict] = None
 
     @classmethod
     def get_methods_metadata(cls):
         if cls.methods_metadata is None:
-            cls.methods_metadata = MiddlewareCommand('core.get_methods').execute().output or {}
+            cls.methods_metadata = MiddlewareCommand("core.get_methods").execute().output or {}
         return cls.methods_metadata
 
     def __init__(
@@ -25,18 +24,19 @@ class MiddlewareClientMetric(Metric):
         self.middleware_client: Optional[MiddlewareClient] = None
         self.middleware_commands: List[MiddlewareCommand] = middleware_commands
 
-        assert all(
-            isinstance(middleware_command, MiddlewareCommand) for middleware_command in self.middleware_commands
-        ) is True
+        assert (
+            all(isinstance(middleware_command, MiddlewareCommand) for middleware_command in self.middleware_commands)
+            is True
+        )
 
     def format_output(self, context: list) -> str:
         if len(context) == 1:
             return dumps(context[0])
         else:
-            return dumps({entry['key']: entry['output'] for entry in context})
+            return dumps({entry["key"]: entry["output"] for entry in context})
 
     def initialize_context(self) -> None:
-        self.middleware_client = self.execution_context['middleware_client']
+        self.middleware_client = self.execution_context["middleware_client"]
 
     def execute_impl(self) -> Tuple[Any, str]:
         context = []
@@ -44,23 +44,27 @@ class MiddlewareClientMetric(Metric):
         for middleware_command in self.middleware_commands:
             start_time = time.time()
             if self.middleware_client is None:
-                execution_error = 'Failed to initialize middleware client'
+                execution_error = "Failed to initialize middleware client"
             else:
                 response = middleware_command.execute(self.middleware_client)
                 execution_error = response.error
 
-            metric_report.append({
-                'endpoint': middleware_command.endpoint,
-                'error': execution_error,
-                'execution_time': time.time() - start_time,
-                'description': self.get_methods_metadata().get(middleware_command.endpoint, {}).get('description'),
-            })
+            metric_report.append(
+                {
+                    "endpoint": middleware_command.endpoint,
+                    "error": execution_error,
+                    "execution_time": time.time() - start_time,
+                    "description": self.get_methods_metadata().get(middleware_command.endpoint, {}).get("description"),
+                }
+            )
             if execution_error:
                 continue
 
-            context.append({
-                'key': response.result_key,
-                'output': response.output,
-            })
+            context.append(
+                {
+                    "key": response.result_key,
+                    "output": response.output,
+                }
+            )
 
-        return metric_report, self.format_output(context) if context else ''
+        return metric_report, self.format_output(context) if context else ""

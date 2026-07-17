@@ -5,7 +5,6 @@ from typing import Any, List, Tuple
 
 
 class Metric:
-
     def __init__(self, name: str, prerequisites: List[Prerequisite] | None = None):
         self.execution_context: Any = None
         self.name = name
@@ -17,16 +16,16 @@ class Metric:
 
     @property
     def output_file_extension(self) -> str:
-        return '.json'
+        return ".json"
 
     def output_file_path(self, base_dir: str) -> str:
-        return os.path.join(base_dir, f'{self.name}{self.output_file_extension}')
+        return os.path.join(base_dir, f"{self.name}{self.output_file_extension}")
 
     def execute(self, execution_context: Any = None) -> Tuple[Any, str]:
         self.execution_context = execution_context
         for prerequisite in self.prerequisites:
             if not prerequisite.evaluate():
-                return {'error': f'"{prerequisite}" prerequisite failed'}, ''
+                return {"error": f'"{prerequisite}" prerequisite failed'}, ""
 
         self.initialize_context()
         data = self.execute_impl()

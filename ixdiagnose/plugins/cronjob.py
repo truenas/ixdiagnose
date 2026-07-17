@@ -5,9 +5,9 @@ from .metrics import FileMetric, MiddlewareClientMetric
 
 
 class Cronjob(Plugin):
-    name = 'cronjob'
+    name = "cronjob"
     metrics = [
-        FileMetric('crontab', '/etc/crontab', extension='.txt'),
-        FileMetric('middleware_crontab', '/etc/cron.d/middlewared', extension='.txt'),
-        MiddlewareClientMetric('cronjobs', [MiddlewareCommand('cronjob.query')]),
+        FileMetric("crontab", "/etc/crontab", extension=".txt"),
+        FileMetric("middleware_crontab", "/etc/cron.d/middlewared", extension=".txt"),
+        MiddlewareClientMetric("cronjobs", [MiddlewareCommand("cronjob.query")]),
     ]

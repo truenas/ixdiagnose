@@ -7,11 +7,11 @@ from .python import PythonMetric
 
 
 __all__ = [
-    'CommandMetric',
-    'DirectoryTreeMetric',
-    'FileMetric',
-    'Metric',
-    'MiddlewareClientMetric',
-    'PythonMetric',
-    'RedactedFileMetric',
+    "CommandMetric",
+    "DirectoryTreeMetric",
+    "FileMetric",
+    "Metric",
+    "MiddlewareClientMetric",
+    "PythonMetric",
+    "RedactedFileMetric",
 ]

@@ -8,13 +8,13 @@ from middlewared.logger import ALL_LOG_FILES
 
 def parse_log_file(path: str) -> list[dict]:
     results = []
-    with open(path, 'r') as f:
+    with open(path, "r") as f:
         for line in f:
             if '@cee:{"TNLOG":' not in line:
                 continue
 
-            data = json.loads(line.split('@cee:')[1])
-            results.append(data['TNLOG'])
+            data = json.loads(line.split("@cee:")[1])
+            results.append(data["TNLOG"])
 
     return results
 
@@ -31,5 +31,5 @@ def gather_exceptions(client: None, resource_type: str) -> dict:
 
 
 class LoggedExceptions(Plugin):
-    name = 'logged_exceptions'
-    metrics = [PythonMetric('log_file_exceptions', gather_exceptions, serializable=True)]
+    name = "logged_exceptions"
+    metrics = [PythonMetric("log_file_exceptions", gather_exceptions, serializable=True)]

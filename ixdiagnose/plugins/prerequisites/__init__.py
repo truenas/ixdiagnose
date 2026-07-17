@@ -8,13 +8,13 @@ from .service import ServiceRunningPrerequisite
 from .vm import VMPrerequisite
 
 __all__ = [
-    'ActiveDirectoryStatePrerequisite',
-    'DomainJoinedPrerequisite',
-    'FailoverPrerequisite',
-    'FibreChannelPrerequisite',
-    'JBOFPrerequisite',
-    'LibvirtContainersPrerequisite',
-    'VMPrerequisite',
-    'Prerequisite',
-    'ServiceRunningPrerequisite',
+    "ActiveDirectoryStatePrerequisite",
+    "DomainJoinedPrerequisite",
+    "FailoverPrerequisite",
+    "FibreChannelPrerequisite",
+    "JBOFPrerequisite",
+    "LibvirtContainersPrerequisite",
+    "VMPrerequisite",
+    "Prerequisite",
+    "ServiceRunningPrerequisite",
 ]

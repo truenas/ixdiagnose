@@ -13,21 +13,20 @@ MiddlewareClient: TypeAlias = Client
 def get_middleware_client() -> Client:
     with Client(private_methods=True, call_timeout=conf.timeout) as client:
         # Drop privilege set to readonly admin to ensure that API responses with Secret fields are always redacted
-        client.call('privilege.become_readonly')
+        client.call("privilege.become_readonly")
         yield client
 
 
 @contextlib.contextmanager
 def get_admin_middleware_client() -> Client:
-    """ This middleware client has the full privilege set of the initiaiting process. Since this tool is typically
-    invoked by root, it will have FULL_ADMIN privileges. This is required to call private API methods. """
+    """This middleware client has the full privilege set of the initiaiting process. Since this tool is typically
+    invoked by root, it will have FULL_ADMIN privileges. This is required to call private API methods."""
     with Client(private_methods=True, call_timeout=conf.timeout) as client:
         yield client
 
 
 @dataclass
 class MiddlewareResponse:
-
     result_key: str
     error: Optional[str] = None
     output: Any = None
@@ -35,8 +34,12 @@ class MiddlewareResponse:
 
 class MiddlewareCommand:
     def __init__(
-        self, endpoint: str, api_payload: Optional[list] = None, format_output: Optional[Callable[[Any], Any]] = None,
-        result_key: Optional[str] = None, job: bool = False,
+        self,
+        endpoint: str,
+        api_payload: Optional[list] = None,
+        format_output: Optional[Callable[[Any], Any]] = None,
+        result_key: Optional[str] = None,
+        job: bool = False,
     ):
         """
         :param endpoint: The API method to call.
@@ -48,7 +51,7 @@ class MiddlewareCommand:
         self.endpoint = endpoint
         self.overridden_format_output = format_output
         self.payload = api_payload or []
-        self.result_key = result_key or self.endpoint.replace('.', '_')
+        self.result_key = result_key or self.endpoint.replace(".", "_")
         self.job = job
 
     def format_output(self, output: Any) -> Any:
@@ -68,15 +71,16 @@ class MiddlewareCommand:
             try:
                 response.output = self.format_output(response.output)
             except Exception as e:
-                response.error = f'Failed to clean {self.endpoint!r} output: {e}'
+                response.error = f"Failed to clean {self.endpoint!r} output: {e}"
 
         return response
 
 
 class AdminMiddlewareCommand(MiddlewareCommand):
-    """ Execute a middleware command with FULL_ADMIN privileges. This allows calling private endpoints,
+    """Execute a middleware command with FULL_ADMIN privileges. This allows calling private endpoints,
     and should be used *very* sparingly since it removes response redaction and can cause sensitive information
-    to leak into debug files. """
+    to leak into debug files."""
+
     def execute(self, unused: Optional[MiddlewareClient] = None) -> MiddlewareResponse:
         with get_admin_middleware_client() as privileged_client:
             return super().execute(privileged_client)

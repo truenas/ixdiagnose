@@ -13,36 +13,30 @@ from .utils import BASE_REPORT_SCHEMA
 
 
 PLUGINS_REPORT_SCHEMA = {
-    'type': 'object',
-    'properties': {
-        'execution_time': {'type': 'number'},
-        'metric_report': {
-            'anyOf': [
+    "type": "object",
+    "properties": {
+        "execution_time": {"type": "number"},
+        "metric_report": {
+            "anyOf": [
                 {
-                    'type': ['array', 'null'],
-                    'items': {
-                        'type': 'object',
-                        'properties': {
-                            'error': {'type': ['string', 'null', 'object']},
-                            'command': {'type': ['string', 'array']},
-                            'execution_time': {'type': 'number'},
-                            'description': {'type': ['string', 'null']},
-                            'returncode': {'type': 'integer'},
-                            'endpoint': {'type': 'string'},
+                    "type": ["array", "null"],
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "error": {"type": ["string", "null", "object"]},
+                            "command": {"type": ["string", "array"]},
+                            "execution_time": {"type": "number"},
+                            "description": {"type": ["string", "null"]},
+                            "returncode": {"type": "integer"},
+                            "endpoint": {"type": "string"},
                         },
-                    }
+                    },
                 },
-                {
-                    'type': ['object', 'null'],
-                    'properties': {
-                        'error': {'type': ['string', 'null']}
-                    }
-                },
+                {"type": ["object", "null"], "properties": {"error": {"type": ["string", "null"]}}},
             ],
-
         },
-        'metric_execution_error': {'type': ['string', 'null']},
-        'metric_execution_traceback': {'type': ['string', 'null']},
+        "metric_execution_error": {"type": ["string", "null"]},
+        "metric_execution_traceback": {"type": ["string", "null"]},
     },
 }
 
@@ -52,7 +46,7 @@ PROGRESS_TRACK = []
 
 @contextlib.contextmanager
 def generate_plugins(base_percentage=0, total_percentage=100):
-    conf.debug_path = '/tmp/ixdiagnose'
+    conf.debug_path = "/tmp/ixdiagnose"
     os.makedirs(conf.debug_path, exist_ok=True)
 
     try:
@@ -64,9 +58,7 @@ def generate_plugins(base_percentage=0, total_percentage=100):
 
 
 def get_plugins_dirs(base_plugins_dir) -> list:
-    return [
-        i.path for i in os.scandir(base_plugins_dir) if i.is_dir()
-    ]
+    return [i.path for i in os.scandir(base_plugins_dir) if i.is_dir()]
 
 
 def event_callback(progresss, text):
@@ -76,7 +68,7 @@ def event_callback(progresss, text):
 
 def test_base_report_generation():
     with generate_plugins() as plugins_dir:
-        assert os.path.exists(os.path.join(plugins_dir, 'report.json')) is True
+        assert os.path.exists(os.path.join(plugins_dir, "report.json")) is True
 
 
 def test_plugins_directories_report_generation():
@@ -84,7 +76,7 @@ def test_plugins_directories_report_generation():
         plugins_dirs = get_plugins_dirs(plugins_dir)
         assert len(plugins_dirs) > 0
         for plugin_dir in plugins_dirs:
-            assert os.path.exists(os.path.join(plugin_dir, 'report.json')) is True
+            assert os.path.exists(os.path.join(plugin_dir, "report.json")) is True
 
 
 def test_plugins_count():
@@ -95,7 +87,7 @@ def test_plugins_count():
 
 def test_report_schema():
     with generate_plugins() as plugins_dir:
-        with open(os.path.join(plugins_dir, 'report.json')) as f:
+        with open(os.path.join(plugins_dir, "report.json")) as f:
             base_report = json.loads(f.read())
 
         assert set(plugin_factory.get_items()) == set(base_report)
@@ -104,7 +96,7 @@ def test_report_schema():
             validate(base_report[plugin_name], BASE_REPORT_SCHEMA)
 
         for plugin_dir in get_plugins_dirs(plugins_dir):
-            with open(os.path.join(plugin_dir, 'report.json')) as f:
+            with open(os.path.join(plugin_dir, "report.json")) as f:
                 plugin_report = json.loads(f.read())
 
             plugin = plugin_factory.get_items()[os.path.basename(plugin_dir)]

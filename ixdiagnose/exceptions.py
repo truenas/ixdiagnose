@@ -2,7 +2,7 @@ import errno
 
 
 def get_errname(code):
-    return errno.errorcode.get(code, 'EUNKNOWN')
+    return errno.errorcode.get(code, "EUNKNOWN")
 
 
 class CallError(Exception):
@@ -13,4 +13,4 @@ class CallError(Exception):
 
     def __str__(self):
         errname = get_errname(self.errno)
-        return f'[{errname}] {self.errmsg}'
+        return f"[{errname}] {self.errmsg}"
