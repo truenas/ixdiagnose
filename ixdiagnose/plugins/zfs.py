@@ -99,6 +99,10 @@ class ZFS(Plugin):
             'pool_status_guid', [Command(['zpool', 'status', '-g'], 'ZFS Pool(s) Status (with vdev GUIDs)',
                                          serializable=False)]
         ),
+        CommandMetric(
+            'pool_status_dedup', [Command(['zpool', 'status', '-D'], 'ZFS Pool(s) Status (dedup statistics)',
+                                          serializable=False)]
+        ),
         CommandMetric('pool_history', [Command(['zpool', 'history'], 'ZFS Pool(s) History', serializable=False)]),
         CommandMetric('arc_summary', [Command(['arc_summary'], 'ARC Summary', serializable=False)]),
         CommandMetric('pool_status_serialized', [
