@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Lint with ruff
-      uses: astral-sh/ruff-action@v4
+      uses: astral-sh/ruff-action@v4.1.0
       with:
         args: check
     - name: Check formatting with ruff
