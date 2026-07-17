@@ -10,9 +10,9 @@ ixdiagnose
 ├── Dockerfile
 ├── ixdiagnose (Directory)
 ├── LICENSE
+├── pyproject.toml
 ├── README.md
 ├── requirements.txt
-├── setup.cfg
 └── setup.py
 ```
 

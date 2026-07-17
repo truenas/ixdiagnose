@@ -5,7 +5,7 @@ from .metrics import MiddlewareClientMetric
 
 
 class InitShutDownScripts(Plugin):
-    name = 'initshutdown_scripts'
+    name = "initshutdown_scripts"
     metrics = [
-        MiddlewareClientMetric('initshutdown', [MiddlewareCommand('initshutdownscript.query')]),
+        MiddlewareClientMetric("initshutdown", [MiddlewareCommand("initshutdownscript.query")]),
     ]

@@ -1,25 +1,27 @@
-name: unit_tests
+name: tests
 
 on: [push]
 
 jobs:
-  build:
+  tests:
 
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/truenas/middleware:26
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup dependencies
-      run: |
-        FAKE_ENV=1 /usr/bin/install-dev-tools
-        mkdir -p /run/middleware
+    - uses: actions/checkout@v4
+    - name: Setup
+      run: mkdir -p /run/middleware
 
     - name: Deps
       run: |
         pip install --break-system-packages -r requirements.txt
         pip install --break-system-packages -U .
 
-    - name: Running test
+    - name: Run unit tests
       run: pytest -v ixdiagnose/test/pytest/unit/
+
+    - name: Run integration tests
+      if: ${{ !cancelled() }}
+      run: pytest -v ixdiagnose/test/pytest/integration/

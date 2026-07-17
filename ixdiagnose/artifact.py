@@ -11,26 +11,27 @@ from .utils.paths import get_artifacts_base_dir
 def gather_artifacts(percentage: int = 0, total_percentage: int = 100) -> None:
     os.makedirs(get_artifacts_base_dir(), exist_ok=True)
     to_execute_artifacts = {
-        artifact_name: artifact for artifact_name, artifact in artifact_factory.get_items().items()
+        artifact_name: artifact
+        for artifact_name, artifact in artifact_factory.get_items().items()
         if artifact_name not in conf.exclude_artifacts
     }
     artifacts_report = {}
     artifact_percentage = total_percentage / (len(to_execute_artifacts) or 1)  # We want to handle this quietly
     for artifact_name, artifact in to_execute_artifacts.items():
-        send_event(int(percentage + 0.5), f'Gathering artifact {artifact_name!r}')
+        send_event(int(percentage + 0.5), f"Gathering artifact {artifact_name!r}")
 
         try:
             report = artifact.gather()
         except Exception as exc:
             report = {
-                'execution_time': None,
-                'execution_error': str(exc),
-                'execution_traceback': traceback.format_exc(),
+                "execution_time": None,
+                "execution_error": str(exc),
+                "execution_traceback": traceback.format_exc(),
             }
 
         artifacts_report[artifact_name] = report
         percentage += artifact_percentage
 
-    send_event(total_percentage, 'Gathered artifacts')
-    with open(os.path.join(get_artifacts_base_dir(), 'report.json'), 'w') as f:
+    send_event(total_percentage, "Gathered artifacts")
+    with open(os.path.join(get_artifacts_base_dir(), "report.json"), "w") as f:
         f.write(dumps(artifacts_report))

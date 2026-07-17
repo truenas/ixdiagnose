@@ -6,13 +6,21 @@ from .metrics import MiddlewareClientMetric
 
 
 class CloudSync(Plugin):
-    name = 'cloud_sync'
+    name = "cloud_sync"
     metrics = [
         MiddlewareClientMetric(
-            'cloud_sync', [
-                MiddlewareCommand('cloudsync.query', format_output=remove_keys([
-                    'credentials.provider', 'encryption_password', 'encryption_salt',
-                ])),
-            ]
+            "cloud_sync",
+            [
+                MiddlewareCommand(
+                    "cloudsync.query",
+                    format_output=remove_keys(
+                        [
+                            "credentials.provider",
+                            "encryption_password",
+                            "encryption_salt",
+                        ]
+                    ),
+                ),
+            ],
         ),
     ]

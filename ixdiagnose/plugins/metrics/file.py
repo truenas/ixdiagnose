@@ -7,9 +7,8 @@ from .base import Metric
 
 
 class FileMetric(Metric):
-
     def __init__(
-        self, name: str, file_path: str, prerequisites: List[Prerequisite] | None = None, extension: str = '.txt'
+        self, name: str, file_path: str, prerequisites: List[Prerequisite] | None = None, extension: str = ".txt"
     ):
         """
         :param name: Name of the output file (not including the file extension).
@@ -29,13 +28,14 @@ class FileMetric(Metric):
 
     def execute_impl(self) -> Tuple[Dict, str]:
         report = {
-            'error': None, 'description': f'Contents of {self.file_path!r}',
+            "error": None,
+            "description": f"Contents of {self.file_path!r}",
         }
-        output = ''
+        output = ""
         try:
-            shutil.copy(self.file_path, self.output_file_path(self.execution_context['output_dir']))
+            shutil.copy(self.file_path, self.output_file_path(self.execution_context["output_dir"]))
         except FileNotFoundError:
-            report['error'] = f'{self.file_path!r} file path does not exist'
+            report["error"] = f"{self.file_path!r} file path does not exist"
 
         return report, output
 
@@ -46,28 +46,32 @@ class RedactedFileMetric(FileMetric):
     to perform any necessary redaction.
     """
 
-    def __init__(self, name: str,
-                 file_path: str,
-                 prerequisites: List[Prerequisite] = None,
-                 extension: str = '.txt',
-                 redact_callback: Callable[[str], str] | None = None):
+    def __init__(
+        self,
+        name: str,
+        file_path: str,
+        prerequisites: List[Prerequisite] = None,
+        extension: str = ".txt",
+        redact_callback: Callable[[str], str] | None = None,
+    ):
         super().__init__(name, file_path, prerequisites, extension)
         self.redact_callback = redact_callback
 
     def execute_impl(self) -> Tuple[Dict, str]:
         report = {
-            'error': None, 'description': f'Redacted contents of {self.file_path!r}',
+            "error": None,
+            "description": f"Redacted contents of {self.file_path!r}",
         }
-        output = ''
+        output = ""
         try:
             with open(self.file_path, "r", encoding="utf-8") as input_file:
-                output_filepath = self.output_file_path(self.execution_context['output_dir'])
+                output_filepath = self.output_file_path(self.execution_context["output_dir"])
                 with open(output_filepath, "w", encoding="utf-8") as output_file:
                     for line in input_file:
                         if self.redact_callback:
                             line = self.redact_callback(line)
                         output_file.write(line)
         except FileNotFoundError:
-            report['error'] = f'{self.file_path!r} file path does not exist'
+            report["error"] = f"{self.file_path!r} file path does not exist"
 
         return report, output

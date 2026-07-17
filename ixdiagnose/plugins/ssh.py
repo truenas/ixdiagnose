@@ -6,18 +6,32 @@ from .metrics import MiddlewareClientMetric, FileMetric
 
 
 class SSH(Plugin):
-    name = 'ssh'
+    name = "ssh"
     metrics = [
         MiddlewareClientMetric(
-            'ssh_config',
-            [MiddlewareCommand(
-                'ssh.config',
-                format_output=redact_keys(include=[
-                    'id', 'bindiface', 'tcpport', 'password_login_groups', 'passwordauth', 'kerberosauth', 'tcpfwd',
-                    'compression', 'sftp_log_level', 'sftp_log_facility', 'weak_ciphers', 'options',
-                ])
-            )]
+            "ssh_config",
+            [
+                MiddlewareCommand(
+                    "ssh.config",
+                    format_output=redact_keys(
+                        include=[
+                            "id",
+                            "bindiface",
+                            "tcpport",
+                            "password_login_groups",
+                            "passwordauth",
+                            "kerberosauth",
+                            "tcpfwd",
+                            "compression",
+                            "sftp_log_level",
+                            "sftp_log_facility",
+                            "weak_ciphers",
+                            "options",
+                        ]
+                    ),
+                )
+            ],
         ),
-        FileMetric('sshd', '/etc/pam.d/sshd'),
-        FileMetric('sshd_config', '/etc/ssh/sshd_config'),
+        FileMetric("sshd", "/etc/pam.d/sshd"),
+        FileMetric("sshd_config", "/etc/ssh/sshd_config"),
     ]

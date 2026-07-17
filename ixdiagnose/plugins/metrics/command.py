@@ -11,7 +11,6 @@ from .base import Metric
 
 
 class CommandMetric(Metric):
-
     def __init__(self, name: str, cmds: List[Command], prerequisites: List[Prerequisite] = None):
         super().__init__(name, prerequisites)
         self.cmds: List[Command] = cmds
@@ -25,16 +24,16 @@ class CommandMetric(Metric):
 
     @property
     def output_file_extension(self) -> str:
-        return '.json' if self.serializable else '.txt'
+        return ".json" if self.serializable else ".txt"
 
     def format_data(self, cmd_context: list) -> str:
         if self.serializable:
             result = dumps(cmd_context)
         else:
-            result = ''
+            result = ""
             for index, entry in enumerate(cmd_context):
-                padding = f'\n{"-" * (len(entry["description"]) + 5)}\n'
-                result += f'{padding}{index + 1}) {entry["description"]}{padding}\n{entry["result"]}'
+                padding = f"\n{'-' * (len(entry['description']) + 5)}\n"
+                result += f"{padding}{index + 1}) {entry['description']}{padding}\n{entry['result']}"
 
         return result
 
@@ -45,16 +44,16 @@ class CommandMetric(Metric):
             start_time = time.time()
             cp = cmd.execute()
             report = {
-                'command': cmd.command,
-                'error': None,
-                'execution_time': time.time() - start_time,
-                'description': cmd.description,
-                'returncode': cp.returncode,
+                "command": cmd.command,
+                "error": None,
+                "execution_time": time.time() - start_time,
+                "description": cmd.description,
+                "returncode": cp.returncode,
             }
             metric_report.append(report)
 
             if cp.returncode not in cmd.safe_returncodes:
-                report['error'] = cp.stderr or f'Command returncode {cp.returncode!r} is not marked safe'
+                report["error"] = cp.stderr or f"Command returncode {cp.returncode!r} is not marked safe"
                 continue
 
             output = cp.stdout
@@ -62,9 +61,9 @@ class CommandMetric(Metric):
                 try:
                     output = loads(output)
                 except json.JSONDecodeError:
-                    report['error'] = f'Failed to serialize command output: {output!r}'
+                    report["error"] = f"Failed to serialize command output: {output!r}"
                     continue
 
-            cmd_context.append({'description': cmd.description, 'result': output})
+            cmd_context.append({"description": cmd.description, "result": output})
 
-        return metric_report, self.format_data(cmd_context) if cmd_context else ''
+        return metric_report, self.format_data(cmd_context) if cmd_context else ""

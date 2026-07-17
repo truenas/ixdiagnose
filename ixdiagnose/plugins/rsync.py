@@ -6,11 +6,12 @@ from .metrics import MiddlewareClientMetric
 
 
 class Rsync(Plugin):
-    name = 'rsync'
+    name = "rsync"
     metrics = [
         MiddlewareClientMetric(
-            'rsync', [
-                MiddlewareCommand('rsynctask.query', format_output=remove_keys(['ssh_credentials'])),
-            ]
+            "rsync",
+            [
+                MiddlewareCommand("rsynctask.query", format_output=remove_keys(["ssh_credentials"])),
+            ],
         ),
     ]
