@@ -19,6 +19,7 @@ from .initshutdown_scripts import InitShutDownScripts
 from .ipmi import IPMI
 from .iscsi import ISCSI
 from .jobs import CoreGetJobs
+from .licensing import Licensing
 from .network import Network
 from .nfs import NFS
 from .nvme import NVME
@@ -64,6 +65,7 @@ for plugin in [
     InitShutDownScripts,
     IPMI,
     ISCSI,
+    Licensing,
     LoggedExceptions,
     Network,
     NFS,

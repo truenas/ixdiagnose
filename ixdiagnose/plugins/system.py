@@ -87,7 +87,7 @@ class System(Plugin):
         MiddlewareClientMetric(
             "system_info",
             [
-                AdminMiddlewareCommand("system.is_enterprise", result_key="Enterprise System"),
+                MiddlewareCommand("system.product_type", result_key="Product Type"),
                 AdminMiddlewareCommand("system.license", result_key="System License"),
                 MiddlewareCommand("system.info", result_key="system_info"),
             ],
