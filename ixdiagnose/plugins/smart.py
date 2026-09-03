@@ -32,8 +32,9 @@ def smart_output(client: MiddlewareClient, context: Any) -> str:
             cmd.extend(["-jc"])
 
         cp = run(cmd, check=False, timeout=3)
+        is_error = (cp.returncode & 0b11) != 0
         if serializable:
-            if cp.returncode:
+            if is_error:
                 output[disk] = cp.stderr
             else:
                 try:
@@ -44,7 +45,7 @@ def smart_output(client: MiddlewareClient, context: Any) -> str:
             msg = f"Block Device: /dev/{disk}{nvme_msg}"
             output += f"{'=' * (len(msg) + 5)}\n"
             output += f"  {msg}\n"
-            output += f"{'=' * (len(msg) + 5)}\n\n{cp.stderr if cp.returncode else cp.stdout}\n\n"
+            output += f"{'=' * (len(msg) + 5)}\n\n{cp.stderr if is_error else cp.stdout}\n\n"
 
     return output
 
