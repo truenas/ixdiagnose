@@ -1,8 +1,9 @@
 from ixdiagnose.utils.command import Command
 from ixdiagnose.utils.middleware import AdminMiddlewareCommand, MiddlewareCommand
+from ixdiagnose.utils.plugins.license_usage import features_in_use
 
 from .base import Plugin
-from .metrics import CommandMetric, MiddlewareClientMetric
+from .metrics import CommandMetric, MiddlewareClientMetric, PythonMetric
 
 LICENSE_DAEMON_UNIT = "truenas-licensed"
 
@@ -25,6 +26,11 @@ class Licensing(Plugin):
                 AdminMiddlewareCommand("truenas.entitlements.debug_info", result_key="debug_info"),
                 AdminMiddlewareCommand("system.is_ha_capable", result_key="is_ha_capable"),
             ],
+        ),
+        PythonMetric(
+            "features_in_use",
+            features_in_use,
+            description="License features deduced to be in use",
         ),
         CommandMetric(
             "license_files",
