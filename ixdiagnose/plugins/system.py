@@ -75,6 +75,7 @@ class System(Plugin):
             "advanced_settings",
             [
                 MiddlewareCommand("system.advanced.config", format_output=remove_keys(["sed_user", "sed_passwd"])),
+                MiddlewareCommand("system.advanced.sed_global_password_is_set"),
             ],
         ),
         MiddlewareClientMetric("alerts", [MiddlewareCommand("alert.list")]),
@@ -94,4 +95,7 @@ class System(Plugin):
         ),
         MiddlewareClientMetric("system_dataset", [MiddlewareCommand("systemdataset.config")]),
         MiddlewareClientMetric("system_security", [MiddlewareCommand("system.security.config")]),
+        MiddlewareClientMetric("kmip", [MiddlewareCommand("kmip.config")]),
+        MiddlewareClientMetric("update_settings", [MiddlewareCommand("update.config")]),
+        MiddlewareClientMetric("support_settings", [MiddlewareCommand("support.config")]),
     ]

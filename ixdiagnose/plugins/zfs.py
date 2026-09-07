@@ -119,6 +119,7 @@ class ZFS(Plugin):
                 AdminMiddlewareCommand("zpool.status", [{"real_paths": True}], result_key="middleware_pool_status"),
             ],
         ),
+        MiddlewareClientMetric("tier_config", [MiddlewareCommand("zfs.tier.config")]),
         PythonMetric("encryption_summary", encryption_summary),
     ]
     raw_metrics = [
