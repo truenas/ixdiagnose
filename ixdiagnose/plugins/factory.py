@@ -42,6 +42,7 @@ from .truenas_connect import TruenasConnect
 from .two_factor_auth import TwoFactorAuth
 from .ups import UPS
 from .vm import VM
+from .webshare import Webshare
 from .zfs import ZFS
 
 
@@ -89,6 +90,7 @@ for plugin in [
     TwoFactorAuth,
     UPS,
     VM,
+    Webshare,
     ZFS,
 ]:
     plugin_factory.register(plugin())
