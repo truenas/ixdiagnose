@@ -27,6 +27,7 @@ class Logs(Artifact):
         File("debug"),
         File("dpkg.log"),
         File("error"),
+        File("git.log"),
         File("kern.log"),
         File("k8s_api.log"),
         File("messages"),
