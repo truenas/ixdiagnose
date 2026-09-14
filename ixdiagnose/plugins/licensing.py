@@ -14,6 +14,7 @@ class Licensing(Plugin):
             "license_info",
             [
                 MiddlewareCommand("truenas.license.info", result_key="license"),
+                MiddlewareCommand("truenas.entitlements.facts", result_key="facts"),
                 MiddlewareCommand("truenas.entitlements.info", result_key="entitlements"),
             ],
         ),
