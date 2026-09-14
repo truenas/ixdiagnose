@@ -87,7 +87,7 @@ class System(Plugin):
         MiddlewareClientMetric(
             "system_info",
             [
-                MiddlewareCommand("system.product_type", result_key="Product Type"),
+                MiddlewareCommand("truenas.entitlements.facts", result_key="Product Facts"),
                 AdminMiddlewareCommand("system.license", result_key="System License"),
                 MiddlewareCommand("system.info", result_key="system_info"),
             ],
