@@ -24,6 +24,7 @@ class Licensing(Plugin):
                 # Private: the public views omit the daemon verdict, the hardware facts and the
                 # matrix column, which is what traces a denial back to its cause.
                 AdminMiddlewareCommand("truenas.entitlements.debug_info", result_key="debug_info"),
+                AdminMiddlewareCommand("truenas.entitlements.usage", result_key="usage"),
                 AdminMiddlewareCommand("system.is_ha_capable", result_key="is_ha_capable"),
             ],
         ),
