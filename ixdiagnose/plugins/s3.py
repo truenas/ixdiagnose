@@ -15,7 +15,11 @@ class S3(Plugin):
             "s3_config",
             [
                 MiddlewareCommand("s3.config", result_key="config"),
-                MiddlewareCommand("s3.accesskey.query", result_key="accesskeys", format_output=remove_keys(["access_key", "secret"])),
+                MiddlewareCommand(
+                    "s3.accesskey.query",
+                    result_key="accesskeys",
+                    format_output=remove_keys(["access_key", "secret"])
+                ),
                 MiddlewareCommand("sharing.s3.query", result_key="buckets"),
             ],
         ),
