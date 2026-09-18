@@ -28,6 +28,7 @@ from .rbac import RBAC
 from .replication import Replication
 from .reporting import Reporting
 from .rsync import Rsync
+from .s3 import S3
 from .services import Services
 from .smart import SMART
 from .smb import SMB
@@ -75,6 +76,7 @@ for plugin in [
     Replication,
     Reporting,
     Rsync,
+    S3,
     Services,
     SMART,
     SMB,
