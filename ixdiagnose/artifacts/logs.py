@@ -48,5 +48,6 @@ class Logs(Artifact):
         Pattern("mail.+"),
         Pattern("middlewared.+"),
         Pattern("truenas-discoveryd.+"),
+        Pattern("truenas_s3.+"),
         Pattern("zettarepl.+"),
     ]
