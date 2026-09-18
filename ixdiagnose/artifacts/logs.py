@@ -21,6 +21,7 @@ class Logs(Artifact):
         DirectoryPattern("proftpd"),
         DirectoryPattern("samba4"),
         DirectoryPattern("sssd", pattern=r"^(ldap_child|sssd)_?(.*)?(\.log)(\.1)?$"),
+        DirectoryPattern("webshare-link"),
         File("app_lifecycle.log"),
         File("app_migrations.log"),
         File("auth.log"),
