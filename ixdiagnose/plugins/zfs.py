@@ -47,8 +47,10 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
         return output
 
     props_header = output_lines[0]
+    # Names and values may contain spaces, but zfs pads each column to one width for all rows
+    prop_col, value_col, source_col = (props_header.index(col) for col in ("PROPERTY", "VALUE", "SOURCE"))
     for index, resource_line in enumerate(filter(bool, map(str.strip, output_lines[1:]))):
-        resource_name = resource_line.split()[0].strip()
+        resource_name = resource_line[:prop_col].rstrip()
         if resource_context != resource_name:
             if resource_context is not None and resource_type == "filesystem":
                 output += zfs_getacl(resource_context, prop_dict)
@@ -61,9 +63,9 @@ def resource_output(client: MiddlewareClient, resource_type: str) -> str:
             resource_context = resource_name
 
         if resource_type == "filesystem":
-            prop = resource_line.split()[1]
+            prop = resource_line[prop_col:value_col].rstrip()
             if prop in prop_list:
-                prop_dict[prop] = resource_line.split()[2]
+                prop_dict[prop] = resource_line[value_col:source_col].rstrip()
 
         output += f"{resource_line}\n"
 

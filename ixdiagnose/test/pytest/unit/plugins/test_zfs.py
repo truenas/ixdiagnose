@@ -110,3 +110,19 @@ def test_resource_output(mocker, resource_type, args, returncode, file_name, std
         assert resource_output(mock_client, resource_type) == output
     else:
         assert resource_output(mock_client, resource_type) != output
+
+
+def test_resource_output_names_with_spaces(mocker):
+    input_content = get_asset("input_resource_output4.txt")
+    mocker.patch(
+        "ixdiagnose.plugins.zfs.run", return_value=CompletedProcess(("zfs", "get", "all"), 0, input_content, "")
+    )
+    getacl = mocker.patch("ixdiagnose.plugins.zfs.zfs_getacl", return_value="")
+    output = resource_output(mocker.Mock(), "filesystem")
+    assert getacl.call_args_list == [
+        mocker.call("dozer", {"mounted": "yes", "mountpoint": "/mnt/dozer"}),
+        mocker.call("dozer/User", {"mounted": "yes", "mountpoint": "/mnt/dozer/User"}),
+        mocker.call("dozer/User Drives", {"mounted": "yes", "mountpoint": "/mnt/dozer/User Drives"}),
+        mocker.call("dozer/User Drives/alice", {"mounted": "yes", "mountpoint": "/mnt/dozer/User Drives/alice"}),
+    ]
+    assert "  zfs get all dozer/User Drives\n" in output
