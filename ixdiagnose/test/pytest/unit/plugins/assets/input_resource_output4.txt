@@ -1,0 +1,21 @@
+NAME                     PROPERTY    VALUE                         SOURCE
+dozer                    type        filesystem                    -
+dozer                    creation    Thu Oct  1  7:25 2026         -
+dozer                    mounted     yes                           -
+dozer                    mountpoint  /mnt/dozer                    default
+dozer                    acltype     posix                         local
+dozer/User               type        filesystem                    -
+dozer/User               creation    Thu Oct  1  7:26 2026         -
+dozer/User               mounted     yes                           -
+dozer/User               mountpoint  /mnt/dozer/User               default
+dozer/User               acltype     posix                         inherited from dozer
+dozer/User Drives        type        filesystem                    -
+dozer/User Drives        creation    Thu Oct  1  7:26 2026         -
+dozer/User Drives        mounted     yes                           -
+dozer/User Drives        mountpoint  /mnt/dozer/User Drives        default
+dozer/User Drives        acltype     nfsv4                         local
+dozer/User Drives/alice  type        filesystem                    -
+dozer/User Drives/alice  creation    Thu Oct  1  7:26 2026         -
+dozer/User Drives/alice  mounted     yes                           -
+dozer/User Drives/alice  mountpoint  /mnt/dozer/User Drives/alice  default
+dozer/User Drives/alice  acltype     nfsv4                         inherited from dozer/User Drives
