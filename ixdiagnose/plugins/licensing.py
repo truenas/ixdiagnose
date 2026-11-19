@@ -35,6 +35,7 @@ class Licensing(Plugin):
                     "ls -la /data/subsystems/truenas_license/ /data/license 2>&1",
                     "License files on disk",
                     serializable=False,
+                    shell=True,
                     # ls exits 2 on a missing operand, and an unsafe return code discards the output.
                     safe_returncodes=[0, 1, 2],
                 ),
