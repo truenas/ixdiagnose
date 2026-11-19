@@ -1,13 +1,21 @@
 import os
 import subprocess
+from typing import Union
 
 from ixdiagnose.config import conf
 
 
-def run(*args, **kwargs) -> subprocess.CompletedProcess:
-    shell = isinstance(args[0], str)
-    if isinstance(args[0], list):
-        args = tuple(args[0])
+def check_shell_command(command: Union[str, list, tuple], shell: bool) -> None:
+    if shell and not isinstance(command, str):
+        raise TypeError(f"{command!r}: a command run with shell=True must be a string")
+
+    if not shell and not isinstance(command, (list, tuple)):
+        raise TypeError(f"{command!r}: a command must be an argument list, unless it is run with shell=True")
+
+
+def run(command: Union[str, list, tuple], *, shell: bool = False, **kwargs) -> subprocess.CompletedProcess:
+    check_shell_command(command, shell)
+    args = command if shell else tuple(command)
     kwargs.setdefault("stdout", subprocess.PIPE)
     kwargs.setdefault("stderr", subprocess.PIPE)
     kwargs.setdefault("timeout", conf.timeout)
