@@ -15,7 +15,7 @@ def get_smb_shares(client: MiddlewareClient, context: Any) -> str:
         smb_share["acl"] = client.call("sharing.smb.getacl", {"share_name": smb_share["name"]})
 
         # Get the smb.conf section for the share
-        testparm = run(f"testparm -s --section-name {smb_share['name']}", check=False)
+        testparm = run(["testparm", "-s", f"--section-name={smb_share['name']}"], check=False)
         if testparm.returncode:
             smb_share["smb.conf"] = f"Failed to get SMB share configuration: {testparm.stderr}"
         else:
@@ -32,7 +32,7 @@ def get_smb_shares(client: MiddlewareClient, context: Any) -> str:
             acl_cmd = "truenas_getfacl"
 
         if acl_cmd:
-            getacl = run(f"{acl_cmd} {smb_share['path']}", check=False)
+            getacl = run([acl_cmd, smb_share["path"]], check=False)
             if getacl.returncode:
                 smb_share["fsacl"] = f"Failed to get fs acl: {getacl.stderr}"
             else:

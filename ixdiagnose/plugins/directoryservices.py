@@ -33,16 +33,8 @@ class DirectoryServices(Plugin):
                 Command(["wbinfo", "--online-status"], "Active directory online status.", serializable=False),
                 Command(["wbinfo", "-u"], "Active directory Users", serializable=False, max_lines=50),
                 Command(["wbinfo", "-g"], "Active directory Groups.", serializable=False, max_lines=50),
-                Command(
-                    'wbinfo --domain-info="$(wbinfo --own-domain)"',
-                    "Active directory domain information.",
-                    serializable=False,
-                ),
-                Command(
-                    'wbinfo --dc-info="$(wbinfo --own-domain)"',
-                    "Active Directory DC info.",
-                    serializable=False,
-                ),
+                Command(["wbinfo", "--domain-info="], "Active directory domain information.", serializable=False),
+                Command(["wbinfo", "--dc-info="], "Active Directory DC info.", serializable=False),
             ],
             prerequisites=[ActiveDirectoryStatePrerequisite()],
         ),
