@@ -68,6 +68,7 @@ class WebShare(Plugin):
                     "ps -eo pid,ppid,user,etime,rss,args | grep -E '[t]ruenas-(webshare|file-manager)|[c]addy run'",
                     "WebShare Processes",
                     serializable=False,
+                    shell=True,
                     # grep exits 1 when nothing matches, which is the answer when the service is stopped.
                     safe_returncodes=[0, 1],
                 ),
@@ -75,6 +76,7 @@ class WebShare(Plugin):
                     "ls -la /var/run/webshare /var/db/system/webshare /var/db/system/webshare/bulk-downloads 2>&1",
                     "WebShare Runtime and Data Directories",
                     serializable=False,
+                    shell=True,
                     # ls exits 2 on a missing operand, and an unsafe return code discards the output.
                     safe_returncodes=[0, 1, 2],
                 ),

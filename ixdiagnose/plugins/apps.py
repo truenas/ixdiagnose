@@ -73,7 +73,7 @@ class Apps(Plugin):
         CommandMetric(
             "docker_logs",
             [
-                Command("journalctl -u docker | tail -n 1000", "Docker logs", serializable=False),
+                Command("journalctl -u docker | tail -n 1000", "Docker logs", serializable=False, shell=True),
             ],
         ),
         CommandMetric(

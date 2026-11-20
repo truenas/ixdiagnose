@@ -42,6 +42,7 @@ class S3(Plugin):
                     "s3d --check 2>&1",
                     "S3 Service Configuration Check",
                     serializable=False,
+                    shell=True,
                     safe_returncodes=[0, 1],
                 ),
             ],
